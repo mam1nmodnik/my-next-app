@@ -55,11 +55,65 @@ body::after {
   background-size: 200% 200%;
   animation: gradient-move 5s ease infinite;
 }
-.glass{
-  background: rgba(255, 255, 255, 0.15); /* полупрозрачный белый */
+
+/* 🌫 Базовый стеклянный блок */
+.glass {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  transition: all 0.5s ease;
 }
+
+/* 🌈 Мягкий перелив и свечение */
+.glass::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.25),
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.25)
+  );
+  transform: rotate(0deg);
+  transition: transform 1.2s ease, opacity 0.8s ease;
+  opacity: 0.7;
+  pointer-events: none;
+  filter: blur(20px);
+}
+
+/* Наведение: плавное вращение и усиление свечения */
+.glass:hover::before {
+  transform: rotate(45deg);
+  opacity: 1;
+}
+
+/* 🌕 Светлый вариант */
+.glass-light {
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  color: #111;
+}
+
+/* 🌑 Тёмный вариант */
+.glass-dark {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  color: #f1f5f9;
+}
+
+

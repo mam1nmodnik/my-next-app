@@ -1,11 +1,11 @@
 "use client";
 
 import { PostsContextProvider } from "@/context/postsContext";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, ConfigProvider } from "antd";
 import Link from "next/link";
 import type { MenuProps } from "antd";
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Sider, Content } = Layout;
 
 const items: MenuProps["items"] = [
   {
@@ -25,15 +25,39 @@ const items: MenuProps["items"] = [
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
     <PostsContextProvider>
-      <Layout  className="glass">
-        <Sider className="glass flex flex-col">
-          <Menu defaultSelectedKeys={["1"]} items={items} className="glass" />
-        </Sider>
-        <Layout className="glass">
-          <Header style={{ padding: 0 }} className="glass" />
-          <Content style={{ margin: "16px" }}>{children}</Content>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorLinkActive: 'black'
+          },
+          components: {
+            Modal: {
+              contentBg: "bg-gray-800",
+              titleColor: 'white',
+              titleFontSize: 48,
+              titleLineHeight: 1
+            },
+            Layout: {
+              footerBg: "none",
+              siderBg: "none",
+            },
+            Button: {
+              textTextActiveColor: 'black',
+              textTextColor: 'black'
+            }
+          },
+        }}
+      >
+        <Layout className="glass-light">
+          <Sider className="glass-light flex flex-col">
+            <Menu defaultSelectedKeys={["1"]} items={items} className="glass-light" />
+          </Sider>
+          <Layout className="glass-light">
+            <Header style={{ padding: 0 }} className="glass-light" />
+            <Content style={{ margin: "16px" }}>{children}</Content>
+          </Layout>
         </Layout>
-      </Layout>
+      </ConfigProvider>
     </PostsContextProvider>
   );
 }
