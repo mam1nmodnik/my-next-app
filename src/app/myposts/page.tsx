@@ -60,27 +60,27 @@ export default function MyPosts() {
   return (
     <div>
       <div className="flex flex-col items-center w-full max-h-[95vh] overflow-y-auto gap-4 relative ">
-        <div className="mb-25 flex flex-col items-center w-full ">
+        <div className=" mb-30 lg:mb-25 flex flex-col items-center w-full ">
           {posts.map((post) => (
             <div
               key={post.key}
-              className="flex flex-col justify-between font-sans p-4 rounded-[24px] min-h-fit w-[80%] glass m-2"
+              className="flex flex-col justify-between gap-4  font-sans p-4 rounded-[24px] min-h-fit w-[80%] glass m-2"
             >
-              <h1 className="text-shadow-amber-50 text-3xl font-bold p-4">
+              <h1 className=" text-shadow-amber-50 text-xl lg:text-3xl font-bold p-2 lg:p-4 text-left">
                 {post.title}
               </h1>
-              <p className="text-shadow-amber-50 text-xl font-medium p-6 break-words">
+              <p className=" indent-4 text-shadow-amber-50 text-l lg:text-xl font-medium p-2 lg:p-6 ml-4 lg:ml-7 break-words">
                 {post.content}
               </p>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center flex-row justify-between  ml-2 lg:ml-7 lg:mr-7 lg:mb-2">
                 <button
-                  className="glass p-2 cursor-pointer w-40 rounded-[20px] text-l font-medium text-shadow-amber-50"
+                  className="glass p-2 cursor-pointer w-40 rounded-[20px] text-xs lg:text-l font-medium text-shadow-amber-50"
                   onClick={() => deletePost(post.key)}
                 >
                   удалить пост
                 </button>
-                <p className="text-l  text-[0.8rem]">
+                <p className=" text-xs lg:text-l text-[0.8rem] text-right ">
                   Дата публикации: {post.date}
                 </p>
               </div>
