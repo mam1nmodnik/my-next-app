@@ -32,29 +32,29 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
           },
           components: {
             Modal: {
-              contentBg: "bg-gray-800",
-              titleColor: 'white',
+              contentBg: "#6D6D71",
+              titleColor: '#373A3E',
               titleFontSize: 48,
               titleLineHeight: 1
             },
             Layout: {
               footerBg: "none",
-              siderBg: "none",
+              siderBg: "#6D6D71",
             },
             Button: {
               textTextActiveColor: 'black',
               textTextColor: 'black'
-            }
+            },
           },
         }}
       >
-        <Layout className="glass-light">
-          <Sider className="glass-light flex flex-col">
-            <Menu defaultSelectedKeys={["1"]} items={items} className="glass-light" />
+        <Layout className="bg-gray-rabbit min-h-[80vh]">
+          <Sider className="flex flex-col bg-gray-rabbit">
+            <Menu defaultSelectedKeys={["1"]} items={items} className="bg-gray-rabbit" />
           </Sider>
-          <Layout className="glass-light">
-            <Header style={{ padding: 0 }} className="glass-light" />
-            <Content style={{ margin: "16px" }}>{children}</Content>
+          <Layout className="">
+            <Header style={{ padding: 0 }} className="bg-gray-rabbit"  />
+            <Content className="bg-gray-rabbit" >{children}</Content>
           </Layout>
         </Layout>
       </ConfigProvider>
