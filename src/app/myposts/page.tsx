@@ -59,7 +59,7 @@ export default function MyPosts() {
 
   return (
     <div>
-      <div className="flex flex-col items-center w-full max-h-[95vh] overflow-y-auto gap-4 relative bg-beige-gray">
+      <div className="flex flex-col items-center w-full max-h-[95vh] overflow-y-auto gap-4 relative ">
         <div className="mb-25 flex flex-col items-center w-full ">
           {posts.map((post) => (
             <div
