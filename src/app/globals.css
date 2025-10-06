@@ -48,8 +48,6 @@ body {
 /* 🌫 Базовый стеклянный блок */
 .glass {
   position: relative;
-  overflow: hidden;
-  border-radius: 1.25rem;
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -59,31 +57,7 @@ body {
 }
 
 /* 🌈 Мягкий перелив и свечение */
-.glass::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.25),
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0.25)
-  );
-  transform: rotate(0deg);
-  transition: transform 1.2s ease, opacity 0.8s ease;
-  opacity: 0.7;
-  pointer-events: none;
-  filter: blur(20px);
-}
 
-/* Наведение: плавное вращение и усиление свечения */
-.glass:hover::before {
-  transform: rotate(45deg);
-  opacity: 1;
-}
 
 /* 🌕 Светлый вариант */
 .glass-light {
