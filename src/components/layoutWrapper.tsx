@@ -1,36 +1,42 @@
 "use client";
 
 import { PostsContextProvider } from "@/context/postsContext";
-import { Layout, Menu, ConfigProvider, Modal } from "antd";
+import { Layout, Menu, ConfigProvider } from "antd";
 import Link from "next/link";
 import type { MenuProps } from "antd";
-import { useState } from "react";
 import { MyFooter } from "./MyFooter";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { ModalPostContextProvider } from "@/context/modalPostContext";
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
-const items: MenuProps["items"] = [
-  {
-    key: "1",
-    label: <Link href="/">Главная</Link>,
-  },
-  {
-    key: "2",
-    label: <Link href="/profile">Профиль</Link>,
-  },
-  {
-    key: "3",
-    label: <Link href="/myposts">Мои посты</Link>,
-  },
-];
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
-  const [openWindow, setOpenWindow] = useState<boolean>(false);
-  const openModal = () => {
-    setOpenWindow((op) => !op);
-    console.log(openWindow);
-  };
+  const pathname = usePathname();
+  useEffect(()=> {
+    console.log(pathname)
+  }, [pathname])
+  const items: MenuProps["items"] = [
+    {
+      key: "/",
+      label: <Link href="/">Главная</Link>,
+    },
+    {
+      key: "/profile",
+      label: <Link href="/profile">Профиль</Link>,
+    },
+    {
+      key: "/myposts",
+      label: (
+        <Link href="/myposts" scroll={false}>
+          Мои посты
+        </Link>
+      ),
+    },
+  ];
   return (
     <PostsContextProvider>
+      <ModalPostContextProvider>
       <ConfigProvider
         theme={{
           token: {
@@ -43,7 +49,9 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
               titleFontSize: 48,
               titleLineHeight: 1,
             },
+
             Layout: {
+              footerPadding: "none",
               footerBg: "none",
               siderBg: "#6D6D71",
               headerColor: "none",
@@ -60,6 +68,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
           <Sider className="lg:flex flex-col bg-gray-rabbit hidden ">
             <Menu
               defaultSelectedKeys={["3"]}
+              selectedKeys={[pathname]}
               items={items}
               className="bg-gray-rabbit "
             />
@@ -67,29 +76,11 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
           <Layout>
             {/* <Header className="bg-gray-rabbit w-auto h-[60px] relative"/> */}
             <Content className="bg-gray-rabbit">{children}</Content>
-            <MyFooter/>
+            <MyFooter />
           </Layout>
-          <Modal
-            open={openWindow}
-            onCancel={openModal}
-            footer={null}
-            mask={true}
-            className="w-fit bg-none glass"
-          >
-            <div className="flex flex-col text-2xl gap-4 w-full">
-              <Link href="/" onClick={openModal}>
-                Главная
-              </Link>
-              <Link href="/profile" onClick={openModal}>
-                Профиль
-              </Link>
-              <Link href="/myposts" onClick={openModal}>
-                Мои посты
-              </Link>
-            </div>
-          </Modal>
         </Layout>
       </ConfigProvider>
+      </ModalPostContextProvider>
     </PostsContextProvider>
   );
 }

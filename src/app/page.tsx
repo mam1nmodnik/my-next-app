@@ -5,14 +5,14 @@ import React from "react";
 export default function Home() {
   const { posts, userName } = usePostsContext();
   return (
-    <div className="flex flex-col w-full gap-4 h-[100vh]">
-      <div className="flex flex-col items-center gap-4 w-full overflow-y-auto pb-28 relative ">
+    <div className="flex flex-col w-full gap-4 h-[100vh] ">
+      <div className="flex flex-col items-center gap-4 w-full overflow-y-auto pb-28 relative mt-2 ">
         {posts.map((post) => (
           <div
             key={post.key}
             className="flex flex-col justify-between font-sans gap-2 p-4 rounded-[24px] min-h-[200px] w-[80%] glass"
           >
-            <h1 className="text-gray-800 text-xl lg:text-3xl font-bold p-2 lg:p-4 text-center lg:text-left ">
+            <h1 className="text-gray-800 text-xl lg:text-3xl font-bold p-2 lg:p-4 text-left ">
               {post.title}
             </h1>
             <p className="text-gray-800 text-l lg:text-xl font-medium p-2 lg:p-6 ml-4 lg:ml-7 break-words">

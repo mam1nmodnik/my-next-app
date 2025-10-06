@@ -1,68 +1,26 @@
 "use client";
+import { useModalPostContext } from "@/context/modalPostContext";
 import { usePostsContext } from "@/context/postsContext";
-import { useState } from "react";
 import { Modal } from "antd";
-import type { FormEvent } from "react";
-
-type FormValueType = {
-  title: string;
-  content: string;
-};
 
 export default function MyPosts() {
-  const [openWindow, setOpenWindow] = useState<boolean>(false);
-
-  const { posts, setPosts, userName } = usePostsContext();
-  const [formValue, setFormValue] = useState<FormValueType>({
-    title: "",
-    content: "",
-  });
-
-  function updateDate(date: Date) {
-    return (
-      date.toLocaleDateString("ru-RU", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      }) +
-      " " +
-      date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })
-    );
-  }
-
-  function newPost(event: FormEvent<HTMLFormElement>) {
-    if (!userName?.nameUser) {
-      setOpenWindow(false);
-      return alert("Вы не заполнили профиль");
-    }
-    event.preventDefault();
-    const data = {
-      key: Date.now(),
-      title: formValue.title,
-      content: formValue.content,
-      date: updateDate(new Date()),
-      nameUser: userName?.nameUser,
-    };
-    setPosts((prev) => [...prev, data]);
-    localStorage.setItem("posts", JSON.stringify([...posts, data]));
-    setFormValue({ title: "", content: "" });
-    setOpenWindow(false);
-  }
-
-  function deletePost(key: number) {
-    setPosts(posts.filter((task) => task.key !== key));
-  }
-
-  const showModal = () => setOpenWindow(true);
-  const handleCancel = () => setOpenWindow(false);
-
+  const { posts } = usePostsContext();
+  const {
+    openWindow,
+    setFormValue,
+    formValue,
+    newPost,
+    deletePost,
+    showModal,
+    handleCancel,
+  } = useModalPostContext();
   return (
     <>
-      <div className="flex flex-col w-full gap-4 h-[100vh]">
+      <div className="flex flex-col  w-full gap-4 h-[100vh]">
         <div className="flex flex-col items-center gap-4 w-full overflow-y-auto pb-28 relative ">
           {posts?.length == 0 ? (
-            <h1 className=" mt-10 lg:text-2xl text-xl text-center magic-black ">
-              У вас есть что-то интерестное, скорее сделайте публикацию){" "}
+            <h1 className="mt-10 lg:text-2xl flex items-center text-xl text-center magic-black ">
+              У вас есть что-то интерестное?
             </h1>
           ) : (
             posts.map((post) => (
@@ -70,10 +28,10 @@ export default function MyPosts() {
                 key={post.key}
                 className="flex flex-col justify-between gap-4 font-sans p-4 rounded-[24px] min-h-fit w-[80%] glass m-2"
               >
-                <h1 className="text-shadow-amber-50 text-xl lg:text-3xl font-bold p-2 lg:p-4 text-left">
+                <h1 className="text-gray-800 text-xl lg:text-3xl font-bold p-2 lg:p-4 text-left ">
                   {post.title}
                 </h1>
-                <p className="indent-4 text-shadow-amber-50 text-l lg:text-xl font-medium p-2 lg:p-6 ml-4 lg:ml-7 break-words">
+                <p className="text-gray-800 text-l lg:text-xl font-medium p-2 lg:p-6 ml-4 lg:ml-7 break-words">
                   {post.content}
                 </p>
 
@@ -99,8 +57,6 @@ export default function MyPosts() {
       >
         Добавить новый пост +
       </button>
-
-      {/* Модалка */}
       <Modal
         open={openWindow}
         onCancel={handleCancel}
