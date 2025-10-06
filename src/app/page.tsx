@@ -5,8 +5,8 @@ import React from "react";
 export default function Home() {
   const { posts, userName } = usePostsContext();
   return (
-    <div className="flex-1 flex flex-col items-center w-full max-h-[95vh] overflow-y-auto gap-4">
-      <div className="mb-10 flex flex-col items-center gap-4 w-full mt-2">
+    <div className="flex flex-col w-full gap-4 h-[100vh]">
+      <div className="flex flex-col items-center gap-4 w-full overflow-y-auto pb-28 relative ">
         {posts.map((post) => (
           <div
             key={post.key}
