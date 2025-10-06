@@ -5,6 +5,7 @@ import { Layout, Menu, ConfigProvider, Modal } from "antd";
 import Link from "next/link";
 import type { MenuProps } from "antd";
 import { useState } from "react";
+import { MyFooter } from "./MyFooter";
 
 const { Header, Sider, Content } = Layout;
 
@@ -24,8 +25,10 @@ const items: MenuProps["items"] = [
 ];
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const [openWindow, setOpenWindow] = useState<boolean>(false);
-  const handleCancel = () => setOpenWindow((op) => !op);
-
+  const openModal = () => {
+    setOpenWindow((op) => !op);
+    console.log(openWindow);
+  };
   return (
     <PostsContextProvider>
       <ConfigProvider
@@ -43,7 +46,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
             Layout: {
               footerBg: "none",
               siderBg: "#6D6D71",
-              headerColor: 'none',
+              headerColor: "none",
               headerHeight: 0,
             },
             Button: {
@@ -56,35 +59,35 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
         <Layout className="bg-gray-rabbit ">
           <Sider className="lg:flex flex-col bg-gray-rabbit hidden ">
             <Menu
-              defaultSelectedKeys={["1"]}
+              defaultSelectedKeys={["3"]}
               items={items}
               className="bg-gray-rabbit "
             />
           </Sider>
           <Layout>
-            <Header className="bg-gray-rabbit lg:block hidden"/>
-              <button
-                className="lg:hidden absolute top-2.5 right-5 w-15 h-15 glass-light rounded-2xl"
-                onClick={handleCancel}
-              >
-                Меню
-              </button>
-              <Modal
-                open={openWindow}
-                onCancel={handleCancel}
-                footer={null}
-                mask={true}
-                className="w-fit bg-none glass"
-              >
-                <div className="flex flex-col text-2xl gap-4 w-full">
-                  <Link href="/" onClick={handleCancel}>Главная</Link>
-                  <Link href="/profile" onClick={handleCancel}>Профиль</Link>
-                  <Link href="/myposts" onClick={handleCancel}>Мои посты</Link>
-                </div>
-              </Modal>
-            
+            {/* <Header className="bg-gray-rabbit w-auto h-[60px] relative"/> */}
             <Content className="bg-gray-rabbit">{children}</Content>
+            <MyFooter/>
           </Layout>
+          <Modal
+            open={openWindow}
+            onCancel={openModal}
+            footer={null}
+            mask={true}
+            className="w-fit bg-none glass"
+          >
+            <div className="flex flex-col text-2xl gap-4 w-full">
+              <Link href="/" onClick={openModal}>
+                Главная
+              </Link>
+              <Link href="/profile" onClick={openModal}>
+                Профиль
+              </Link>
+              <Link href="/myposts" onClick={openModal}>
+                Мои посты
+              </Link>
+            </div>
+          </Modal>
         </Layout>
       </ConfigProvider>
     </PostsContextProvider>

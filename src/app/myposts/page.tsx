@@ -1,6 +1,5 @@
 "use client";
 import { usePostsContext } from "@/context/postsContext";
-import { MyFooter } from "@/components/MyFooter";
 import { useState } from "react";
 import { Modal } from "antd";
 import type { FormEvent } from "react";
@@ -20,18 +19,19 @@ export default function MyPosts() {
   });
 
   function updateDate(date: Date) {
-    const newDate =
+    return (
       date.toLocaleDateString("ru-RU", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
       }) +
       " " +
-      date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
-    return newDate;
+      date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })
+    );
   }
+
   function newPost(event: FormEvent<HTMLFormElement>) {
-    if (userName?.nameUser == undefined) {
+    if (!userName?.nameUser) {
       setOpenWindow(false);
       return alert("Вы не заполнили профиль");
     }
@@ -45,7 +45,6 @@ export default function MyPosts() {
     };
     setPosts((prev) => [...prev, data]);
     localStorage.setItem("posts", JSON.stringify([...posts, data]));
-
     setFormValue({ title: "", content: "" });
     setOpenWindow(false);
   }
@@ -58,38 +57,50 @@ export default function MyPosts() {
   const handleCancel = () => setOpenWindow(false);
 
   return (
-    <div>
-      <div className="flex flex-col items-center w-full max-h-[95vh] overflow-y-auto gap-4 relative ">
-        <div className=" mb-30 lg:mb-25 flex flex-col items-center w-full ">
-          {posts.map((post) => (
-            <div
-              key={post.key}
-              className="flex flex-col justify-between gap-4  font-sans p-4 rounded-[24px] min-h-fit w-[80%] glass m-2"
-            >
-              <h1 className=" text-shadow-amber-50 text-xl lg:text-3xl font-bold p-2 lg:p-4 text-left">
-                {post.title}
-              </h1>
-              <p className=" indent-4 text-shadow-amber-50 text-l lg:text-xl font-medium p-2 lg:p-6 ml-4 lg:ml-7 break-words">
-                {post.content}
-              </p>
-
-              <div className="flex items-center flex-row justify-between  ml-2 lg:ml-7 lg:mr-7 lg:mb-2">
-                <button
-                  className="glass p-2 cursor-pointer w-40 rounded-[20px] text-xs lg:text-l font-medium text-shadow-amber-50"
-                  onClick={() => deletePost(post.key)}
-                >
-                  удалить пост
-                </button>
-                <p className=" text-xs lg:text-l text-[0.8rem] text-right ">
-                  Дата публикации: {post.date}
+    <>
+      <div className="flex flex-col w-full gap-4 h-[100vh]">
+        <div className="flex flex-col items-center gap-4 w-full overflow-y-auto pb-28 relative ">
+          {posts?.length == 0 ? (
+            <h1 className=" mt-10 lg:text-2xl text-xl text-center magic-black ">
+              У вас есть что-то интерестное, скорее сделайте публикацию){" "}
+            </h1>
+          ) : (
+            posts.map((post) => (
+              <div
+                key={post.key}
+                className="flex flex-col justify-between gap-4 font-sans p-4 rounded-[24px] min-h-fit w-[80%] glass m-2"
+              >
+                <h1 className="text-shadow-amber-50 text-xl lg:text-3xl font-bold p-2 lg:p-4 text-left">
+                  {post.title}
+                </h1>
+                <p className="indent-4 text-shadow-amber-50 text-l lg:text-xl font-medium p-2 lg:p-6 ml-4 lg:ml-7 break-words">
+                  {post.content}
                 </p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <MyFooter showModal={showModal} />
-      </div>
 
+                <div className="flex items-center flex-row justify-between ml-2 lg:ml-7 lg:mr-7 lg:mb-2">
+                  <button
+                    className="glass p-2 cursor-pointer w-40 rounded-[20px] text-xs lg:text-l font-medium text-shadow-amber-50"
+                    onClick={() => deletePost(post.key)}
+                  >
+                    удалить пост
+                  </button>
+                  <p className="text-xs lg:text-l text-[0.8rem] text-right ">
+                    Дата публикации: {post.date}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+      <button
+        className=" lg:fixed lg:block  hidden  bottom-20 left-1/2 -translate-x-1/2 glass rounded-[10px] lg:rounded-[20px] w-[80%] lg:w-[40%] p-4 text-lg lg:text-xl font-bold magic-black bg-beige-gray shadow-lg"
+        onClick={showModal}
+      >
+        Добавить новый пост +
+      </button>
+
+      {/* Модалка */}
       <Modal
         open={openWindow}
         onCancel={handleCancel}
@@ -97,12 +108,12 @@ export default function MyPosts() {
         mask={true}
       >
         <form className="flex flex-col gap-5" onSubmit={newPost}>
-          <h1 className="text-3xl font-bold magic-black ">Новый пост</h1>
-          <label className="flex flex-col gap-2 text-xl font-bold magic-black ">
+          <h1 className="text-3xl font-bold magic-black">Новый пост</h1>
+          <label className="flex flex-col gap-2 text-xl font-bold magic-black">
             Название поста
             <input
               type="text"
-              className="border font-sans p-2 glass pounded-[20px] cursor-pointer"
+              className="border font-sans p-2 glass rounded cursor-pointer"
               value={formValue.title}
               onChange={(e) =>
                 setFormValue({ ...formValue, title: e.target.value })
@@ -127,6 +138,6 @@ export default function MyPosts() {
           </button>
         </form>
       </Modal>
-    </div>
+    </>
   );
 }
