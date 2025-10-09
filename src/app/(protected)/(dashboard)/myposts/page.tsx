@@ -11,13 +11,12 @@ export default function MyPosts() {
     formValue,
     newPost,
     deletePost,
-    showModal,
     handleCancel,
   } = useModalPostContext();
   return (
     <>
-      <div className="flex flex-col  w-full gap-4 h-[100vh]">
-        <div className="flex flex-col items-center gap-4 w-full overflow-y-auto pb-28 relative ">
+      <div className="flex flex-col w-full  gap-4 md:mt-0 mt-5">
+        <div className="flex flex-col items-center gap-4 w-full h-fit pb-28 relative ">
           {posts?.length == 0 ? (
             <h1 className="mt-10 lg:text-2xl flex items-center text-xl text-center magic-black ">
               У вас есть что-то интерестное?
@@ -26,7 +25,7 @@ export default function MyPosts() {
             posts.map((post) => (
               <div
                 key={post.key}
-                className="flex flex-col justify-between gap-4 font-sans p-4 rounded-[24px] min-h-fit w-[80%] glass m-2"
+                className="flex flex-col justify-between gap-4 font-sans p-4 rounded-[24px] min-h-fit md:w-[80%] w-full glass md:m-2 "
               >
                 <h1 className="text-gray-800 text-xl lg:text-3xl font-bold p-2 lg:p-4 text-left ">
                   {post.title}
@@ -51,12 +50,6 @@ export default function MyPosts() {
           )}
         </div>
       </div>
-      <button
-        className=" lg:fixed lg:block  hidden  bottom-20 left-1/2 -translate-x-1/2 glass rounded-[10px] lg:rounded-[20px] w-[80%] lg:w-[40%] p-4 text-lg lg:text-xl font-bold magic-black bg-beige-gray shadow-lg"
-        onClick={showModal}
-      >
-        Добавить новый пост +
-      </button>
       <Modal
         open={openWindow}
         onCancel={handleCancel}

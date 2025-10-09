@@ -22,8 +22,8 @@ export default function Profile() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full mt-10">
-      <div className="rounded-[24px] flex flex-col gap-4 p-4 glass  h-fit w-[80%]">
+    <div className="flex flex-col items-center  w-full ">
+      <div className="rounded-[24px] flex flex-col gap-4 p-4 glass h-fit ">
         <div className="w-auto flex flex-row gap-3">
           {edit ? null : (
             <button
