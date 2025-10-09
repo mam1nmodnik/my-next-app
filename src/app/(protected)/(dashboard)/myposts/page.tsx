@@ -1,6 +1,6 @@
 "use client";
-import { useModalPostContext } from "@/context/modalPostContext";
-import { usePostsContext } from "@/context/postsContext";
+import { usePostNewContext } from "@/context/post-new-context";
+import { usePostsContext } from "@/context/posts-context";
 import { Modal } from "antd";
 
 export default function MyPosts() {
@@ -12,7 +12,7 @@ export default function MyPosts() {
     newPost,
     deletePost,
     handleCancel,
-  } = useModalPostContext();
+  } = usePostNewContext();
   return (
     <>
       <div className="flex flex-col w-full  gap-4 md:mt-0 mt-5">
@@ -33,7 +33,6 @@ export default function MyPosts() {
                 <p className="text-gray-800 text-l lg:text-xl font-medium p-2 lg:p-6 ml-4 lg:ml-7 break-words">
                   {post.content}
                 </p>
-
                 <div className="flex items-center flex-row justify-between ml-2 lg:ml-7 lg:mr-7 lg:mb-2">
                   <button
                     className="glass p-2 cursor-pointer w-40 rounded-[20px] text-xs lg:text-l font-medium text-shadow-amber-50"
@@ -55,10 +54,11 @@ export default function MyPosts() {
         onCancel={handleCancel}
         footer={null}
         mask={true}
+        getContainer={false}
       >
         <form className="flex flex-col gap-5" onSubmit={newPost}>
-          <h1 className="text-3xl font-bold magic-black">Новый пост</h1>
-          <label className="flex flex-col gap-2 text-xl font-bold magic-black">
+          <h1 className="text-3xl font-bold text-white">Новый пост</h1>
+          <label className="flex flex-col gap-2 text-xl font-bold text-white">
             Название поста
             <input
               type="text"
@@ -70,7 +70,7 @@ export default function MyPosts() {
               required
             />
           </label>
-          <label className="flex flex-col gap-2 text-xl font-bold magic-black">
+          <label className="flex flex-col gap-2 text-xl font-bold text-white">
             Текст поста
             <textarea
               rows={5}
@@ -82,7 +82,7 @@ export default function MyPosts() {
               required
             />
           </label>
-          <button className="glass p-2 cursor-pointer w-[10rem] text-[1rem]">
+          <button type="submit" className="glass-light p-2 cursor-pointer rounded-2xl w-[10rem] text-[1rem]">
             Опубликовать
           </button>
         </form>

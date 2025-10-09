@@ -1,5 +1,5 @@
 import { ReactNode, useContext, createContext } from "react";
-import { usePostsContext } from "@/context/postsContext";
+import { usePostsContext } from "@/context/posts-context";
 import { useState } from "react";
 import type { FormEvent } from "react";
 
@@ -18,7 +18,7 @@ type PostsContextType = {
   handleCancel: () => void;
 };
 
-const ModalPostContext = createContext<PostsContextType | undefined>(undefined);
+const PostNewContext = createContext<PostsContextType | undefined>(undefined);
 
 export function ModalPostContextProvider({ children }: { children: ReactNode }) {
   const { posts, setPosts, userName } = usePostsContext();
@@ -43,7 +43,7 @@ export function ModalPostContextProvider({ children }: { children: ReactNode }) 
   function newPost(event: FormEvent<HTMLFormElement>) {
     if (!userName?.nameUser) {
       setOpenWindow(false);
-      return alert("Вы не заполнили профиль");
+      alert("Вы не заполнили профиль");
     }
     event.preventDefault();
     const data = {
@@ -56,7 +56,7 @@ export function ModalPostContextProvider({ children }: { children: ReactNode }) 
     setPosts((prev) => [...prev, data]);
     localStorage.setItem("posts", JSON.stringify([...posts, data]));
     setFormValue({ title: "", content: "" });
-     setOpenWindow(false);
+    setOpenWindow(false);
   }
 
   const  deletePost = (key: number) => {
@@ -67,7 +67,7 @@ export function ModalPostContextProvider({ children }: { children: ReactNode }) 
   const handleCancel = () => setOpenWindow(false);
 
   return (
-    <ModalPostContext.Provider
+    <PostNewContext.Provider
       value={{
         openWindow,
         setFormValue,
@@ -79,14 +79,14 @@ export function ModalPostContextProvider({ children }: { children: ReactNode }) 
       }}
     >
       {children}
-    </ModalPostContext.Provider>
+    </PostNewContext.Provider>
   );
 }
-export function useModalPostContext() {
-  const context = useContext(ModalPostContext);
+export function usePostNewContext() {
+  const context = useContext(PostNewContext);
   if (!context) {
     throw new Error(
-      "useModalPostContext must be used inside ModalPostContext.Provider"
+      "usePostNewContext must be used inside PostNewContext.Provider"
     );
   }
   return context;

@@ -5,11 +5,11 @@ import { LiaBookOpenSolid } from "react-icons/lia";
 
 import { Layout } from "antd";
 import Link from "next/link";
-import { useModalPostContext } from "@/context/modalPostContext";
+import { usePostNewContext } from "@/context/post-new-context";
 
 const { Footer } = Layout;
 export function FooterMobile({pathname}: {pathname: string}) {
-  const { showModal } = useModalPostContext();
+  const { showModal } = usePostNewContext();
   function openWindowPost() {
     setTimeout(() => {
       return showModal();
@@ -54,7 +54,6 @@ export function FooterMobile({pathname}: {pathname: string}) {
             <Link href="/myposts" className="flex items-center text-black  ">
               <AiOutlineEdit size={45} onClick={openWindowPost} color='black'/>
             </Link>
-            
           )}
         </li>
       </ul>

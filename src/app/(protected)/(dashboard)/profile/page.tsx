@@ -1,6 +1,6 @@
 "use client";
-import { usePostsContext } from "@/context/postsContext";
-import React, { useState } from "react";
+import { usePostsContext } from "@/context/posts-context";
+import React, { useEffect, useState } from "react";
 type InputValueType = {
   idUser: string;
   nameUser: string;
@@ -9,18 +9,18 @@ type InputValueType = {
 };
 
 export default function Profile() {
-  const { userName, getUserLocalStorage } = usePostsContext();
+  const { userName } = usePostsContext();
   const [edit, setEdit] = useState<boolean>(false);
 
   const [inputValue, setInputValue] = useState<InputValueType>(userName);
 
   function setValue() {
     localStorage.setItem("user", JSON.stringify(inputValue));
-    getUserLocalStorage();
     setEdit(!edit);
-    console.log(inputValue);
   }
-
+  useEffect(() => {
+    setInputValue(userName);
+  }, [userName]);
   return (
     <div className="flex flex-col items-center  w-full ">
       <div className="rounded-[24px] flex flex-col gap-4 p-4 glass h-fit ">
@@ -93,22 +93,32 @@ export default function Profile() {
               </button>
             </div>
           ) : (
-            <div className="w-fit flex flex-col items-start gap-3 ">
-              <p>
-                Никнейм:{" "}
-                {userName.emailUser || "" ? userName.emailUser : "не задано"}
-              </p>
-              <p>
-                Имя: {userName.nameUser || "" ? userName.nameUser : "не задано"}
-              </p>
-              <p>
-                Email:{" "}
-                {userName.emailUser || "" ? userName.emailUser : "не задано"}
-              </p>
-              <p>
-                Номер: {userName.telUser || "" ? userName.telUser : "не задано"}
-              </p>
-            </div>
+            // <Suspense fallback={}>
+              <div className="w-fit flex flex-col items-start gap-3 ">
+                <p>
+                  Никнейм:{" "}
+                  {inputValue.emailUser || ""
+                    ? inputValue.emailUser
+                    : "не задано"}
+                </p>
+                <p>
+                  Имя:{" "}
+                  {inputValue.nameUser || ""
+                    ? inputValue.nameUser
+                    : "не задано"}
+                </p>
+                <p>
+                  Email:{" "}
+                  {inputValue.emailUser || ""
+                    ? inputValue.emailUser
+                    : "не задано"}
+                </p>
+                <p>
+                  Номер:{" "}
+                  {inputValue.telUser || "" ? inputValue.telUser : "не задано"}
+                </p>
+              </div>
+            // </Suspense>
           )}
         </div>
       </div>

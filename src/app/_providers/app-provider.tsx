@@ -1,6 +1,6 @@
 "use client";
-import { ModalPostContextProvider } from "@/context/modalPostContext";
-import { PostsContextProvider } from "@/context/postsContext";
+import { ModalPostContextProvider } from "@/context/post-new-context";
+import { PostsContextProvider } from "@/context/posts-context";
 import { ReactNode } from "react";
 import { ConfigProvider } from "antd";
 
@@ -17,7 +17,7 @@ export default function AppProvider({ children }: { children: ReactNode }) {
             },
             components: {
               Modal: {
-                contentBg: "#6D6D71",
+                contentBg: "glass-dark ",
                 titleColor: "#373A3E",
                 titleFontSize: 48,
               },

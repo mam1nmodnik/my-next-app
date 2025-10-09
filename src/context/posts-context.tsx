@@ -26,7 +26,8 @@ type PostsContextType = {
   posts: Post[];
   setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
   userName: NameUser;
-  getUserLocalStorage: () => void
+  getUserLocalStorage: () => NameUser;
+  loader: boolean
 };
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
@@ -39,12 +40,13 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
     emailUser: "",
     telUser: "",
   });
+  const [loader, setLoader] = useState<boolean>(false);
   const getPostsLockalStorage = useCallback(() => {
     try {
       const raw = localStorage.getItem("posts");
       if (!raw) return [];
       const post: Post[] = JSON.parse(raw);
-      console.log(post)
+      console.log(post);
       return post;
     } catch (e) {
       console.error("Ошибка парсинга posts:", e);
@@ -54,22 +56,32 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
   const getUserLocalStorage = useCallback((): NameUser => {
     try {
       const raw = localStorage.getItem("user");
-      if (!raw)
-      return { idUser: "", nameUser: "Гость", emailUser: "", telUser: "" };
-      return JSON.parse(raw) as NameUser;
+      if (!raw) {
+        return { idUser: "", nameUser: "Гость", emailUser: "", telUser: "" };
+      }
+      const user: NameUser = JSON.parse(raw);
+      console.log(user);
+      return user;
     } catch (e) {
       console.error("Ошибка парсинга user:", e);
       return { idUser: "", nameUser: "Гость", emailUser: "", telUser: "" };
     }
-  }, []); 
+  }, []);
 
   useEffect(() => {
-    setPosts(getPostsLockalStorage());
-    setNameUser(getUserLocalStorage());
-  }, [getUserLocalStorage, getPostsLockalStorage]);
+    setTimeout(() => {
+      const user = getUserLocalStorage();
+      setNameUser(user);
+      const posts = getPostsLockalStorage();
+      setPosts(posts);
+      setLoader((el => !el));
+    }, 2000);
+  }, [getPostsLockalStorage, getUserLocalStorage]);
 
   return (
-    <PostsContext.Provider value={{ posts, setPosts, userName, getUserLocalStorage }}>
+    <PostsContext.Provider
+      value={{ posts, setPosts, userName, getUserLocalStorage, loader }}
+    >
       {children}
     </PostsContext.Provider>
   );
