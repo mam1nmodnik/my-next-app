@@ -4,11 +4,13 @@ import { usePostsContext } from "@/context/posts-context";
 import { useState } from "react";
 import {PostsContextType , FormValueType} from '@/type/type-new-post-context'
 import type { FormEvent } from "react";
+import { useUserContext } from "./user-context";
 
 const PostNewContext = createContext<PostsContextType | undefined>(undefined);
 
 export function ModalPostContextProvider({ children }: { children: ReactNode }) {
-  const { posts, setPosts, userName } = usePostsContext();
+  const { posts, setPosts } = usePostsContext();
+  const {userName} = useUserContext()
   const [openWindow, setOpenWindow] = useState<boolean>(false);
   const [formValue, setFormValue] = useState<FormValueType>({
     title: "",
@@ -28,17 +30,14 @@ export function ModalPostContextProvider({ children }: { children: ReactNode }) 
   }
 
   function newPost(event: FormEvent<HTMLFormElement>) {
-    if (!userName?.nameUser) {
-      setOpenWindow(false);
-      alert("Вы не заполнили профиль");
-    }
+    
     event.preventDefault();
     const data = {
       key: Date.now(),
       title: formValue.title,
       content: formValue.content,
       date: updateDate(new Date()),
-      nameUser: userName?.nameUser,
+      name: userName?.login
     };
     setPosts((prev) => [...prev, data]);
     localStorage.setItem("posts", JSON.stringify([...posts, data]));

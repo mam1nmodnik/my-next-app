@@ -2,7 +2,6 @@ export type Post = {
   key: number;
   title: string;
   content: string;
-  nameUser: string;
   date: string;
 };
 export type User = {
