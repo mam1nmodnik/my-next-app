@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { usePostNewContext } from "@/context/post-new-context";
+import { signOut } from "next-auth/react";
 
 export default function NavDesktop({ pathname }: { pathname: string }) {
   const { showModal } = usePostNewContext();
@@ -22,6 +23,16 @@ export default function NavDesktop({ pathname }: { pathname: string }) {
           Добавить новый пост +
         </button>
       )}
+      <button
+        className="rounded-[20px] h-[40px] pr-2 pl-2 text-xl text-white hover:text-blue-400 cursor-pointer"
+        onClick={() =>
+          signOut({
+            callbackUrl: "/login", // куда отправить после выхода
+          })
+        }
+      >
+        Выйти
+      </button>
     </header>
   );
 }

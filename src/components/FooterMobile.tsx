@@ -8,7 +8,7 @@ import Link from "next/link";
 import { usePostNewContext } from "@/context/post-new-context";
 
 const { Footer } = Layout;
-export function FooterMobile({pathname}: {pathname: string}) {
+export function FooterMobile({ pathname }: { pathname: string }) {
   const { showModal } = usePostNewContext();
   function openWindowPost() {
     setTimeout(() => {
@@ -18,43 +18,59 @@ export function FooterMobile({pathname}: {pathname: string}) {
   return (
     <Footer
       style={{ textAlign: "center" }}
-      className="lg:hidden flex items-center justify-center w-full lg:w-[60%] fixed bottom-0"
+      className="lg:hidden flex items-center justify-between w-full  fixed bottom-0"
     >
       <ul className="lg:hidden flex flex-row items-center   glass w-full">
-        <li className="flex items-center justify-center  p-1 h-fit w-full rounded-3xl ">
-          <Link href="/">
+        <li
+          className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl cursor-pointer  ${
+            pathname == "/" ? "text-white" : "text-black"
+          }  `}
+        >
+          <Link href="/" className={`flex flex-col items-center `}>
             <FiHome
-              size={45}
+              size={30}
               color={`${pathname == "/" ? "white" : "black"}`}
             />
           </Link>
+          Главная
         </li>
-        <li className="flex items-center justify-center p-2 w-full rounded-3xl  ">
-          <Link href="/profile" className=" items-center">
+        <li
+          className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl cursor-pointer  ${
+            pathname == "/profile" ? "text-white" : "text-black"
+          }  `}
+        >
+          <Link href="/profile" className="flex flex-col items-center">
             <AiOutlineUser
-              size={45}
+              size={30}
               className=""
               color={`${pathname == "/profile" ? "white" : "black"}`}
             />
           </Link>
+          Профиль
         </li>
-        <li className="flex items-center justify-center p-2 rounded-2xl w-full ">
-          <Link href="/myposts" className="flex items-center text-black  ">
+        <li
+          className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl  cursor-pointer  ${
+            pathname == "/myposts" ? "text-white" : "text-black"
+          }  `}
+        >
+          <Link href="/myposts" className="flex flex-col items-center">
             <LiaBookOpenSolid
-              size={45}
+              size={30}
               className=""
               color={`${pathname == "/myposts" ? "white" : "black"}`}
             />
           </Link>
+          Посты
         </li>
-        <li className="flex items-center justify-center p-2 w-full rounded-3xl">
+        <li className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl text-black hover:text-gray active:text-white cursor-pointer `}>
           {pathname == "/myposts" ? (
-            <AiOutlineEdit size={45} onClick={showModal} color='black'/>
+            <AiOutlineEdit size={30} onClick={showModal} color="black"/>
           ) : (
             <Link href="/myposts" className="flex items-center text-black  ">
-              <AiOutlineEdit size={45} onClick={openWindowPost} color='black'/>
+              <AiOutlineEdit size={30} onClick={openWindowPost} color=" black" />
             </Link>
           )}
+          Новый пост
         </li>
       </ul>
     </Footer>

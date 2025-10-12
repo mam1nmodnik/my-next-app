@@ -1,22 +1,9 @@
+"use client"
 import { ReactNode, useContext, createContext } from "react";
 import { usePostsContext } from "@/context/posts-context";
 import { useState } from "react";
+import {PostsContextType , FormValueType} from '@/type/type-new-post-context'
 import type { FormEvent } from "react";
-
-type FormValueType = {
-  title: string;
-  content: string;
-};
-
-type PostsContextType = {
-  openWindow: boolean;
-  setFormValue: React.Dispatch<React.SetStateAction<FormValueType>>;
-  formValue: FormValueType;
-  newPost: (event: FormEvent<HTMLFormElement>) => void;
-  deletePost: (key: number) => void;
-  showModal: () => void;
-  handleCancel: () => void;
-};
 
 const PostNewContext = createContext<PostsContextType | undefined>(undefined);
 

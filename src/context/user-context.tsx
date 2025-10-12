@@ -1,59 +1,47 @@
-"use client"; // если используешь Next.js App Router
+// user-context.tsx
+"use client";
 
+import { useSession } from "next-auth/react";
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
   ReactNode,
-  useEffect,
-  useCallback,
 } from "react";
+import { User } from "@/type/type-post-context";
 
-type NameUser = {
-  idUser: string;
-  nameUser: string;
-  emailUser: string;
-  telUser: string;
-};
-type PostsContextType = {
-  userName: NameUser;
-  getUserLocalStorage: () => NameUser;
+type UserContextType = {
+  userName: User | null;
+  setNameUser: React.Dispatch<React.SetStateAction<User | null>>;
+  loader: boolean;
 };
 
-const UserContext = createContext<PostsContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export function PostsContextProvider({ children }: { children: ReactNode }) {
-  const [userName, setNameUser] = useState<NameUser>({
-    idUser: "",
-    nameUser: "",
-    emailUser: "",
-    telUser: "",
-  });
-  
-  const getUserLocalStorage = useCallback((): NameUser => {
-    try {
-      const raw = localStorage.getItem("user");
-      if (!raw) {
-        return { idUser: "", nameUser: "Гость", emailUser: "", telUser: "" };
-      }
-      const user: NameUser = JSON.parse(raw);
-      console.log(user);
-      return user;
-    } catch (e) {
-      console.error("Ошибка парсинга user:", e);
-      return { idUser: "", nameUser: "Гость", emailUser: "", telUser: "" };
-    }
-  }, []);
+export function UserContextProvider({ children }: { children: ReactNode }) {
+  const { data: session } = useSession();
+  const [userName, setNameUser] = useState<User | null>(null);
+  const [loader, setLoader] = useState<boolean>(true);
 
   useEffect(() => {
-    const user = getUserLocalStorage();
-    setNameUser(user);
-  }, [ getUserLocalStorage]);
+    
+      if (session?.user) {
+        const userData: User = {
+          id: session.user.id || "",
+          name: session.user.name || "",
+          email: session.user.email || "",
+          login: session.user?.login || "",
+        };
+        setNameUser(userData);
+      }
+      setTimeout(() => {
+        setLoader(false);
+    }, 1000);
+  }, [session]);
 
   return (
-    <UserContext.Provider
-      value={{ userName, getUserLocalStorage }}
-    >
+    <UserContext.Provider value={{ userName, setNameUser, loader }}>
       {children}
     </UserContext.Provider>
   );
@@ -61,10 +49,7 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
 
 export function useUserContext() {
   const context = useContext(UserContext);
-  if (!context) {
-    throw new Error(
-      "useUserContext must be used inside UserContext.Provider"
-    );
-  }
+  if (!context)
+    throw new Error("useUserContext must be used inside UserContextProvider");
   return context;
 }

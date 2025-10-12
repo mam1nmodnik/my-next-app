@@ -1,126 +1,116 @@
 "use client";
-import { usePostsContext } from "@/context/posts-context";
+
 import React, { useEffect, useState } from "react";
-type InputValueType = {
-  idUser: string;
-  nameUser: string;
-  emailUser: string;
-  telUser: string;
-};
+import { User } from "@/type/type-post-context";
+import InputField from "@/components/IU/InputField";
+import InfoRow from "@/components/IU/InfoRow";
+import { useUserContext } from "@/context/user-context";
 
 export default function Profile() {
-  const { userName } = usePostsContext();
-  const [edit, setEdit] = useState<boolean>(false);
+  const [edit, setEdit] = useState(false);
+  const { userName, setNameUser } = useUserContext();
+  const [inputValue, setInputValue] = useState<User | null>(userName);
 
-  const [inputValue, setInputValue] = useState<InputValueType>(userName);
-
-  function setValue() {
-    localStorage.setItem("user", JSON.stringify(inputValue));
-    setEdit(!edit);
-  }
   useEffect(() => {
     setInputValue(userName);
   }, [userName]);
+
+  function saveChanges() {
+    if (inputValue) {
+      setNameUser(inputValue);
+      localStorage.setItem("user", JSON.stringify(inputValue));
+      setEdit(false);
+    }
+  }
+
+  if (!inputValue) return null;
+
   return (
-    <div className="flex flex-col items-center  w-full ">
-      <div className="rounded-[24px] flex flex-col gap-4 p-4 glass h-fit ">
-        <div className="w-auto flex flex-row gap-3">
-          {edit ? null : (
+    <div className="bg-gradient-to-br text-white flex justify-center items-center p-6">
+      <div className="bg-slate-900/60 backdrop-blur-lg border border-slate-700 rounded-2xl shadow-2xl w-full max-w-lg p-8 space-y-8">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-semibold">Профиль</h2>
+          {!edit && (
             <button
-              className="right-[20] cursor-pointer"
-              onClick={() => setEdit(!edit)}
+              onClick={() => setEdit(true)}
+              className="text-sm px-3 py-1 bg-indigo-600 hover:bg-indigo-500 transition rounded-lg"
             >
-              изменить
+              Изменить
             </button>
           )}
         </div>
-        <div className="flex flex-col md:flex-row gap-4 md:gap-25">
-          <div className="w-20">
-            <p>фото</p>
+
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-28 h-28 rounded-full bg-slate-700 border-4 border-indigo-500 shadow-md flex items-center justify-center text-slate-400 text-sm">
+            Фото
           </div>
-          {edit ? (
-            <div className="w-[250px] flex flex-col items-end gap-3 ">
-              <input
-                type="text"
-                name="idUser"
-                placeholder="Введите ник"
-                className="glass p-2 w-full"
-                value={inputValue.idUser}
-                onChange={(val) =>
-                  setInputValue({ ...inputValue, idUser: val.target.value })
-                }
-                required
-                //   disabled
-              />
-              <input
-                type="text"
-                name="nameUser"
-                placeholder="введите имя"
-                className="glass p-2 w-full cursor-pointer"
-                value={inputValue.nameUser}
-                onChange={(val) =>
-                  setInputValue({ ...inputValue, nameUser: val.target.value })
-                }
-                required
-              />
-              <input
-                type="email"
-                name="emailUser"
-                placeholder="введите email"
-                className="glass p-2 w-full cursor-pointer"
-                value={inputValue.emailUser}
-                onChange={(val) =>
-                  setInputValue({
-                    ...inputValue,
-                    emailUser: val.target.value,
-                  })
-                }
-                required
-              />
-              <input
-                type="text"
-                name="telUser"
-                placeholder="введите номер"
-                className="glass p-2 w-full cursor-pointer"
-                value={inputValue.telUser}
-                onChange={(val) =>
-                  setInputValue({ ...inputValue, telUser: val.target.value })
-                }
-                required
-              />
-              <button className="w-full p-1 glass " onClick={setValue}>
+          <p className="text-slate-400 text-sm">
+            {inputValue.name || "Имя не указано"}
+          </p>
+        </div>
+
+        {edit ? (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              saveChanges();
+            }}
+            className="flex flex-col gap-4"
+          >
+            <InputField
+              label="ID"
+              value={inputValue.id}
+              onChange={(e) =>
+                setInputValue({ ...inputValue, id: e.target.value })
+              }
+            />
+            <InputField
+              label="Имя"
+              value={inputValue.name || ""}
+              onChange={(e) =>
+                setInputValue({ ...inputValue, name: e.target.value })
+              }
+            />
+            <InputField
+              label="Email"
+              type="email"
+              value={inputValue.email}
+              onChange={(e) =>
+                setInputValue({ ...inputValue, email: e.target.value })
+              }
+            />
+            <InputField
+              label="Логин"
+              value={inputValue.login}
+              onChange={(e) =>
+                setInputValue({ ...inputValue, login: e.target.value })
+              }
+            />
+
+            <div className="flex justify-between mt-4">
+              <button
+                type="button"
+                onClick={() => setEdit(false)}
+                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition"
+              >
+                Отмена
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg transition"
+              >
                 Сохранить
               </button>
             </div>
-          ) : (
-            // <Suspense fallback={}>
-              <div className="w-fit flex flex-col items-start gap-3 ">
-                <p>
-                  Никнейм:{" "}
-                  {inputValue.emailUser || ""
-                    ? inputValue.emailUser
-                    : "не задано"}
-                </p>
-                <p>
-                  Имя:{" "}
-                  {inputValue.nameUser || ""
-                    ? inputValue.nameUser
-                    : "не задано"}
-                </p>
-                <p>
-                  Email:{" "}
-                  {inputValue.emailUser || ""
-                    ? inputValue.emailUser
-                    : "не задано"}
-                </p>
-                <p>
-                  Номер:{" "}
-                  {inputValue.telUser || "" ? inputValue.telUser : "не задано"}
-                </p>
-              </div>
-            // </Suspense>
-          )}
-        </div>
+          </form>
+        ) : (
+          <div className="space-y-3">
+            <InfoRow label="ID" value={inputValue.id} />
+            <InfoRow label="Имя" value={inputValue.name || ""} />
+            <InfoRow label="Email" value={inputValue.email} />
+            <InfoRow label="Логин" value={inputValue.login} />
+          </div>
+        )}
       </div>
     </div>
   );
