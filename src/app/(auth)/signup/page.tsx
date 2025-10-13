@@ -51,7 +51,7 @@ export default function SignUp() {
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
           </div>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 relative">
             <label htmlFor="" className="flex gap-2 text-white pl-4">
               <input type="checkbox" name="" id="" className="w-4" />I Agree
               with privacy and policy
@@ -62,7 +62,7 @@ export default function SignUp() {
             >
               Sign Up
             </button>
-            {message && <p>{message}</p>}
+            {message && <p className="text-red-500 text-center">{message}</p>}
           </div>
           <p className="text-white text-center flex flex-col">
             Уже есть аккаунт?{" "}

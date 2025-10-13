@@ -24,7 +24,7 @@ export default function MyPosts() {
           ) : (
             posts.map((post) => (
               <div
-                key={post.key}
+                key={post.date}
                 className="flex flex-col justify-between gap-4 font-sans p-4 rounded-[24px] min-h-fit md:w-[80%] w-full glass md:m-2 "
               >
                 <h1 className="text-gray-800 text-xl lg:text-3xl font-bold p-2 lg:p-4 text-left ">
@@ -36,7 +36,7 @@ export default function MyPosts() {
                 <div className="flex items-center flex-row justify-between ml-2 lg:ml-7 lg:mr-7 lg:mb-2">
                   <button
                     className="glass p-2 cursor-pointer w-40 rounded-[20px] text-xs lg:text-l font-medium text-shadow-amber-50"
-                    onClick={() => deletePost(post.key)}
+                    onClick={() => deletePost(post.id)}
                   >
                     удалить пост
                   </button>

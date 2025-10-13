@@ -25,7 +25,6 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
   const [loader, setLoader] = useState<boolean>(true);
 
   useEffect(() => {
-    
       if (session?.user) {
         const userData: User = {
           id: session.user.id || "",

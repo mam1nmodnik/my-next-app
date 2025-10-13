@@ -1,16 +1,20 @@
-"use client"
+"use client";
 import { ReactNode, useContext, createContext } from "react";
 import { usePostsContext } from "@/context/posts-context";
 import { useState } from "react";
-import {PostsContextType , FormValueType} from '@/type/type-new-post-context'
+import { PostsContextType, FormValueType } from "@/type/type-new-post-context";
 import type { FormEvent } from "react";
 import { useUserContext } from "./user-context";
 
 const PostNewContext = createContext<PostsContextType | undefined>(undefined);
 
-export function ModalPostContextProvider({ children }: { children: ReactNode }) {
+export function ModalPostContextProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const { posts, setPosts } = usePostsContext();
-  const {userName} = useUserContext()
+  const { userName } = useUserContext();
   const [openWindow, setOpenWindow] = useState<boolean>(false);
   const [formValue, setFormValue] = useState<FormValueType>({
     title: "",
@@ -29,25 +33,34 @@ export function ModalPostContextProvider({ children }: { children: ReactNode }) 
     );
   }
 
-  function newPost(event: FormEvent<HTMLFormElement>) {
-    
+  async function newPost(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = {
-      key: Date.now(),
+      idUser: userName?.id,
       title: formValue.title,
       content: formValue.content,
+      nameUser: userName?.login,
       date: updateDate(new Date()),
-      name: userName?.login
     };
-    setPosts((prev) => [...prev, data]);
-    localStorage.setItem("posts", JSON.stringify([...posts, data]));
+    try {
+      const res = await fetch("/api/posts/new-post", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const response = await res.json();
+      console.log(response);
+      setPosts((prev) => [...prev, data]);
+    } catch (error) {
+      console.error("Ошибка при создании поста:", error);
+    }
     setFormValue({ title: "", content: "" });
     setOpenWindow(false);
   }
 
-  const  deletePost = (key: number) => {
-   return setPosts(posts.filter((task) => task.key !== key));
-  }
+  const deletePost = (id?: string) => {
+    return setPosts(posts.filter((task) => task.id !== id));
+  };
 
   const showModal = () => setOpenWindow(true);
   const handleCancel = () => setOpenWindow(false);

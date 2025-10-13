@@ -15,7 +15,6 @@ export default function LogIn() {
       email: form.email,
       password: form.password,
     });
-
     if (res?.error) setError("Неверный логин или пароль");
     else window.location.href = "/";
   };
@@ -61,7 +60,7 @@ export default function LogIn() {
             >
               Log In
             </button>
-            {error && <p className="text-red-500">{error}</p>}
+            {error && <p className="text-red-500 text-center">{error}</p>}
           </div>
           <p className="text-white text-center flex flex-col ">
             Нет аккаунта?

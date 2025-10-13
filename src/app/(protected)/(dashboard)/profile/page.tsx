@@ -5,6 +5,7 @@ import { User } from "@/type/type-post-context";
 import InputField from "@/components/IU/InputField";
 import InfoRow from "@/components/IU/InfoRow";
 import { useUserContext } from "@/context/user-context";
+import { signOut } from "next-auth/react";
 
 export default function Profile() {
   const [edit, setEdit] = useState(false);
@@ -30,14 +31,26 @@ export default function Profile() {
       <div className="bg-slate-900/60 backdrop-blur-lg border border-slate-700 rounded-2xl shadow-2xl w-full max-w-lg p-8 space-y-8">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-semibold">Профиль</h2>
-          {!edit && (
+          <div className="flex flex-col">
+            {!edit && (
+              <button
+                onClick={() => setEdit(true)}
+                className="text-sm px-3 py-1 bg-indigo-600 hover:bg-indigo-500 transition rounded-lg"
+              >
+                Изменить
+              </button>
+            )}
             <button
-              onClick={() => setEdit(true)}
-              className="text-sm px-3 py-1 bg-indigo-600 hover:bg-indigo-500 transition rounded-lg"
+              className=" lg:hidden block  rounded-[20px] h-[40px] pr-2 pl-2 text-xl text-white hover:text-blue-400 cursor-pointer"
+              onClick={() =>
+                signOut({
+                  callbackUrl: "/login", // куда отправить после выхода
+                })
+              }
             >
-              Изменить
+              Выйти
             </button>
-          )}
+          </div>
         </div>
 
         <div className="flex flex-col items-center gap-3">

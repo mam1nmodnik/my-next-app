@@ -7,38 +7,48 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import {  PostsContextType, Post} from '@/type/type-post-context'
-
+import { PostsContextType, Post } from "@/type/type-post-context";
+import { useUserContext } from "./user-context";
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
 
 export function PostsContextProvider({ children }: { children: ReactNode }) {
   const [posts, setPosts] = useState<Post[]>([]);
-  
-  const getPostsLockalStorage = useCallback(() => {
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
+  const { userName } = useUserContext();
+  const getPosts = useCallback(async () => {
     try {
-      const raw = localStorage.getItem("posts");
-      if (!raw) return [];
-      const post: Post[] = JSON.parse(raw);
-      console.log(post);
-      return post;
-    } catch (e) {
-      console.error("Ошибка парсинга posts:", e);
-      return [];
+      if (userName) {
+        const res = await fetch("/api/posts/post-user", {
+          headers: {
+            "x-user-id": userName?.id,
+          },
+        });
+        const response = await res.json();
+        setPosts(response);
+      }
+    } catch (error) {
+      console.error("Ошибка при получении поста:", error);
     }
-  }, []);
-  
-  useEffect(() => {
-  
-    const posts = getPostsLockalStorage();
-      setPosts(posts);
-    
-  }, [getPostsLockalStorage, ]);
+  }, [userName]);
 
+  const getAllPosts = useCallback( async () => {
+    try {
+      const res = await fetch("/api/posts/all-posts");
+      const response = await res.json();
+      console.log(response)
+      setAllPosts(response);
+    } catch (error) {
+      console.error("Ошибка при получении поста:", error);
+    }
+  }, [])
+
+  useEffect(() => {
+    getAllPosts();
+    getPosts();
+  }, [getPosts, getAllPosts]);
   return (
-    <PostsContext.Provider
-      value={{ posts, setPosts }}
-    >
+    <PostsContext.Provider value={{ posts, setPosts, allPosts }}>
       {children}
     </PostsContext.Provider>
   );

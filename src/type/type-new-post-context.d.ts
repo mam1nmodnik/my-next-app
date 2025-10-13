@@ -10,7 +10,7 @@ export type PostsContextType = {
   setFormValue: React.Dispatch<React.SetStateAction<FormValueType>>;
   formValue: FormValueType;
   newPost: (event: FormEvent<HTMLFormElement>) => void;
-  deletePost: (key: number) => void;
+  deletePost: (id?: string) => void;
   showModal: () => void;
   handleCancel: () => void;
 };
