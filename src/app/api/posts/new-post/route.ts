@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const data = await req.json();
     const { idUser, title, content, nameUser, date } = data;
 
-    const newUser = await prisma.post.create({
+    await prisma.post.create({
       data: {
         idUser,    
         title,     
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
         date
       },
     });
-    return NextResponse.json(newUser, { status: 201 });
+    return NextResponse.json( { status: 201 });
   } catch (error) {
     console.error('Ошибка при создании поста:', error);
     return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });

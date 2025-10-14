@@ -5,12 +5,12 @@ export type FormValueType = {
   content: string;
 };
 
-export type PostsContextType = {
+export type NewPostContextType = {
   openWindow: boolean;
   setFormValue: React.Dispatch<React.SetStateAction<FormValueType>>;
   formValue: FormValueType;
   newPost: (event: FormEvent<HTMLFormElement>) => void;
-  deletePost: (id?: string) => void;
+  deletePost: (id: number) => void
   showModal: () => void;
   handleCancel: () => void;
 };

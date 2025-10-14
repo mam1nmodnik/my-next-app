@@ -1,10 +1,11 @@
 export type Post = {
-  id?: string;
+  id?: number;
   idUser?: string;
   title?: string;
   content?: string;
   nameUser?: string;
-  date: string;
+  date: Date;
+  createdAt: Date;
 };
 export type User = {
   id: string;
@@ -17,4 +18,6 @@ export type PostsContextType = {
   allPosts: Post[];
   posts: Post[];
   setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
+  getPosts: () => void;
+  getAllPosts: () => void;
 };

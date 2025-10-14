@@ -1,8 +1,9 @@
 "use client"
 import { usePostsContext } from "@/context/posts-context";
-
+import { formateDate } from "@/lib/formate-date";
 export default function Home() {
   const { allPosts } = usePostsContext();
+  
   return (
     <div className="flex flex-col w-full  gap-4 md:mt-0 mt-5">
       <div className="flex flex-col items-center gap-4 w-full h-fit pb-28 relative ">
@@ -11,9 +12,9 @@ export default function Home() {
             У вас есть что-то интерестное?
           </h1>
         ) : (
-          allPosts.map((post) => (
+          allPosts.map((post, index) => (
             <div
-              key={post.date}
+              key={index}
               className="flex flex-col justify-between gap-4 font-sans p-4 rounded-[24px] min-h-fit md:w-[80%] w-full glass md:m-2 "
             >
               <h1 className="text-gray-800 text-xl lg:text-3xl font-bold p-2 lg:p-4 text-left ">
@@ -27,7 +28,7 @@ export default function Home() {
                   Опубликовал {post.nameUser}
                 </p>
                 <p className="text-xs lg:text-l text-[0.8rem] text-right ">
-                  Дата публикации: {post.date}
+                  Дата публикации: {formateDate(post.date)}
                 </p>
               </div>
             </div>

@@ -23,6 +23,6 @@ model Post {
   title     String   
   content   String   
   nameUser  String  
-  date      String   
+  date      DateTime    
   createdAt DateTime @default(now())
 }

@@ -16,6 +16,7 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [allPosts, setAllPosts] = useState<Post[]>([]);
   const { userName } = useUserContext();
+
   const getPosts = useCallback(async () => {
     try {
       if (userName) {
@@ -42,13 +43,13 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
       console.error("Ошибка при получении поста:", error);
     }
   }, [])
-
+ 
   useEffect(() => {
     getAllPosts();
     getPosts();
   }, [getPosts, getAllPosts]);
   return (
-    <PostsContext.Provider value={{ posts, setPosts, allPosts }}>
+    <PostsContext.Provider value={{ posts, setPosts, allPosts, getPosts, getAllPosts }}>
       {children}
     </PostsContext.Provider>
   );
