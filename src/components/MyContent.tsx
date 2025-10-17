@@ -6,13 +6,19 @@ import { useEffect } from "react";
 import NavDesktop from "./NavDesktop";
 import MyLoader from "./IU/MyLoader";
 import { useUserContext } from "@/context/user-context";
+import { usePostsContext } from "@/context/posts-context";
 export default function MyContent({ children }: { children: React.ReactNode }) {
+  const {getAllPosts} = usePostsContext()
   const { loader } = useUserContext()
   const pathname = usePathname();
+  const isHome = ["/", ].includes(pathname) ?? "/";
   useEffect(() => {
-    console.log(pathname);
-  }, [pathname]);
-  const authcontent = ["/login", "/signup"].includes(pathname);
+    if(isHome == true){ 
+      getAllPosts()
+    }
+  }, [isHome, getAllPosts]);
+  const authcontent = ["/login", "/signup"].includes(pathname) ;
+
   if (loader) {
     return <MyLoader />;
   }

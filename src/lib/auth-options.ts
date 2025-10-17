@@ -25,29 +25,31 @@ export const authOptions: AuthOptions = {
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) return null;
-
         return {
           id: String(user.id),
           email: user.email,
           name: user.name,
           login: user.login,
+          avatar: user.avatar,
         };
       },
     }),
   ],
   session: {
     strategy: "jwt",
+    maxAge: 60 * 60 * 24 * 7, // 7 дней
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.email = user.email || "";
+        token.email = user.email || '';
         token.name = user.name;
         token.login = user.login;
       }
       return token;
     },
+
     async session({ session, token }) {
       if (token) {
         session.user = {
@@ -59,5 +61,6 @@ export const authOptions: AuthOptions = {
       }
       return session;
     },
+
   },
 };

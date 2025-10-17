@@ -25,7 +25,7 @@ export default function Home() {
               </p>
               <div className="flex items-center flex-row justify-between ml-2 lg:ml-7 lg:mr-7 lg:mb-2">
                 <p className="text-xs lg:text-l text-[0.8rem] text-left ">
-                  Опубликовал {post.nameUser}
+                  Опубликовал {post.user.name}
                 </p>
                 <p className="text-xs lg:text-l text-[0.8rem] text-right ">
                   Дата публикации: {formateDate(post.date)}

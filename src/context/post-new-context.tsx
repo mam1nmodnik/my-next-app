@@ -2,7 +2,10 @@
 import { ReactNode, useContext, createContext } from "react";
 import { usePostsContext } from "@/context/posts-context";
 import { useState } from "react";
-import { NewPostContextType, FormValueType } from "@/type/type-new-post-context";
+import {
+  NewPostContextType,
+  FormValueType,
+} from "@/type/type-new-post-context";
 import type { FormEvent } from "react";
 import { useUserContext } from "./user-context";
 
@@ -13,7 +16,7 @@ export function ModalPostContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const {getPosts, getAllPosts} = usePostsContext()
+  const { getPosts } = usePostsContext();
   const { userName } = useUserContext();
   const [openWindow, setOpenWindow] = useState<boolean>(false);
   const [formValue, setFormValue] = useState<FormValueType>({
@@ -23,38 +26,36 @@ export function ModalPostContextProvider({
 
   async function newPost(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    console.log(userName?.id)
     const data = {
-      idUser: userName?.id,
+      id: userName?.id,
       title: formValue.title,
       content: formValue.content,
-      nameUser: userName?.login,
       date: new Date(),
     };
     try {
-    const response =  await fetch("/api/posts/new-post", {
+      const response = await fetch("/api/posts/new-post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      console.log(response)
-      getPosts()
-      getAllPosts()
-      } catch (error) {
+      const res = await response.json()
+      console.log(res)
+      getPosts();
+    } catch (error) {
       console.error("Ошибка при создании поста:", error);
     }
     setFormValue({ title: "", content: "" });
     setOpenWindow(false);
   }
 
-
   async function deletePost(id: number) {
-      const res = await fetch(`/api/posts/delete-post/${id}`, {
-        method: 'DELETE',
-      });
-      getPosts()
-      getAllPosts()
-      const data = await res.json();
-      console.log(data);
+    const res = await fetch(`/api/posts/delete-post/${id}`, {
+      method: "DELETE",
+    });
+    getPosts();
+    const data = await res.json();
+    console.log(data);
   }
 
   const showModal = () => setOpenWindow(true);

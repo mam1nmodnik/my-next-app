@@ -1,3 +1,4 @@
+// src/app/api/posts/new-post/route.ts
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
@@ -5,19 +6,35 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
-    const data = await req.json();
-    const { idUser, title, content, nameUser, date } = data;
+    const { id, title, content, date } = await req.json();
 
-    await prisma.post.create({
+    // Проверка обязательных полей
+    if (!id || !title || !content || !date) {
+      return NextResponse.json(
+        { error: `Все поля обязательны: ${id}, ${title}, ${content}, ${date}` },
+        { status: 400 }
+      );
+    }
+
+    // Проверяем существование пользователя
+    const user = await prisma.user.findUnique({
+      where: { id: Number(id) },
+    });
+    if (!user) {
+      return NextResponse.json({ error: 'Пользователь не найден' }, { status: 404 });
+    }
+
+    // Создание поста
+    const post = await prisma.post.create({
       data: {
-        idUser,    
-        title,     
+        title,
         content,
-        nameUser,
-        date
+        date: new Date(date),
+        user: { connect: { id: Number(id) } },
       },
     });
-    return NextResponse.json( { status: 201 });
+
+    return NextResponse.json({ status: 200, message: 'Пост успешно создан', post });
   } catch (error) {
     console.error('Ошибка при создании поста:', error);
     return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });

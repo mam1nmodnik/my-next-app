@@ -1,17 +1,21 @@
 export type Post = {
   id?: number;
-  idUser?: string;
+  idUser?: number;
   title?: string;
   content?: string;
-  nameUser?: string;
   date: Date;
   createdAt: Date;
+  userId: number;
+  user: {
+    name: string
+  }
 };
 export type User = {
   id: string;
   name?: string | null;
   email: string;
   login: string;
+  avatar: string | null;
 };
 
 export type PostsContextType = {

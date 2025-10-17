@@ -1,25 +1,29 @@
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+// src/app/api/posts/my/route.ts
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-options";
+import { prisma } from "@/lib/prisma";
+import {  } from "@prisma/client";
 
-const prisma = new PrismaClient();
-
-// GET /api/posts
-export async function GET(req: Request) {
+export async function GET() {
   try {
-    const userIdHeader = req.headers.get('x-user-id');
-    const idUser = userIdHeader || '0';
-
-    if (!idUser) {
-      return NextResponse.json({ error: 'Не передан ID пользователя' }, { status: 400 });
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
     }
-    const posts = await prisma.post.findMany({
-      where: { idUser },
-      orderBy: { createdAt: 'desc' },
-    });
 
-    return NextResponse.json(posts);
+    const userId = Number(session.user.id);
+
+    
+  const userPosts = await prisma.post.findMany({
+    where: { userId: userId }, 
+    orderBy: { createdAt: 'desc' },
+  });
+
+
+    return NextResponse.json(userPosts);
   } catch (error) {
-    console.error('Ошибка при получении постов пользователя:', error);
-    return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
+    console.error("Ошибка при получении постов пользователя:", error);
+    return NextResponse.json({ error: "Ошибка сервера" }, { status: 500 });
   }
 }

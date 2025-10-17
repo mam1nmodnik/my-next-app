@@ -26,6 +26,8 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
           },
         });
         const response = await res.json();
+        console.log( response);
+
         setPosts(response);
       }
     } catch (error) {
@@ -33,23 +35,24 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
     }
   }, [userName]);
 
-  const getAllPosts = useCallback( async () => {
+  const getAllPosts = useCallback(async () => {
     try {
-      const res = await fetch("/api/posts/all-posts");
+      const res = await fetch("/api/posts/all-posts")
       const response = await res.json();
       console.log(response)
       setAllPosts(response);
     } catch (error) {
       console.error("Ошибка при получении поста:", error);
     }
-  }, [])
- 
+  }, []);
+
   useEffect(() => {
-    getAllPosts();
     getPosts();
-  }, [getPosts, getAllPosts]);
+  }, [getPosts]);
   return (
-    <PostsContext.Provider value={{ posts, setPosts, allPosts, getPosts, getAllPosts }}>
+    <PostsContext.Provider
+      value={{ posts, setPosts, allPosts, getPosts, getAllPosts }}
+    >
       {children}
     </PostsContext.Provider>
   );

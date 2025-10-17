@@ -3,16 +3,19 @@ export default function InputField({
   value,
   onChange,
   type = "text",
+  disabled,
 }: {
   label: string;
   value?: string;
   type?: string;
+  disabled?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <div className="flex flex-col">
       <label className="text-sm text-slate-400 mb-1">{label}</label>
       <input
+        disabled={disabled}
         type={type}
         value={value}
         onChange={onChange}
