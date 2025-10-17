@@ -1,14 +1,12 @@
 import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
 // DELETE /api/posts/:id
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
-  const postId = Number(params.id);
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params; 
+  const postId = Number(id);
 
   try {
     await prisma.post.delete({
