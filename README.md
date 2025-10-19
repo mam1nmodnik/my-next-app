@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Service For Publications
 
-## Getting Started
+Современное веб-приложение, созданное на **Next.js 15 (Turbopack)** с использованием **TypeScript**, **Prisma ORM**, **NextAuth** и **Ant Design**.  
+Проект построен с акцентом на масштабируемость, удобство разработки и современный стек технологий.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📦 Технологический стек
+
+### 🔹 Frontend
+- **Next.js 15.5.3** — фреймворк для React с поддержкой SSR и SSG  
+- **React 19** — современная версия React  
+- **TypeScript 5** — строгая типизация  
+- **Tailwind CSS 4** — утилитарный CSS-фреймворк  
+- **Ant Design 5** — библиотека компонентов UI  
+- **Framer Motion** — анимации и плавные переходы  
+- **React Icons** — коллекция иконок  
+- **React Spinners** и **React JS Loader** — индикаторы загрузки  
+
+---
+
+### 🔹 Backend
+- **NextAuth 4** — аутентификация и управление сессиями  
+- **Prisma 6.17.1** — ORM для работы с базой данных  
+- **SQLite / PostgreSQL / MySQL** — поддерживаемые базы данных  
+- **bcrypt** — хэширование паролей  
+- **jsonwebtoken** — работа с JWT-токенами  
+
+---
+
+### 🔹 Dev-инструменты
+- **ESLint 9** — анализ качества кода  
+- **Tailwind PostCSS** — интеграция Tailwind с PostCSS  
+- **TypeScript Types (@types/react, @types/node)** — типы для разработки  
+- **Turbopack** — сверхбыстрая сборка проекта  
+
+---
+
+## ⚙️ Установка и запуск
+
+### 1. Клонирование репозитория
 ```
+git clone https://github.com/USERNAME/my-next-app.git
+cd my-next-app
+```
+### 2. Установка зависимостей
+```
+npm install
+```
+### 3. Настройка переменных окружения
+Создай файл .env в корне проекта и добавь:
+```
+DATABASE_URL="file:./dev.db"
+NEXTAUTH_SECRET="your_secret_key"
+NEXTAUTH_URL="http://localhost:3000"
+```
+💡 Если используешь PostgreSQL или MySQL — замени DATABASE_URL на соответствующий адрес.
+### 4. Применение миграций базы данных
+```
+npx prisma migrate dev
+```
+### 5. Запуск проекта в режиме разработки
+```
+npm run dev
+```
+После запуска проект будет доступен по адресу:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+👉 [http://localhost:3000](http://localhost:3000)
+### 📁 Структура проекта
+```
+src/
+ ├─ app/                                 # Основные страницы и маршруты Next.js
+ │   ├─ _providers/                      # Провайдеры контекстов и общие обертки
+ │   ├─ (auth)/                          # Маршруты аутентификации
+ │   │   ├─ login/                       # Страница входа
+ │   │   ├─ recovery/                    # Восстановление пароля
+ │   │   └─ signup/                      # Регистрация
+ │   ├─ (protected)/                     # Закрытые маршруты (требуется авторизация)
+ │   │   ├─ (dashboard)/                 # Главная страница после входа
+ │   │   ├─ myposts/                     # Посты пользователя
+ │   │   └─ profile/                     # Профиль пользователя
+ │   ├─ api/                             # API маршруты (Next.js API Routes)
+ │   │   ├─ auth/                        # Авторизация
+ │   │   ├─ posts/                       # Работа с постами
+ │   │   │   ├─ all-posts/               # Получение всех постов
+ │   │   │   ├─ delete-post/[id]/        # Удаление поста по ID
+ │   │   │   ├─ new-post/                # Создание нового поста
+ │   │   │   └─ post-user/               # Получение постов конкретного пользователя
+ │   │   ├─ register/                    # Регистрация пользователя
+ │   │   └─ user/update/                 # Обновление данных пользователя
+ │   ├─ globals.css                      # Глобальные стили
+ │   ├─ layout.tsx                       # Основной layout
+ │   ├─ not-found.tsx                    # Обработка 404
+ │   └─ page.tsx                         # Главная страница
+ │
+ ├─ components/                          # UI и функциональные компоненты
+ │   ├─ IU/                              # Элементы интерфейса
+ │   ├─ FooterMobile.tsx                 # Мобильный футер
+ │   ├─ layoutWrapper.tsx                # Основной layout wrapper
+ │   ├─ MyContent.tsx                    # Основной контент
+ │   └─ NavDesktop.tsx                   # Навигация для desktop
+ │
+ ├─ context/                             # Контексты (пользователь, посты, уведомления)
+ ├─ lib/                                 # Prisma, NextAuth и вспомогательные функции
+ └─ type/                                # Определения типов TypeScript
+```
+### ✨ Основные возможности
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 🔐 Авторизация и регистрация через NextAuth
+- 👤 Управление профилем пользователя и сессией
+- 📝 Работа с контентом (создание, удаление)
+- 📸 Загрузка аватаров и изображений
+- 💬 Уведомления через Ant Design message
+- 🧭 Оптимизация рендеринга и SSR
