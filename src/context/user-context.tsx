@@ -10,30 +10,35 @@ import {
   ReactNode,
 } from "react";
 import { User } from "@/type/type-post-context";
+import { useMessageContext } from "./message-context";
 
 type UserContextType = {
   userName: User | null;
   setNameUser: React.Dispatch<React.SetStateAction<User | null>>;
   loader: boolean;
   edit: boolean;
-  setEdit: React.Dispatch<React.SetStateAction<boolean>>
+  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
   inputValue: User | null;
   setInputValue: React.Dispatch<React.SetStateAction<User | null>>;
-  saveChanges: () => void
+  saveChanges: () => void;
 };
 
-
-
-
+type Data = {
+  id: number;
+  name?: string | null;
+  email?: string | null;
+  login?: string | null;
+  avatar?: string;
+};
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserContextProvider({ children }: { children: ReactNode }) {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const [userName, setNameUser] = useState<User | null>(null);
   const [loader, setLoader] = useState<boolean>(true);
   const [edit, setEdit] = useState(false);
   const [inputValue, setInputValue] = useState<User | null>(null);
- 
+  const {openMessage} = useMessageContext()
   useEffect(() => {
     if (session?.user) {
       const userData: User = {
@@ -41,7 +46,7 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
         name: session.user.name || "",
         email: session.user.email || "",
         login: session.user?.login || "",
-        avatar: session.user?.image || "",
+        image: session.user?.image || "",
       };
       setNameUser(userData);
       setInputValue(userData);
@@ -52,25 +57,29 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
   }, [session]);
   async function saveChanges() {
     if (inputValue) {
-      const data = {
+      const data: Data = {
         id: Number(userName?.id),
-        name: inputValue.name,
-        email: inputValue.email,
-        login: inputValue.login,
       };
 
+      if (userName?.name !== inputValue.name) data.name = inputValue.name;
+      if (userName?.email !== inputValue.email) data.email = inputValue.email;
+      if (userName?.login !== inputValue.login) data.login = inputValue.login;
+      
+      data.avatar =
+        "https://i.pinimg.com/736x/d4/38/c3/d438c31d0caf10b0dc17a5fcb503a38e.jpg";
       try {
-       const res = await fetch("/api/user/update", {
+        const res = await fetch("/api/user/update", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
-        })
-
-         if (res.ok) {
-          const response = await res.json()
-          setNameUser(inputValue);
+        });
+        if (res.ok) {
+          const response = await res.json();
+          await update();
+          openMessage(response)
           setEdit(false);
-          console.log(response)
+          console.log(response);
+          
         }
       } catch (error) {
         console.error(error);
@@ -79,7 +88,18 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <UserContext.Provider value={{ userName, setNameUser, loader, edit, setEdit, inputValue, setInputValue, saveChanges }}>
+    <UserContext.Provider
+      value={{
+        userName,
+        setNameUser,
+        loader,
+        edit,
+        setEdit,
+        inputValue,
+        setInputValue,
+        saveChanges,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

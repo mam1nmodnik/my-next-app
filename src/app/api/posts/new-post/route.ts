@@ -8,24 +8,19 @@ export async function POST(req: Request) {
   try {
     const { id, title, content, date } = await req.json();
 
-    // Проверка обязательных полей
     if (!id || !title || !content || !date) {
-      return NextResponse.json(
-        { error: `Все поля обязательны: ${id}, ${title}, ${content}, ${date}` },
-        { status: 400 }
-      );
+      return NextResponse.json({ notice: 'error', message: 'Все поля обязательны' }, { status: 400 });
     }
 
-    // Проверяем существование пользователя
     const user = await prisma.user.findUnique({
       where: { id: Number(id) },
     });
+
     if (!user) {
-      return NextResponse.json({ error: 'Пользователь не найден' }, { status: 404 });
+      return NextResponse.json({ notice: 'error', message: 'Пользователь не найден' }, { status: 404 });
     }
 
-    // Создание поста
-    const post = await prisma.post.create({
+    await prisma.post.create({
       data: {
         title,
         content,
@@ -34,9 +29,9 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ status: 200, message: 'Пост успешно создан', post });
+    return NextResponse.json({ notice: 'success', message: 'Пост успешно создан' }, { status: 200 });
   } catch (error) {
     console.error('Ошибка при создании поста:', error);
-    return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
+    return NextResponse.json({ message: 'Ошибка сервера' , notice: 'error'}, { status: 500});
   }
 }

@@ -6,7 +6,7 @@ export default function NavDesktop({ pathname }: { pathname: string }) {
   const { showModal } = usePostNewContext();
 
   return (
-    <header className="lg:sticky lg:flex hidden top-0 h-[100px] w-full p-6 text-left flex-row justify-between  gap-4">
+    <header className="lg:sticky lg:flex hidden top-0 h-[100px] w-full p-6 text-left flex-row items-center justify-between  gap-4">
       <div className="text-xl flex flex-row items-center gap-4 text-white">
         <Link href="/">Главная</Link>
         <Link href="/profile">Профиль</Link>

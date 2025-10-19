@@ -12,7 +12,7 @@ export default function Profile() {
   
   const {inputValue , edit, setEdit, saveChanges, setInputValue} = useUserContext()
 
-  if (!inputValue) return null;
+  if (!inputValue) return null; 
 
   return (
     <div className="bg-gradient-to-br text-white flex justify-center items-center p-6">
@@ -43,15 +43,16 @@ export default function Profile() {
 
         <div className="flex flex-col items-center gap-3">
           <div className="w-28 h-28 rounded-full bg-slate-700 border-4 border-indigo-500 shadow-md flex items-center justify-center text-slate-400 text-sm">
-              {inputValue.avatar ? 
+              {inputValue.image ? 
               <Image
-                src={inputValue.avatar }
+                src={inputValue.image}
                 alt="Аватар"
                 width={100}
                 height={100}
                 className="rounded-full"
               /> :
               <RiAccountCircleLine size={100} /> 
+              
               }
           </div>
           <p className="text-slate-400 text-sm">

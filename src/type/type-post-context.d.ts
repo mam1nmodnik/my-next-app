@@ -15,7 +15,7 @@ export type User = {
   name?: string | null;
   email: string;
   login: string;
-  avatar: string | null;
+  image: string | null;
 };
 
 export type PostsContextType = {

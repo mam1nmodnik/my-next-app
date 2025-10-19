@@ -8,6 +8,7 @@ import {
 } from "@/type/type-new-post-context";
 import type { FormEvent } from "react";
 import { useUserContext } from "./user-context";
+import { useMessageContext } from "./message-context";
 
 const PostNewContext = createContext<NewPostContextType | undefined>(undefined);
 
@@ -24,9 +25,9 @@ export function ModalPostContextProvider({
     content: "",
   });
 
+  const { openMessage } = useMessageContext();
   async function newPost(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log(userName?.id)
     const data = {
       id: userName?.id,
       title: formValue.title,
@@ -39,8 +40,8 @@ export function ModalPostContextProvider({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      const res = await response.json()
-      console.log(res)
+      const res = await response.json();
+      openMessage(res)
       getPosts();
     } catch (error) {
       console.error("Ошибка при создании поста:", error);
@@ -50,12 +51,12 @@ export function ModalPostContextProvider({
   }
 
   async function deletePost(id: number) {
-    const res = await fetch(`/api/posts/delete-post/${id}`, {
+    const response = await fetch(`/api/posts/delete-post/${id}`, {
       method: "DELETE",
     });
+    const res = await response.json();
+    openMessage(res)
     getPosts();
-    const data = await res.json();
-    console.log(data);
   }
 
   const showModal = () => setOpenWindow(true);

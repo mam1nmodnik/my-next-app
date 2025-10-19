@@ -40,24 +40,27 @@ export const authOptions: AuthOptions = {
     maxAge: 60 * 60 * 24 * 7, // 7 дней
   },
   callbacks: {
-    async jwt({ token, user }) {
+   async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.email = user.email || '';
-        token.name = user.name;
-        token.login = user.login;
       }
       return token;
     },
-
     async session({ session, token }) {
-      if (token) {
-        session.user = {
-          id: token.id as string,
-          email: token.email as string,
-          name: token.name as string,
-          login: token.login as string,
-        };
+      if (token?.id) {
+        const user = await prisma.user.findUnique({
+          where: { id: Number(token.id)},
+        });
+
+        if (user) {
+          session.user = {
+            id: String(user.id),
+            name: user.name,
+            email: user.email,
+            login: user.login,
+            image: user.avatar,
+          };
+        }
       }
       return session;
     },

@@ -26,8 +26,6 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
           },
         });
         const response = await res.json();
-        console.log( response);
-
         setPosts(response);
       }
     } catch (error) {
@@ -39,7 +37,6 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
     try {
       const res = await fetch("/api/posts/all-posts")
       const response = await res.json();
-      console.log(response)
       setAllPosts(response);
     } catch (error) {
       console.error("Ошибка при получении поста:", error);
