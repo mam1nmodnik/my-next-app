@@ -55,12 +55,12 @@ export function ModalPostContextProvider({
       method: "DELETE",
     });
     const res = await response.json();
+    
     openMessage(res)
     getPosts();
   }
 
-  const showModal = () => setOpenWindow(true);
-  const handleCancel = () => setOpenWindow(false);
+  const handleCancel = () => setOpenWindow( el => !el);
 
   return (
     <PostNewContext.Provider
@@ -70,7 +70,6 @@ export function ModalPostContextProvider({
         formValue,
         newPost,
         deletePost,
-        showModal,
         handleCancel,
       }}
     >

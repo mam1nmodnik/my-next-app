@@ -1,5 +1,5 @@
 export type Post = {
-  id?: number;
+  id: number;
   idUser?: number;
   title?: string;
   content?: string;
@@ -7,7 +7,8 @@ export type Post = {
   createdAt: Date;
   userId: number;
   user: {
-    name: string
+    id: string,
+    login: string
   }
 };
 export type User = {

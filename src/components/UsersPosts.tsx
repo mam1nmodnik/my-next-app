@@ -18,7 +18,7 @@ const UserPosts = React.memo(function UsersPosts({ posts, suspens, deletePost }:
           </h1>
         ) : (
           posts.map((post, index) => (
-            <UsersPost  key={index} post={post} deletePost={deletePost} />
+            <UsersPost  key={index} post={post} deletePost={deletePost}/>
           ))
         )}
       </div>

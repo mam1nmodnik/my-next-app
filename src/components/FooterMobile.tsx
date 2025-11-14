@@ -9,10 +9,10 @@ import { usePostNewContext } from "@/context/post-new-context";
 
 const { Footer } = Layout;
 export function FooterMobile({ pathname }: { pathname: string }) {
-  const { showModal } = usePostNewContext();
+  const { handleCancel } = usePostNewContext();
   function openWindowPost() {
     setTimeout(() => {
-      return showModal();
+      return handleCancel();
     }, 200);
   }
   return (
@@ -64,7 +64,7 @@ export function FooterMobile({ pathname }: { pathname: string }) {
         </li>
         <li className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl text-black hover:text-gray active:text-white cursor-pointer `}>
           {pathname == "/myposts" ? (
-            <AiOutlineEdit size={30} onClick={showModal} color="black"/>
+            <AiOutlineEdit size={30} onClick={handleCancel} color="black"/>
           ) : (
             <Link href="/myposts" className="flex items-center text-black  ">
               <AiOutlineEdit size={30} onClick={openWindowPost} color=" black" />

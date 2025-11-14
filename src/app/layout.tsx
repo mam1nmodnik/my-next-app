@@ -1,6 +1,6 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "@ant-design/v5-patch-for-react-19";
+import '@ant-design/v5-patch-for-react-19';
 import "@/app/globals.css";
+import { Geist, Geist_Mono } from "next/font/google";
 import { LayoutWrapper } from "@/components/layoutWrapper";
 import AppProvider from "./_providers/app-provider";
 
@@ -17,6 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <meta name="referrer" content="origin"/>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AppProvider>
           <LayoutWrapper>{children}</LayoutWrapper>

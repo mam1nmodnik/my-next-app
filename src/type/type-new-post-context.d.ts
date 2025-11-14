@@ -11,6 +11,5 @@ export type NewPostContextType = {
   formValue: FormValueType;
   newPost: (event: FormEvent<HTMLFormElement>) => void;
   deletePost: (id: number) => void
-  showModal: () => void;
   handleCancel: () => void;
 };
