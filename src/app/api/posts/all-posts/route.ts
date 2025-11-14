@@ -10,7 +10,8 @@ export async function GET() {
       include: { 
       user: {
         select: {
-          name: true,
+          id: true,
+          login: true
         },
       } 
     }
