@@ -52,7 +52,6 @@ export default function Profile() {
                 className="rounded-full"
               /> :
               <RiAccountCircleLine size={100} /> 
-              
               }
           </div>
           <p className="text-slate-400 text-sm">

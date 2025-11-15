@@ -21,7 +21,10 @@ export async function GET(req: NextRequest,context: { params: Promise<{ id: stri
             id: true,
             title: true,
             content: true,
-            date: true
+            date: true,
+            createdAt: true,
+            userId: true, 
+            user: true
           }
         }
       }

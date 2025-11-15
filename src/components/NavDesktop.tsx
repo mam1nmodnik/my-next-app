@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { usePostNewContext } from "@/context/post-new-context";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function NavDesktop({ pathname }: { pathname: string }) {
   const { handleCancel } = usePostNewContext();
- 
+  const { data: session } = useSession();
+
   return (
     <header className="lg:sticky lg:flex hidden top-0 h-[100px] w-full p-6 text-left flex-row items-center justify-between  gap-4">
       <div className="text-xl flex flex-row items-center gap-4 text-white">
@@ -52,16 +53,18 @@ export default function NavDesktop({ pathname }: { pathname: string }) {
             Новый пост +
           </button>
         )}
-        <button
-          className=" h-[40px] pr-2 pl-2 text-xl text-white hover:text-blue-400 cursor-pointer"
-          onClick={() =>
-            signOut({
-              callbackUrl: "/login", // куда отправить после выхода
-            })
-          }
-        >
-          Выйти
-        </button>
+        {session && (
+          <button
+            className=" h-[40px] pr-2 pl-2 text-xl text-white hover:text-blue-400 cursor-pointer"
+            onClick={() =>
+              signOut({
+                callbackUrl: "/login", // куда отправить после выхода
+              })
+            }
+          >
+            Выйти
+          </button>
+        )}
       </div>
     </header>
   );

@@ -6,10 +6,6 @@ export type Post = {
   date: Date;
   createdAt: Date;
   userId: number;
-  user: {
-    id: string,
-    login: string
-  }
 };
 export type User = {
   id: string;
