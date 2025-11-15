@@ -1,4 +1,4 @@
-export type Post = {
+type Post = {
   id: number;
   idUser?: number;
   title?: string;
@@ -6,6 +6,11 @@ export type Post = {
   date: Date;
   createdAt: Date;
   userId: number;
+  user: {
+    id: string;
+    login: string;
+    name: string
+  }
 };
 export type User = {
   id: string;
