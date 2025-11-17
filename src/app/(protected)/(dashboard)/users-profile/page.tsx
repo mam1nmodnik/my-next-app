@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { RiAccountCircleLine } from "react-icons/ri";
 import Image from "next/image";
-import UsersPosts from "@/components/UsersPosts";
+import UsersPosts from "@/components/posts/UsersPosts";
 
 type Post = {
   id: number;
@@ -50,8 +50,8 @@ export default function UsersProfile() {
     );
   }
   return (
-    <div className="p-6 flex gap-5 ">
-      <div className="bg-gradient-to-br text-white flex w-3xl h-fit">
+    <div className="p-6 flex lg:flex-row flex-col lg:  gap-5">
+      <div className="bg-gradient-to-br text-white flex justify-center items-center w-full max-w-3xl h-fit">
         <div className="bg-slate-900/60 backdrop-blur-lg border border-slate-700 rounded-2xl shadow-2xl w-full max-w-lg p-8 space-y-8">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-semibold">Профиль</h2>
@@ -85,7 +85,7 @@ export default function UsersProfile() {
         </div>
       </div>
 
-      <UsersPosts posts={user.posts} suspens="У вас есть что-то интерестное?" />
+      <UsersPosts postUser={user.posts} suspens="Постов нет(" />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 import { usePostNewContext } from "@/context/post-new-context";
 import { usePostsContext } from "@/context/posts-context";
 import { Modal } from "antd";
-import UsersPosts from "@/components/UsersPosts";
+import UsersPosts from "@/components/posts/UsersPosts";
 
 export default function MyPosts() {
   const { posts } = usePostsContext();
@@ -15,7 +15,7 @@ export default function MyPosts() {
     handleCancel,
   } = usePostNewContext();
   return (
-    <>
+    <div className="p-4">
       <UsersPosts posts={posts} deletePost={deletePost}  suspens='У вас есть что-то интерестное?'/>
       <Modal
         open={openWindow}
@@ -56,6 +56,6 @@ export default function MyPosts() {
           </button>
         </form>
       </Modal>
-    </>
+    </div>
   );
 }
