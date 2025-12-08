@@ -77,9 +77,7 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
           const response = await res.json();
           await update();
           openMessage(response)
-          setEdit(false);
-          console.log(response);
-          
+          setEdit(false);          
         }
       } catch (error) {
         console.error(error);

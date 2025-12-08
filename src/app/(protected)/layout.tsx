@@ -1,4 +1,3 @@
-
 import UserSessionPage from "@/context/user-session";
 import "../globals.css";
 export default function ProfileLayout({
@@ -6,11 +5,5 @@ export default function ProfileLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-        <UserSessionPage>
-            {children}
-        </UserSessionPage>
-    </>
-  );
+  return <UserSessionPage>{children}</UserSessionPage>;
 }

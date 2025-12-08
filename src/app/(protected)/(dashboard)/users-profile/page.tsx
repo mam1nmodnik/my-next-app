@@ -36,7 +36,6 @@ export default function UsersProfile() {
     }
     const data = await response.json();
     setUser(data);
-    console.log(data);
   }, [id]);
 
   useEffect(() => {

@@ -3,16 +3,14 @@
 import React from "react";
 import InputField from "@/components/IU/InputField";
 import InfoRow from "@/components/IU/InfoRow";
-import { signOut } from "next-auth/react";
 import { useUserContext } from "@/context/user-context";
 import Image from "next/image";
 import { RiAccountCircleLine } from "react-icons/ri";
 
 export default function Profile() {
-  
-  const {inputValue , edit, setEdit, saveChanges, setInputValue} = useUserContext()
+  const { inputValue, edit, setEdit, saveChanges, setInputValue } = useUserContext();
 
-  if (!inputValue) return null; 
+  if (!inputValue) return null;
 
   return (
     <div className="bg-gradient-to-br text-white flex justify-center items-center p-6">
@@ -28,31 +26,23 @@ export default function Profile() {
                 Изменить
               </button>
             )}
-            <button
-              className=" lg:hidden block  rounded-[20px] h-[40px] pr-2 pl-2 text-xl text-white hover:text-blue-400 cursor-pointer"
-              onClick={() =>
-                signOut({
-                  callbackUrl: "/login",
-                })
-              }
-            >
-              Выйти
-            </button>
           </div>
         </div>
 
         <div className="flex flex-col items-center gap-3">
-          <div className="w-28 h-28 rounded-full bg-slate-700 border-4 border-indigo-500 shadow-md flex items-center justify-center text-slate-400 text-sm">
-              {inputValue.image ? 
-              <Image
-                src={inputValue.image}
-                alt="Аватар"
-                width={100}
-                height={100}
-                className="rounded-full"
-              /> :
-              <RiAccountCircleLine size={100} /> 
-              }
+          <div className="w-28 h-28 rounded-full border-4 border-indigo-500 shadow-md p-[3px] bg-slate-700">
+            <div className="relative w-full h-full rounded-full overflow-hidden">
+              {inputValue.image ? (
+                <Image
+                  src={inputValue.image}
+                  alt="Аватар"
+                  fill
+                  className="object-cover max-w-none"
+                />
+              ) : (
+                <RiAccountCircleLine size={100} className="text-slate-300" />
+              )}
+            </div>
           </div>
           <p className="text-slate-400 text-sm">
             {inputValue.name || "Имя не указано"}

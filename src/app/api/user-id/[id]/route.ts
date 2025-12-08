@@ -24,7 +24,13 @@ export async function GET(req: NextRequest,context: { params: Promise<{ id: stri
             date: true,
             createdAt: true,
             userId: true, 
-            user: true
+            user: {
+              select: {
+                id: true,
+                login: true,
+                name: true,
+              }
+            }
           }
         }
       }

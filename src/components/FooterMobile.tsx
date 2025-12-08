@@ -1,35 +1,35 @@
 "use client";
-import { AiOutlineUser, AiOutlineEdit } from "react-icons/ai";
-import { FiHome } from "react-icons/fi";
+import { AiOutlineUser } from "react-icons/ai";
+import { FiHome, FiMenu } from "react-icons/fi";
 import { LiaBookOpenSolid } from "react-icons/lia";
 
 import { Layout } from "antd";
 import Link from "next/link";
-import { usePostNewContext } from "@/context/post-new-context";
+import { useSession } from "next-auth/react";
+import { useDrawerContext } from "@/context/drawer-context";
 
 const { Footer } = Layout;
 export function FooterMobile({ pathname }: { pathname: string }) {
-  const { handleCancel } = usePostNewContext();
-  function openWindowPost() {
-    setTimeout(() => {
-      return handleCancel();
-    }, 200);
-  }
+  const { data: session } = useSession();
+  const { showDrawer } = useDrawerContext();
+
   return (
     <Footer
       style={{ textAlign: "center" }}
-      className="lg:hidden flex items-center justify-between w-full  fixed bottom-0"
+      className="flex justify-center w-full fixed bottom-4"
     >
-      <ul className="lg:hidden flex flex-row items-center   glass w-full">
+      <ul className="lg:hidden flex gap-2 flex-row items-center justify-center glass w-[93%] rounded-4xl p-1">
         <li
-          className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl cursor-pointer  ${
-            pathname == "/" ? "text-white" : "text-black"
+          className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl cursor-pointer   ${
+            pathname == "/" ? "text-white" : "text-black "
           }  `}
         >
-          <Link href="/" className={`flex flex-col items-center `}>
+          <Link href="/" className={`flex flex-col items-center text-black hover:text-white `}>
             <FiHome
               size={30}
-              color={`${pathname == "/" ? "white" : "black"}`}
+              color={`${pathname == "/" ? "white" : "black "}`}
+              title="Главная"
+              className=""
             />
           </Link>
           Главная
@@ -39,11 +39,11 @@ export function FooterMobile({ pathname }: { pathname: string }) {
             pathname == "/profile" ? "text-white" : "text-black"
           }  `}
         >
-          <Link href="/profile" className="flex flex-col items-center">
+          <Link href="/profile" className="flex flex-col items-center hover:bg-white">
             <AiOutlineUser
               size={30}
               className=""
-              color={`${pathname == "/profile" ? "white" : "black"}`}
+              color={`${pathname == "/profile" ? "white" : "black"} `}
             />
           </Link>
           Профиль
@@ -62,16 +62,26 @@ export function FooterMobile({ pathname }: { pathname: string }) {
           </Link>
           Посты
         </li>
-        <li className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl text-black hover:text-gray active:text-white cursor-pointer `}>
-          {pathname == "/myposts" ? (
-            <AiOutlineEdit size={30} onClick={handleCancel} color="black"/>
-          ) : (
-            <Link href="/myposts" className="flex items-center text-black  ">
-              <AiOutlineEdit size={30} onClick={openWindowPost} color=" black" />
+        {session ? (
+          <li
+            className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl text-black hover:text-gray text-[16px] hover:text-white active:text-white cursor-pointer `}
+            onClick={showDrawer}
+          >
+            <FiMenu size={30} />
+            Меню
+          </li>
+        ) : (
+          <li
+            className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl text-black hover:text-gray active:text-white cursor-pointer `}
+          >
+            <Link
+              href="/login"
+              className="flex items-center text-black text-[16px] "
+            >
+              Войти
             </Link>
-          )}
-          Новый пост
-        </li>
+          </li>
+        )}
       </ul>
     </Footer>
   );

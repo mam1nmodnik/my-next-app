@@ -3,6 +3,7 @@ import { usePostNewContext } from "@/context/post-new-context";
 import { usePostsContext } from "@/context/posts-context";
 import { Modal } from "antd";
 import UsersPosts from "@/components/posts/UsersPosts";
+import { AiOutlineEdit } from "react-icons/ai";
 
 export default function MyPosts() {
   const { posts } = usePostsContext();
@@ -14,8 +15,14 @@ export default function MyPosts() {
     deletePost,
     handleCancel,
   } = usePostNewContext();
+
+
   return (
     <div className="p-4">
+      <div className="h-fit bg-slate-800 m-2 p-1 rounded-xl lg:hidden block ">
+        {/* <input type="text" name="search" className="glass rounded-xl"/> */}
+        <AiOutlineEdit size={40} onClick={handleCancel} className="cursor-pointer text-white hover:text-gray-400 " />
+      </div>
       <UsersPosts posts={posts} deletePost={deletePost}  suspens='У вас есть что-то интерестное?'/>
       <Modal
         open={openWindow}
