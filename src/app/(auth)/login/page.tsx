@@ -1,23 +1,85 @@
-"use client"
+"use client";
+
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import MyInput from "@/components/IU/MyInput";
+
+type ErrorInput = {
+  allError?: string | null;
+  email?: { title?: string; };
+  password?: { title?: string; };
+};
 
 export default function LogIn() {
-  const inpStyle =
-    "glass w-full h-[45px] px-4 text-lg rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/70 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-white/30 hover:backdrop-blur-lg hover:bg-white/20";
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ErrorInput>({});
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await signIn("credentials", {
-      redirect: false,
-      email: form.email,
-      password: form.password,
+
+    let emailValid = true;
+    let passwordValid = true;
+
+    setError({
+      allError: null,
+      email: { title: undefined},
+      password: { title: undefined},
     });
-    if (res?.error) setError("Неверный логин или пароль");
-    else window.location.href = "/";
+
+    if (!form.email || !form.password) {
+      setError(prev => ({
+        ...prev,
+        allError: "Заполните все поля",
+      }));
+    }
+
+    if (!isValidEmail(form.email)) {
+      emailValid = false;
+      setError(prev => ({
+        ...prev,
+        email: { title: "Email заполнен некорректно!" },
+      }));
+    }
+
+    if (!isValidPassword(form.password)) {
+      passwordValid = false;
+      setError(prev => ({
+        ...prev,
+        password: { title: "Длина пароля должна быть больше 6" },
+      }));
+    }
+
+    if (!emailValid || !passwordValid) return;
+
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: form.email,
+        password: form.password,
+      });
+
+      if (res?.error) {
+        setError(prev => ({
+          ...prev,
+          allError: res.error,
+        }));
+        return;
+      }
+
+      window.location.href = "/";
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  function isValidEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function isValidPassword(password: string) {
+    return password.length >= 6;
+  }
 
   return (
     <div className="min-h-screen flex justify-center items-center ">
@@ -25,48 +87,61 @@ export default function LogIn() {
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <h1 className="text-white text-xl">Log In</h1>
           <div className="flex flex-col gap-4 w-full">
-            <input
+            <MyInput
               type="email"
               name="email"
-              className={inpStyle}
               placeholder="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
-            <input
+            <MyInput
               type="password"
               name="password"
-              className={inpStyle}
               placeholder="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
+              togglePassword={true}
             />
           </div>
+
           <div className="flex flex-col gap-5 relative">
             <div className="flex items-center justify-between pr-3 pl-3">
-              <label htmlFor="" className="flex gap-2  text-white">
-                <input type="checkbox" name="" id="" className="w-4" />
+              <label htmlFor="" className="flex gap-2 text-white">
+                <input type="checkbox" className="w-4" />
                 Remember me
               </label>
-              <p className="text-white  gap-2 flex ">
+              <p className="text-white gap-2 flex ">
                 <Link href="/recovery" scroll={false}>
                   Forgot password
                 </Link>
               </p>
             </div>
+
             <button
               type="submit"
               className="w-full text-lg p-2 rounded-xl bg-white/10 border border-white/20 text-white backdrop-blur-md backdrop-saturate-150 shadow-md hover:shadow-lg hover:backdrop-blur-lg hover:bg-white/20 transition-all duration-300 ease-in-out"
             >
               Log In
             </button>
-            {error && <p className="text-red-500 text-center">{error}</p>}
+
+            <div className="relative">
+              {(error.allError || error.email?.title || error.password?.title) && (
+                <div className="flex flex-col">
+                  <p className="text-red-500 text-center ">{error.allError}</p>
+                  <p className="text-red-500 text-center ">
+                    {error.email?.title}
+                  </p>
+                  <p className="text-red-500 text-center ">
+                    {error.password?.title}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
+
           <p className="text-white text-center flex flex-col ">
             Нет аккаунта?
-            <Link href="/signup" scroll={false}>
-              Sign Up
-            </Link>
+            <Link href="/signup" scroll={false}>Sign Up</Link>
           </p>
         </form>
       </div>
