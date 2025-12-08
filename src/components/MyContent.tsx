@@ -9,19 +9,18 @@ import { useUserContext } from "@/context/user-context";
 import { usePostsContext } from "@/context/posts-context";
 import { useAllUsersContext } from "@/context/all-users-context";
 export default function MyContent({ children }: { children: React.ReactNode }) {
-  const {getAllPosts} = usePostsContext()
-  const {Users} = useAllUsersContext()
-  const { loader } = useUserContext()
+  const { getAllPosts } = usePostsContext();
+  const { Users } = useAllUsersContext();
+  const { loader } = useUserContext();
   const pathname = usePathname();
-  const isHome = ["/", ].includes(pathname) ?? "/";
-  const users = ["/users", ].includes(pathname) ?? "/users";
+  const isHome = ["/"].includes(pathname) ?? "/";
+  const users = ["/users"].includes(pathname) ?? "/users";
   useEffect(() => {
-    if(isHome === true) getAllPosts()
-    if(users === true) Users()
-
+    if (isHome === true) getAllPosts();
+    if (users === true) Users();
   }, [isHome, getAllPosts, Users, users]);
 
-  const authcontent = ["/login", "/signup"].includes(pathname) ;
+  const authcontent = ["/login", "/signup"].includes(pathname);
 
   if (loader) {
     return <MyLoader />;
@@ -33,7 +32,7 @@ export default function MyContent({ children }: { children: React.ReactNode }) {
       {
         <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-800 bg-fixed">
           {!authcontent && <NavDesktop pathname={pathname} />}
-          {children}
+          {!authcontent ? <div className="mb-[100px]">{children}</div> : <>{children}</>}
           {!authcontent && <FooterMobile pathname={pathname} />}
         </div>
       }
