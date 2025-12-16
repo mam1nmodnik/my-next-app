@@ -13,12 +13,10 @@ export default function MyContent({ children }: { children: React.ReactNode }) {
   const { Users } = useAllUsersContext();
   const { loader } = useUserContext();
   const pathname = usePathname();
-  const isHome = ["/"].includes(pathname) ?? "/";
-  const users = ["/users"].includes(pathname) ?? "/users";
   useEffect(() => {
-    if (isHome === true) getAllPosts();
-    if (users === true) Users();
-  }, [isHome, getAllPosts, Users, users]);
+    if (pathname === '/') getAllPosts();
+    if (pathname === '/users') Users();
+  }, [getAllPosts, Users, pathname]);
 
   const authcontent = ["/login", "/signup"].includes(pathname);
 
@@ -30,7 +28,7 @@ export default function MyContent({ children }: { children: React.ReactNode }) {
       className={`flex flex-col gap-10  ${authcontent && " justify-center "}  `}
     >
       {
-        <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-800 bg-fixed">
+        <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-800 ">
           {!authcontent && <NavDesktop pathname={pathname} />}
           {!authcontent ? <div className="mb-[100px]">{children}</div> : <>{children}</>}
           {!authcontent && <FooterMobile pathname={pathname} />}

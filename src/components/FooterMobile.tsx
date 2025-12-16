@@ -18,10 +18,10 @@ export function FooterMobile({ pathname }: { pathname: string }) {
       style={{ textAlign: "center" }}
       className="flex justify-center w-full fixed bottom-4"
     >
-      <ul className="lg:hidden flex gap-2 flex-row items-center justify-center glass w-[93%] rounded-4xl p-1">
+      <ul className="lg:hidden flex gap-2 flex-row items-center justify-center glass w-[93%] rounded-4xl  p-1">
         <li
-          className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl cursor-pointer   ${
-            pathname == "/" ? "text-white" : "text-black "
+          className={`flex flex-col items-center justify-center p-2 h-fit w-full rounded-4xl cursor-pointer   ${
+            pathname == "/" ? "text-white bg-gray-800 ": "text-black"
           }  `}
         >
           <Link href="/" className={`flex flex-col items-center text-black hover:text-white `}>
@@ -35,8 +35,8 @@ export function FooterMobile({ pathname }: { pathname: string }) {
           Главная
         </li>
         <li
-          className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl cursor-pointer  ${
-            pathname == "/profile" ? "text-white" : "text-black"
+          className={`flex flex-col items-center justify-center  p-2 h-fit w-full rounded-4xl cursor-pointer  ${
+            pathname == "/profile" ? "text-white bg-gray-800" : "text-black"
           }  `}
         >
           <Link href="/profile" className="flex flex-col items-center hover:bg-white">
@@ -49,11 +49,11 @@ export function FooterMobile({ pathname }: { pathname: string }) {
           Профиль
         </li>
         <li
-          className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl  cursor-pointer  ${
-            pathname == "/myposts" ? "text-white" : "text-black"
+          className={`flex flex-col items-center justify-center  p-2 h-fit w-full rounded-4xl  cursor-pointer  ${
+            pathname == "/myposts" ? "text-white bg-gray-800" : "text-black"
           }  `}
         >
-          <Link href="/myposts" className="flex flex-col items-center">
+          <Link href="/myposts" className="flex flex-col items-center hover:bg-white">
             <LiaBookOpenSolid
               size={30}
               className=""

@@ -8,7 +8,7 @@ import {
 
 type AllUsersType = {
   users: UsersType[];
-  Users: () => void
+  Users: () => void;
 };
 
 const AllUsersContext = createContext<AllUsersType | undefined>(undefined);
@@ -26,11 +26,11 @@ export function AllUsersContextProvider({ children }: { children: ReactNode }) {
     if (!response.ok) {
       throw new Error("Ошибка сервера");
     } else {
-      const data = await response.json();
-      setUsers(data);
+      const data: UsersType[] = await response.json();
+      setUsers([...users, ...data.slice(users.length)]);
     }
-  }, []);
-  
+  }, [users]);
+
   return (
     <AllUsersContext.Provider value={{ users, Users }}>
       {children}

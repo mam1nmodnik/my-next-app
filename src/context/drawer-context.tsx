@@ -1,4 +1,3 @@
-import ButtonDrawer from "@/components/IU/ButtonDrawer";
 import { Drawer } from "antd";
 import {
   createContext,
@@ -9,6 +8,8 @@ import {
 } from "react";
 import { FiUsers } from "react-icons/fi";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type DrawerContextType = {
   showDrawer: () => void;
@@ -18,7 +19,7 @@ type DrawerContextType = {
 const DrawerContext = createContext<DrawerContextType | undefined>(undefined);
 export function DrawerContextProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-
+  const pathname = usePathname();
   const showDrawer = useCallback(async () => {
     setOpen(true);
   }, []);
@@ -26,6 +27,14 @@ export function DrawerContextProvider({ children }: { children: ReactNode }) {
   const onClose = useCallback(async () => {
     setOpen(false);
   }, []);
+
+  const menu = [
+    {
+      href: "/users",
+      label: "Пользователи",
+      icon: <FiUsers size={40} />,
+    },
+  ];
 
   return (
     <DrawerContext.Provider value={{ showDrawer, onClose }}>
@@ -53,11 +62,24 @@ export function DrawerContextProvider({ children }: { children: ReactNode }) {
         }
       >
         <div className="flex flex-wrap">
-          <ButtonDrawer
-            label="Пользователи"
-            icon={<FiUsers size={40} />}
-            link="/users"
-          />
+          {menu.map((el, index) =>
+            pathname === el.href ? (
+              <div
+                key={index}
+                className="flex flex-col h-[75px] items-center text-white w-fit rounded-2xl p-2 bg-gray-700 cursor-default"
+              >
+                {el.icon}
+                {el.label}
+              </div>
+            ) : (
+              <Link key={index} href={el.href} onClick={onClose} scroll={false}>
+                <span className="flex flex-col h-[75px] items-center text-white w-fit rounded-2xl p-2 hover:bg-gray-700 cursor-pointer">
+                  {el.icon}
+                  {el.label}
+                </span>
+              </Link>
+            )
+          )}
         </div>
       </Drawer>
       {children}

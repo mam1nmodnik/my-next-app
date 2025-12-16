@@ -23,12 +23,9 @@ export default function UsersPost({
   deletePost,
   postUser,
 }: UsersPostProps) {
-  const confirm = (id: number) => {
-    if (deletePost) deletePost(id);
-  };
 
   return (
-    <div className="flex flex-col justify-between gap-4 font-sans md:pt-8 md:pr-8 md:pl-8 md:pb-4 p-4  min-h-fit md:max-w-[968px] w-full  bg-slate-900/60 backdrop-blur-lg border border-slate-700 rounded-2xl shadow-2xl  shadow-indigo-900/20">
+    <div className="flex flex-col justify-between gap-4 font-sans md:pt-8 md:pr-8 md:pl-8 md:pb-4 p-4  min-h-fit md:max-w-[968px] w-full  bg-slate-900/60  border border-slate-700 rounded-2xl shadow-2xl  shadow-indigo-900/20">
       {post && (
         <>
           <div>
@@ -41,20 +38,20 @@ export default function UsersPost({
               </p>
             </div>
           </div>
-          <div className="flex items-center flex-row justify-between">
+          <div className="flex items-center flex-row justify-between ">
             {deletePost && (
               <Popconfirm
                 title="Вы уверены?"
-                onConfirm={() => confirm(post.id)}
+                onConfirm={() => deletePost(post.id)}
                 okText="Да"
                 cancelText="Нет"
+                className="static"
               >
-                <Button
-                  className="bg-red-700 hover:bg-red-900 md:p-3 p-2 cursor-pointer md:w-40 md:rounded-[15px] rounded-[10px] text-s md:text-l font-medium  text-white hover:text-gray"
-                  type="primary"
+                <button
+                  className="bg-red-500  hover:bg-red-900 p-2 cursor-pointer md:w-40 w-35 rounded-[6px] text-[14px]  font-medium  text-white hover:text-gray"
                 >
                   Удалить
-                </Button>
+                </button>
               </Popconfirm>
             )}
             {post.user?.login && (

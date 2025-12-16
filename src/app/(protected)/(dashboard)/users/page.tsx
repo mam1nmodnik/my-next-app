@@ -1,34 +1,28 @@
 "use client";
 import { useAllUsersContext } from "@/context/all-users-context";
-import { Avatar , List, Skeleton } from "antd";
+import { Avatar, List } from "antd";
 import Link from "next/link";
 import React from "react";
 import { VscAccount } from "react-icons/vsc";
 
-
 const Users = React.memo(function Users() {
-const {users} = useAllUsersContext()
-  if (!users)
-    return (
-      <div className="flex items-center justify-center">
-        <div className="max-w-[768px] w-full ">
-          <Skeleton avatar paragraph={{ rows: 3 }} />
-        </div>
-      </div>
-    );
+  const { users } = useAllUsersContext();
+
   return (
     <div className="flex items-center justify-center m-4">
-      <div className="max-w-[768px] w-full ">
+      <div className="max-w-[768px] w-full flex flex-col gap-5 ">
+        <h1 className="text-white text-4xl lg:hidden block">Пользователи</h1>
         <List
           dataSource={users}
           bordered
+          loading={users.length == 0 ? true : false}
           renderItem={(item) => (
             <List.Item
               key={item.id}
               actions={[
                 <Link
                   href={`/users-profile?user=${item.id}`}
-                  key={`a-${item.id}`}
+                  key={`${item.id}`}
                 >
                   View Profile
                 </Link>,

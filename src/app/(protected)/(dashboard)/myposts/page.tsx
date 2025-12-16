@@ -1,9 +1,8 @@
 "use client";
 import { usePostNewContext } from "@/context/post-new-context";
 import { usePostsContext } from "@/context/posts-context";
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import UsersPosts from "@/components/posts/UsersPosts";
-import { AiOutlineEdit } from "react-icons/ai";
 
 export default function MyPosts() {
   const { posts } = usePostsContext();
@@ -16,14 +15,22 @@ export default function MyPosts() {
     handleCancel,
   } = usePostNewContext();
 
-
   return (
-    <div className="p-4">
-      <div className="h-fit bg-slate-800 m-2 p-1 rounded-xl lg:hidden block ">
-        {/* <input type="text" name="search" className="glass rounded-xl"/> */}
-        <AiOutlineEdit size={40} onClick={handleCancel} className="cursor-pointer text-white hover:text-gray-400 " />
+    <div className="p-4 flex flex-col gap-2">
+      <div className="lg:hidden sticky top-5">
+        <button
+          className="bg-blue-500  hover:bg-blue-400 p-2 cursor-pointer md:w-40 w-35 rounded-[6px] text-[14px]  font-medium  text-white hover:text-gray"
+          onClick={handleCancel}
+        >
+          Создать пост
+        </button>
       </div>
-      <UsersPosts posts={posts} deletePost={deletePost}  suspens='У вас есть что-то интерестное?'/>
+      <UsersPosts
+        posts={posts}
+        deletePost={deletePost}
+        suspens="У вас есть что-то интерестное?"
+      />
+
       <Modal
         open={openWindow}
         onCancel={handleCancel}
@@ -58,7 +65,10 @@ export default function MyPosts() {
               required
             />
           </label>
-          <button type="submit" className="glass p-2 cursor-pointer text-[#E5E7EB] rounded-xl w-[10rem] text-[1rem]">
+          <button
+            type="submit"
+            className="glass p-2 cursor-pointer text-[#E5E7EB] rounded-xl w-[10rem] text-[1rem]"
+          >
             Опубликовать
           </button>
         </form>
