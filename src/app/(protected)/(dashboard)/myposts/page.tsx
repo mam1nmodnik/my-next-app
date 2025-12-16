@@ -1,7 +1,7 @@
 "use client";
 import { usePostNewContext } from "@/context/post-new-context";
 import { usePostsContext } from "@/context/posts-context";
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 import UsersPosts from "@/components/posts/UsersPosts";
 
 export default function MyPosts() {

@@ -1,7 +1,7 @@
 "use client";
 import { Post } from "@/type/type-post-context";
 import { formateDate } from "@/lib/formate-date";
-import { Button, Popconfirm } from "antd";
+import { Popconfirm } from "antd";
 import Link from "next/link";
 
 type PostUser = {
