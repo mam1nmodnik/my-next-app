@@ -30,8 +30,7 @@ export default function Profile() {
               <MyButton
                 onClick={() => setEdit(true)}
                 className="text-sm px-3 py-1 bg-indigo-600 hover:bg-indigo-500 transition rounded-lg"
-                text="Изменить"
-              />
+              >Изменить</MyButton>
             )}
           </div>
         </div>
@@ -99,14 +98,13 @@ export default function Profile() {
               <MyButton
                 onClick={() => setEdit(false)}
                 className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition"
-                text="Отмена"
-              />
+              >Отмена</MyButton>
 
               <MyButton
-                text="Сохранить"
+                
                 className="w-35 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg transition"
                 loading={loadBtnProfil}
-              />
+              >Сохранить</MyButton>
             </div>
           </form>
         ) : (

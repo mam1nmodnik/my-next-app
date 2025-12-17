@@ -117,7 +117,7 @@ export default function LogIn() {
               </p>
             </div>
 
-            <MyButton text="Log In" loading={loadbtn} />
+            <MyButton loading={loadbtn}>Log In</MyButton>
 
             <div className="relative">
               {(error.allError ||

@@ -1,13 +1,13 @@
 import { LoadingOutlined } from "@ant-design/icons";
 
-type MyButtonProps = {
+type ButtonProps = {
   loading?: boolean;
-  text: string;
   className?: string;
   onClick?: () => void;
+  children: string
 };
 
-export function MyButton({ loading, text, className, onClick }: MyButtonProps) {
+export function MyButton({ loading,  className, onClick, children }: ButtonProps) {
   return (
     <button
       className={
@@ -17,7 +17,7 @@ export function MyButton({ loading, text, className, onClick }: MyButtonProps) {
       }
       onClick={onClick}
     >
-      {loading ? <LoadingOutlined /> : text}
+      {loading ? <LoadingOutlined /> : children}
     </button>
   );
 }

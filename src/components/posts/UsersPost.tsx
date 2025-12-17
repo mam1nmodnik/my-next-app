@@ -3,7 +3,6 @@ import { Post } from "@/type/type-post-context";
 import { formateDate } from "@/lib/formate-date";
 import { Popconfirm } from "antd";
 import Link from "next/link";
-import { MyButton } from "../IU/MyButton";
 
 type PostUser = {
   id: number;
@@ -47,10 +46,9 @@ export default function UsersPost({
                 cancelText="Нет"
                 className="static"
               >
-                <MyButton
-                  className="bg-red-500  hover:bg-red-900 p-2 cursor-pointer md:w-40 w-35 rounded-[6px] text-[14px]  font-medium  text-white hover:text-gray"
-                  text="Удалить"
-                />
+                <button className="bg-red-500  hover:bg-red-900 p-2 cursor-pointer md:w-40 w-35 rounded-[6px] text-[14px]  font-medium  text-white hover:text-gray">
+                  Удалить
+                </button>
               </Popconfirm>
             )}
             {post.user?.login && (

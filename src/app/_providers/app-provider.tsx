@@ -20,39 +20,42 @@ export default function AppProvider({ children }: { children: ReactNode }) {
           <UserContextProvider>
             <PostsContextProvider>
               <AllUsersContextProvider>
-              <ModalPostContextProvider>
-                <DrawerContextProvider>
-                  <ConfigProvider
-                    theme={{
-                      token: {
-                        colorLinkActive: "black",
-                        colorLink: "#fff",
-                        colorLinkHover: "#60a5fa",
-                      },
-                      components: {
-                        Modal: {
-                          contentBg: "ghosthub-card",
-                          titleColor: "#E2E8F0",
+                <ModalPostContextProvider>
+                  <DrawerContextProvider>
+                    <ConfigProvider
+                      getPopupContainer={(node) =>
+                        node?.parentElement || document.body
+                      }
+                      theme={{
+                        token: {
+                          colorLinkActive: "black",
+                          colorLink: "#fff",
+                          colorLinkHover: "#60a5fa",
                         },
-                        Layout: {
-                          headerBg: "transparent",
-                          footerBg: "transparent",
-                          footerPadding: "none",
-                          siderBg: "transparent",
+                        components: {
+                          Modal: {
+                            contentBg: "ghosthub-card",
+                            titleColor: "#E2E8F0",
+                          },
+                          Layout: {
+                            headerBg: "transparent",
+                            footerBg: "transparent",
+                            footerPadding: "none",
+                            siderBg: "transparent",
+                          },
+                          Button: {
+                            colorText: "black",
+                          },
+                          Input: {
+                            activeBg: "none",
+                          },
                         },
-                        Button: {
-                          colorText: "black",
-                        },
-                        Input: {
-                          activeBg: "none",
-                        },
-                      },
-                    }}
-                  >
-                    {children}
-                  </ConfigProvider>
-                </DrawerContextProvider>
-              </ModalPostContextProvider>
+                      }}
+                    >
+                      {children}
+                    </ConfigProvider>
+                  </DrawerContextProvider>
+                </ModalPostContextProvider>
               </AllUsersContextProvider>
             </PostsContextProvider>
           </UserContextProvider>

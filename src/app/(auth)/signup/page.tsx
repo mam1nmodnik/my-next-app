@@ -120,7 +120,7 @@ export default function SignUp() {
               with privacy and policy
             </label>
 
-            <MyButton text="Sign Up" loading={loadbtn} />
+            <MyButton loading={loadbtn}>Sign Up</MyButton>
 
             <div className="relative">
               {(error.allError ||

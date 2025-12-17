@@ -22,8 +22,8 @@ export default function MyPosts() {
         <MyButton
           className="bg-blue-500  hover:bg-blue-400 p-2 cursor-pointer md:w-40 w-35 rounded-[6px] text-[14px]  font-medium  text-white hover:text-gray"
           onClick={handleCancel}
-          text="Создать пост"
-        />
+          
+        >Создать пост</MyButton>
         
       </div>
       <UsersPosts
