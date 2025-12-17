@@ -29,7 +29,8 @@ export function AllUsersContextProvider({ children }: { children: ReactNode }) {
       const data: UsersType[] = await response.json();
       setUsers([...users, ...data.slice(users.length)]);
     }
-  }, [users]);
+    
+  }, []);
 
   return (
     <AllUsersContext.Provider value={{ users, Users }}>

@@ -16,6 +16,7 @@ type UserContextType = {
   userName: User | null;
   setNameUser: React.Dispatch<React.SetStateAction<User | null>>;
   loader: boolean;
+  loadBtnProfil: boolean
   edit: boolean;
   setEdit: React.Dispatch<React.SetStateAction<boolean>>;
   inputValue: User | null;
@@ -38,7 +39,8 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
   const [loader, setLoader] = useState<boolean>(true);
   const [edit, setEdit] = useState(false);
   const [inputValue, setInputValue] = useState<User | null>(null);
-  const {openMessage} = useMessageContext()
+  const [loadBtnProfil, setLoadBtnProfil] = useState(false);
+  const { openMessage } = useMessageContext();
   useEffect(() => {
     if (session?.user) {
       const userData: User = {
@@ -64,10 +66,11 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
       if (userName?.name !== inputValue.name) data.name = inputValue.name;
       if (userName?.email !== inputValue.email) data.email = inputValue.email;
       if (userName?.login !== inputValue.login) data.login = inputValue.login;
-      
+
       data.avatar =
         "https://i.pinimg.com/736x/d4/38/c3/d438c31d0caf10b0dc17a5fcb503a38e.jpg";
       try {
+        setLoadBtnProfil(() => true);
         const res = await fetch("/api/user/update", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -76,8 +79,9 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
         if (res.ok) {
           const response = await res.json();
           await update();
-          openMessage(response)
-          setEdit(false);          
+          openMessage(response);
+          setEdit(false);
+          setLoadBtnProfil(() => false);
         }
       } catch (error) {
         console.error(error);
@@ -96,6 +100,7 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
         inputValue,
         setInputValue,
         saveChanges,
+        loadBtnProfil
       }}
     >
       {children}

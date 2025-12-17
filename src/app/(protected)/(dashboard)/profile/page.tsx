@@ -6,9 +6,17 @@ import InfoRow from "@/components/IU/InfoRow";
 import { useUserContext } from "@/context/user-context";
 import Image from "next/image";
 import { RiAccountCircleLine } from "react-icons/ri";
+import { MyButton } from "@/components/IU/MyButton";
 
 export default function Profile() {
-  const { inputValue, edit, setEdit, saveChanges, setInputValue } = useUserContext();
+  const {
+    inputValue,
+    edit,
+    setEdit,
+    saveChanges,
+    setInputValue,
+    loadBtnProfil,
+  } = useUserContext();
 
   if (!inputValue) return null;
 
@@ -96,12 +104,12 @@ export default function Profile() {
               >
                 Отмена
               </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg transition"
-              >
-                Сохранить
-              </button>
+
+              <MyButton
+                text="Сохранить"
+                className="w-35 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg transition"
+                loading={loadBtnProfil}
+              />
             </div>
           </form>
         ) : (

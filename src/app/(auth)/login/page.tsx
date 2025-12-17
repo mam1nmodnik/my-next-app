@@ -4,31 +4,30 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import MyInput from "@/components/IU/MyInput";
-
+import { MyButton } from "@/components/IU/MyButton";
 type ErrorInput = {
   allError?: string | null;
-  email?: { title?: string; };
-  password?: { title?: string; };
+  email?: { title?: string };
+  password?: { title?: string };
 };
 
 export default function LogIn() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState<ErrorInput>({});
-
+  const [loadbtn, setLoadBtn] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     let emailValid = true;
     let passwordValid = true;
 
     setError({
       allError: null,
-      email: { title: undefined},
-      password: { title: undefined},
+      email: { title: undefined },
+      password: { title: undefined },
     });
 
     if (!form.email || !form.password) {
-      setError(prev => ({
+      setError((prev) => ({
         ...prev,
         allError: "Заполните все поля",
       }));
@@ -36,7 +35,7 @@ export default function LogIn() {
 
     if (!isValidEmail(form.email)) {
       emailValid = false;
-      setError(prev => ({
+      setError((prev) => ({
         ...prev,
         email: { title: "Email заполнен некорректно!" },
       }));
@@ -44,7 +43,7 @@ export default function LogIn() {
 
     if (!isValidPassword(form.password)) {
       passwordValid = false;
-      setError(prev => ({
+      setError((prev) => ({
         ...prev,
         password: { title: "Длина пароля должна быть больше 6" },
       }));
@@ -53,6 +52,7 @@ export default function LogIn() {
     if (!emailValid || !passwordValid) return;
 
     try {
+      setLoadBtn(() => true);
       const res = await signIn("credentials", {
         redirect: false,
         email: form.email,
@@ -60,14 +60,14 @@ export default function LogIn() {
       });
 
       if (res?.error) {
-        setError(prev => ({
+        setError((prev) => ({
           ...prev,
           allError: res.error,
         }));
         return;
       }
-
       window.location.href = "/";
+      setLoadBtn(() => false);
     } catch (err) {
       console.log(err);
     }
@@ -117,15 +117,12 @@ export default function LogIn() {
               </p>
             </div>
 
-            <button
-              type="submit"
-              className="w-full text-lg p-2 rounded-xl bg-white/10 border border-white/20 text-white backdrop-blur-md backdrop-saturate-150 shadow-md hover:shadow-lg hover:backdrop-blur-lg hover:bg-white/20 transition-all duration-300 ease-in-out"
-            >
-              Log In
-            </button>
+            <MyButton text="Log In" loading={loadbtn} />
 
             <div className="relative">
-              {(error.allError || error.email?.title || error.password?.title) && (
+              {(error.allError ||
+                error.email?.title ||
+                error.password?.title) && (
                 <div className="flex flex-col">
                   <p className="text-red-500 text-center ">{error.allError}</p>
                   <p className="text-red-500 text-center ">
@@ -141,7 +138,9 @@ export default function LogIn() {
 
           <p className="text-white text-center flex flex-col ">
             Нет аккаунта?
-            <Link href="/signup" scroll={false}>Sign Up</Link>
+            <Link href="/signup" scroll={false}>
+              Sign Up
+            </Link>
           </p>
         </form>
       </div>

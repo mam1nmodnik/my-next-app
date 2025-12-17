@@ -1,4 +1,5 @@
 "use client";
+import { MyButton } from "@/components/IU/MyButton";
 import MyInput from "@/components/IU/MyInput";
 import Link from "next/link";
 import { useState } from "react";
@@ -10,14 +11,14 @@ type ErrorInput = {
 };
 
 export default function SignUp() {
-  
   const [form, setForm] = useState({ login: "", email: "", password: "" });
 
   const [error, setError] = useState<ErrorInput>({});
+  const [loadbtn, setLoadBtn] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let loginValid = true
+    let loginValid = true;
     let emailValid = true;
     let passwordValid = true;
 
@@ -28,7 +29,7 @@ export default function SignUp() {
     });
 
     if (!form.email || !form.password || !form.login) {
-      loginValid = false
+      loginValid = false;
       setError((prev) => ({
         ...prev,
         allError: "Заполните все поля",
@@ -54,6 +55,7 @@ export default function SignUp() {
     if (!emailValid || !passwordValid || !loginValid) return;
 
     try {
+      setLoadBtn(() => true);
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -69,6 +71,7 @@ export default function SignUp() {
       }
 
       window.location.href = "/login";
+      setLoadBtn(() => false);
     } catch (err) {
       console.log(err);
     }
@@ -116,12 +119,9 @@ export default function SignUp() {
               <input type="checkbox" name="" id="" className="w-4" />I Agree
               with privacy and policy
             </label>
-            <button
-              type="submit"
-              className="w-full text-lg p-2 rounded-xl bg-white/10 border border-white/20 text-white backdrop-blur-md backdrop-saturate-150 shadow-md hover:shadow-lg hover:backdrop-blur-lg hover:bg-white/20 transition-all duration-300 ease-in-out"
-            >
-              Sign Up
-            </button>
+
+            <MyButton text="Sign Up" loading={loadbtn} />
+
             <div className="relative">
               {(error.allError ||
                 error.email?.title ||
