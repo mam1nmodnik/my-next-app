@@ -3,6 +3,7 @@ import { Post } from "@/type/type-post-context";
 import { formateDate } from "@/lib/formate-date";
 import { Popconfirm } from "antd";
 import Link from "next/link";
+import { MyButton } from "../IU/MyButton";
 
 type PostUser = {
   id: number;
@@ -23,7 +24,6 @@ export default function UsersPost({
   deletePost,
   postUser,
 }: UsersPostProps) {
-
   return (
     <div className="flex flex-col justify-between gap-4 font-sans md:pt-8 md:pr-8 md:pl-8 md:pb-4 p-4  min-h-fit md:max-w-[968px] w-full  bg-slate-900/60  border border-slate-700 rounded-2xl shadow-2xl  shadow-indigo-900/20">
       {post && (
@@ -47,11 +47,10 @@ export default function UsersPost({
                 cancelText="Нет"
                 className="static"
               >
-                <button
+                <MyButton
                   className="bg-red-500  hover:bg-red-900 p-2 cursor-pointer md:w-40 w-35 rounded-[6px] text-[14px]  font-medium  text-white hover:text-gray"
-                >
-                  Удалить
-                </button>
+                  text="Удалить"
+                />
               </Popconfirm>
             )}
             {post.user?.login && (

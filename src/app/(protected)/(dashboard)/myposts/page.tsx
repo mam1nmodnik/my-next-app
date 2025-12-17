@@ -3,6 +3,7 @@ import { usePostNewContext } from "@/context/post-new-context";
 import { usePostsContext } from "@/context/posts-context";
 import { Modal } from "antd";
 import UsersPosts from "@/components/posts/UsersPosts";
+import { MyButton } from "@/components/IU/MyButton";
 
 export default function MyPosts() {
   const { posts } = usePostsContext();
@@ -18,12 +19,12 @@ export default function MyPosts() {
   return (
     <div className="p-4 flex flex-col gap-2">
       <div className="lg:hidden sticky top-5">
-        <button
+        <MyButton
           className="bg-blue-500  hover:bg-blue-400 p-2 cursor-pointer md:w-40 w-35 rounded-[6px] text-[14px]  font-medium  text-white hover:text-gray"
           onClick={handleCancel}
-        >
-          Создать пост
-        </button>
+          text="Создать пост"
+        />
+        
       </div>
       <UsersPosts
         posts={posts}

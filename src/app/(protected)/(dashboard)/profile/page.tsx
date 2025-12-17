@@ -27,12 +27,11 @@ export default function Profile() {
           <h2 className="text-2xl font-semibold">Профиль</h2>
           <div className="flex flex-col">
             {!edit && (
-              <button
+              <MyButton
                 onClick={() => setEdit(true)}
                 className="text-sm px-3 py-1 bg-indigo-600 hover:bg-indigo-500 transition rounded-lg"
-              >
-                Изменить
-              </button>
+                text="Изменить"
+              />
             )}
           </div>
         </div>
@@ -97,13 +96,11 @@ export default function Profile() {
             />
 
             <div className="flex justify-between mt-4">
-              <button
-                type="button"
+              <MyButton
                 onClick={() => setEdit(false)}
                 className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition"
-              >
-                Отмена
-              </button>
+                text="Отмена"
+              />
 
               <MyButton
                 text="Сохранить"

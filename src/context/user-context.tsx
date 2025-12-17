@@ -16,7 +16,7 @@ type UserContextType = {
   userName: User | null;
   setNameUser: React.Dispatch<React.SetStateAction<User | null>>;
   loader: boolean;
-  loadBtnProfil: boolean
+  loadBtnProfil: boolean;
   edit: boolean;
   setEdit: React.Dispatch<React.SetStateAction<boolean>>;
   inputValue: User | null;
@@ -76,6 +76,10 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
+        if (res.status === 500) {
+          openMessage({ notice: "error", message: res.statusText });
+          return setLoadBtnProfil(() => false);
+        }
         if (res.ok) {
           const response = await res.json();
           await update();
@@ -100,7 +104,7 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
         inputValue,
         setInputValue,
         saveChanges,
-        loadBtnProfil
+        loadBtnProfil,
       }}
     >
       {children}
