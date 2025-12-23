@@ -1,9 +1,10 @@
 datasource db {
-  provider = "sqlite" 
+  provider = "sqlite"
 }
 
 generator client {
   provider = "prisma-client-js"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -14,7 +15,7 @@ model User {
   avatar    String?
   password  String
   createdAt DateTime @default(now())
-  posts     Post[]   
+  posts     Post[]
 }
 
 model Post {
@@ -24,5 +25,5 @@ model Post {
   date      DateTime
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int      
+  userId    Int
 }
