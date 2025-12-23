@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { RiAccountCircleLine } from "react-icons/ri";
 import Image from "next/image";
-import UsersPosts from "@/components/posts/UsersPosts";
+import { formateDate } from "@/lib/formate-date";
 
 type Post = {
   id: number;
@@ -84,7 +84,38 @@ export default function UsersProfile() {
         </div>
       </div>
 
-      <UsersPosts postUser={user.posts} suspens="Постов нет(" />
+      <div className="flex flex-col w-full gap-4 md:mt-0 mt-5">
+        <div className="flex flex-col items-center gap-4 w-full h-fit  ">
+          {user.posts.length == 0 ? (
+            <h1 className="mt-10 lg:text-2xl flex items-center text-xl text-center magic-black ">
+              Постов нет(
+            </h1>
+          ) : (
+            user.posts.map((post, index) => (
+              <div
+                key={index}
+                className="flex flex-col justify-between gap-4 font-sans md:pt-8 md:pr-8 md:pl-8 md:pb-4 p-4  min-h-fit md:max-w-[968px] w-full  bg-slate-900/60  border border-slate-700 rounded-2xl shadow-2xl  shadow-indigo-900/20"
+              >
+                <div>
+                  <div className="flex flex-col gap-2">
+                    <h1 className="text-[#E5E7EB] text-xl md:text-3xl font-bold  text-left ">
+                      {post.title}
+                    </h1>
+                    <p className="text-[#E5E7EB] text-l md:text-xl font-medium p-2  ml-4 lg:ml-7 break-words">
+                      {post.content}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center flex-row justify-between ">
+                  <p className="text-xs md::text-l text-[0.8rem] text-right text-[#9CA3AF] ">
+                    Дата публикации: {formateDate(post.date)}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { usePostNewContext } from "@/context/post-new-context";
 import { signOut, useSession } from "next-auth/react";
 import { useDrawerContext } from "@/context/drawer-context";
+import { MyButton } from "./IU/MyButton";
 
 export default function NavDesktop({ pathname }: { pathname: string }) {
   const { handleCancel } = usePostNewContext();
@@ -57,13 +58,12 @@ export default function NavDesktop({ pathname }: { pathname: string }) {
         </div>
         <div className="flex flex-row gap-2">
           {pathname == "/myposts" && (
-            <button
-              type="submit"
-              className=" h-[40px] pr-2 pl-2 text-xl text-white hover:text-blue-400 cursor-pointer"
+            <MyButton
+              className="bg-blue-500 hover:bg-blue-400 pl-2 pr-2 rounded-[6px] text-xl text-white  cursor-pointer"
               onClick={handleCancel}
             >
               Новый пост +
-            </button>
+            </MyButton>
           )}
           {session && (
             <button
@@ -79,9 +79,9 @@ export default function NavDesktop({ pathname }: { pathname: string }) {
           )}
           {!session && (
             <Link href="/login" scroll={false}>
-              <span className=" h-[40px] pr-2 pl-2 text-xl text-white hover:text-blue-400 cursor-pointer">
+              <MyButton className=" h-[40px] pr-2 pl-2 text-xl text-white hover:text-blue-400 cursor-pointer">
                 Войти
-              </span>
+              </MyButton>
             </Link>
           )}
         </div>

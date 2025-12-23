@@ -9,7 +9,7 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { User } from "@/type/type-post-context";
+import { User } from "@/type/type";
 import { useMessageContext } from "./message-context";
 
 type UserContextType = {

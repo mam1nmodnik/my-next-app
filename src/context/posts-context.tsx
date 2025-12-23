@@ -7,7 +7,7 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import { PostsContextType, Post } from "@/type/type-post-context";
+import { PostsContextType, Post } from "@/type/type";
 import { useUserContext } from "./user-context";
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
@@ -25,7 +25,8 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
             "x-user-id": userName?.id,
           },
         });
-        const response = await res.json();
+
+        const response: Post[] = await res.json();
         setPosts(response);
       }
     } catch (error) {
@@ -35,8 +36,9 @@ export function PostsContextProvider({ children }: { children: ReactNode }) {
 
   const getAllPosts = useCallback(async () => {
     try {
-      const res = await fetch("/api/posts/all-posts")
-      const response = await res.json();
+      const res = await fetch("/api/posts/all-posts");
+      const response: Post[] = await res.json();
+
       setAllPosts(response);
     } catch (error) {
       console.error("Ошибка при получении поста:", error);

@@ -14,12 +14,10 @@ export async function GET() {
 
     const userId = Number(session.user.id);
 
-    
   const userPosts = await prisma.post.findMany({
     where: { userId: userId }, 
     orderBy: { createdAt: 'desc' },
   });
-
 
     return NextResponse.json(userPosts);
   } catch (error) {

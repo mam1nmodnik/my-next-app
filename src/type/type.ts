@@ -1,4 +1,5 @@
-type Post = {
+
+export type Post = {
   id: number;
   idUser?: number;
   title?: string;
@@ -12,6 +13,7 @@ type Post = {
     name: string
   }
 };
+
 export type User = {
   id: string;
   name?: string | null;

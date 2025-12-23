@@ -2,13 +2,23 @@
 import { ReactNode, useContext, createContext } from "react";
 import { usePostsContext } from "@/context/posts-context";
 import { useState } from "react";
-import {
-  NewPostContextType,
-  FormValueType,
-} from "@/type/type-new-post-context";
 import type { FormEvent } from "react";
 import { useUserContext } from "./user-context";
 import { useMessageContext } from "./message-context";
+
+type NewPostContextType = {
+  openWindow: boolean;
+  setFormValue: React.Dispatch<React.SetStateAction<FormValueType>>;
+  formValue: FormValueType;
+  newPost: (event: FormEvent<HTMLFormElement>) => void;
+  deletePost: (id: number) => void;
+  handleCancel: () => void;
+};
+
+type FormValueType = {
+  title: string;
+  content: string;
+};
 
 const PostNewContext = createContext<NewPostContextType | undefined>(undefined);
 
@@ -41,7 +51,7 @@ export function ModalPostContextProvider({
         body: JSON.stringify(data),
       });
       const res = await response.json();
-      openMessage(res)
+      openMessage(res);
       getPosts();
     } catch (error) {
       console.error("Ошибка при создании поста:", error);
@@ -55,12 +65,12 @@ export function ModalPostContextProvider({
       method: "DELETE",
     });
     const res = await response.json();
-    
-    openMessage(res)
+
+    openMessage(res);
     getPosts();
   }
 
-  const handleCancel = () => setOpenWindow( el => !el);
+  const handleCancel = () => setOpenWindow((el) => !el);
 
   return (
     <PostNewContext.Provider
