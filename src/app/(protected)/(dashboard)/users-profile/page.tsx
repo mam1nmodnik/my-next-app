@@ -1,10 +1,11 @@
 "use client";
 import InfoRow from "@/components/IU/InfoRow";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
 import { RiAccountCircleLine } from "react-icons/ri";
 import Image from "next/image";
 import { formateDate } from "@/lib/formate-date";
+import { useQuery } from "@tanstack/react-query";
+import SceletonePosts from "@/components/posts/SceletonePosts";
 
 type Post = {
   id: number;
@@ -25,29 +26,21 @@ type User = {
 export default function UsersProfile() {
   const searchParams = useSearchParams();
   const id = searchParams.get("user");
-  const [user, setUser] = useState<User>();
-  const User = useCallback(async () => {
-    const response = await fetch(`/api/user-id/${id}`, {
-      method: "GET",
-    });
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["users", id],
 
-    if (!response.ok) {
-      throw new Error("Ошибка сервера");
-    }
-    const data = await response.json();
-    setUser(data);
-  }, [id]);
+    queryFn: async (): Promise<User> => {
+      const response = await fetch(`/api/user-id/${id}`);
+      return await response.json();
+    },
+  });
 
-  useEffect(() => {
-    User();
-  }, [User]);
-  if (!user) {
-    return (
-      <h1 className="text-white text-3xl flex justify-center items-center">
-        Загрузка....
-      </h1>
-    );
+  if (isLoading) {
+    return <SceletonePosts />;
   }
+
+  if (error) return "An error has occurred: " + error.message;
+
   return (
     <div className="p-6 flex lg:flex-row flex-col lg:  gap-5">
       <div className="bg-gradient-to-br text-white flex justify-center items-center w-full max-w-3xl h-fit">
@@ -58,9 +51,9 @@ export default function UsersProfile() {
           <div className="flex flex-col items-center gap-3">
             <div className="w-28 h-28 rounded-full border-4 border-indigo-500 shadow-md p-[3px] bg-slate-700">
               <div className="relative w-full h-full rounded-full overflow-hidden">
-                {user.avatar ? (
+                {data?.avatar ? (
                   <Image
-                    src={user.avatar}
+                    src={data.avatar}
                     alt="Аватар"
                     fill
                     className="object-cover max-w-none"
@@ -72,26 +65,30 @@ export default function UsersProfile() {
             </div>
 
             <p className="text-slate-400 text-sm">
-              {user.login || "Имя не указано"}
+              {data?.login || "Имя не указано"}
             </p>
           </div>
 
           <div className="space-y-3">
-            <InfoRow label="ID" value={user.id} />
-            <InfoRow label="Имя" value={user.name} />
-            <InfoRow label="Email" value={user.email} />
+            {data && (
+              <>
+                <InfoRow label="ID" value={data?.id} />
+                <InfoRow label="Имя" value={data?.name} />
+                <InfoRow label="Email" value={data?.email} />
+              </>
+            )}
           </div>
         </div>
       </div>
 
       <div className="flex flex-col w-full gap-4 md:mt-0 mt-5">
         <div className="flex flex-col items-center gap-4 w-full h-fit  ">
-          {user.posts.length == 0 ? (
+          {data?.posts.length == 0 ? (
             <h1 className="mt-10 lg:text-2xl flex items-center text-xl text-center magic-black ">
               Постов нет(
             </h1>
           ) : (
-            user.posts.map((post, index) => (
+            data?.posts.map((post, index) => (
               <div
                 key={index}
                 className="flex flex-col justify-between gap-4 font-sans md:pt-8 md:pr-8 md:pl-8 md:pb-4 p-4  min-h-fit md:max-w-[968px] w-full  bg-slate-900/60  border border-slate-700 rounded-2xl shadow-2xl  shadow-indigo-900/20"

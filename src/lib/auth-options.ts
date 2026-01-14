@@ -1,4 +1,3 @@
-// src/lib/auth-options.ts
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
@@ -38,7 +37,7 @@ export const authOptions: AuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60 * 24 * 7, // 7 дней
+    maxAge: 60 * 60 * 24 * 7, 
   },
   callbacks: {
    async jwt({ token, user }) {

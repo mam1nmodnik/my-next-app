@@ -1,22 +1,31 @@
 "use client";
+import SceletonePosts from "@/components/posts/SceletonePosts";
 import UsersPosts from "@/components/posts/UsersPosts";
-import { usePostsContext } from "@/context/posts-context";
-import { Skeleton } from "antd";
+import { Post } from "@/type/type";
+import { useQuery } from "@tanstack/react-query";
 export default function Home() {
-  const { allPosts } = usePostsContext();
-  if (allPosts.length === 0) {
+
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["all-posts"],
+    queryFn: async (): Promise<Array<Post>> => {
+      const response = await fetch("/api/posts/all-posts");
+      return await response.json();
+    },
+  });
+  if (isLoading) {
     return (
-      <div className="p-4 flex justify-center items-center   w-full gap-4 md:mt-0 mt-5">
-        <div className="w-[80%]">
-          <Skeleton active />
-        </div>
-      </div>
+      <SceletonePosts/>
     );
+  }
+  if(error){
+    return "An error has occurred: " + error.message;
   }
 
   return (
     <div className="p-4">
-      <UsersPosts posts={allPosts} suspens="Постов еще нет, будьте первыми)" />
+      {data && (
+        <UsersPosts posts={data} suspens="Постов еще нет, будьте первыми)" />
+      )}
     </div>
   );
 }

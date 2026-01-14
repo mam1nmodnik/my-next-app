@@ -22,10 +22,3 @@ export type User = {
   image: string | null;
 };
 
-export type PostsContextType = {
-  allPosts: Post[];
-  posts: Post[];
-  setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
-  getPosts: () => void;
-  getAllPosts: () => void;
-};

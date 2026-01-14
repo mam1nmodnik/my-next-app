@@ -16,15 +16,17 @@ const UserPosts = React.memo(function UsersPosts({
   return (
     <div className="flex flex-col w-full gap-4 md:mt-0 mt-5">
       <div className="flex flex-col items-center gap-4 w-full h-fit  ">
-        {posts?.length == 0 ? 
-          <h1 className="mt-10 lg:text-2xl flex items-center text-xl text-center magic-black ">
-            {suspens}
-          </h1>
-        : 
+        {posts?.length == 0 ? (
+          <>
+            <h1 className="mt-10 lg:text-2xl flex items-center text-xl text-center magic-black ">
+              {suspens}
+            </h1>
+          </>
+        ) : (
           posts.map((post, index) => (
             <UsersPost key={index} post={post} deletePost={deletePost} />
           ))
-        }
+        )}
       </div>
     </div>
   );

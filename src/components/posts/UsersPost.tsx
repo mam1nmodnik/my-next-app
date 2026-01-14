@@ -1,8 +1,11 @@
 "use client";
 import { Post } from "@/type/type";
 import { formateDate } from "@/lib/formate-date";
-import { Popconfirm } from "antd";
+import { Divider, Popconfirm } from "antd";
 import Link from "next/link";
+import { useState } from "react";
+import LikeCustom from "../IU/likeCustom";
+import Image from "next/image";
 
 type UsersPostProps = {
   post?: Post;
@@ -10,20 +13,48 @@ type UsersPostProps = {
 };
 
 export default function UsersPost({ post, deletePost }: UsersPostProps) {
+  const [likeToggle, setLikeToggle] = useState(false);
+  const [num, setNum] = useState(0);
+
+  function likeToPost() {
+    setLikeToggle((prev) => !prev);
+    setNum((n) => (likeToggle ? n - 1 : n + 1));
+  }
+
   return (
     <div className="flex flex-col justify-between gap-4 font-sans md:pt-8 md:pr-8 md:pl-8 md:pb-4 p-4  min-h-fit md:max-w-[968px] w-full  bg-slate-900/60  border border-slate-700 rounded-2xl shadow-2xl  shadow-indigo-900/20">
       {post && (
-        <>
-          <div>
-            <div className="flex flex-col gap-2">
-              <h1 className="text-[#E5E7EB] text-xl md:text-3xl font-bold  text-left ">
-                {post.title}
-              </h1>
-              <p className="text-[#E5E7EB] text-l md:text-xl font-medium p-2  ml-4 lg:ml-7 break-words">
-                {post.content}
-              </p>
-            </div>
-          </div>
+        <div className="flex flex-col gap-2">
+          {!deletePost && (
+            <>
+              <div className="flex flex-row gap-2 items-center">
+                <Image
+                  src="https://i.pinimg.com/736x/d4/38/c3/d438c31d0caf10b0dc17a5fcb503a38e.jpg"
+                  alt="avatar"
+                  width={50}
+                  height={50}
+                />
+                <Link href={`/users-profile?user=${post.user.id}`}>
+                  {post.user.login}
+                </Link>
+              </div>
+              <Divider
+                variant="solid"
+                style={{
+                  margin: "0",
+                  marginBottom: "10px",
+                  marginTop: "10px",
+                  backgroundColor: "#9CA3AF",
+                }}
+              />
+            </>
+          )}
+          <h1 className="text-[#E5E7EB] text-l md:text-xl font-bold  text-left ">
+            {post.title}
+          </h1>
+          <p className="text-[#E5E7EB] text-l md:text-xl font-medium p-2 ml-1 lg:ml-2 pb-5 break-words">
+            {post.content}
+          </p>
           <div className="flex items-center flex-row justify-between ">
             {deletePost && (
               <Popconfirm
@@ -33,26 +64,21 @@ export default function UsersPost({ post, deletePost }: UsersPostProps) {
                 cancelText="Нет"
                 className="static"
               >
-                <button className="bg-red-500  hover:bg-red-900 p-2 cursor-pointer md:w-40 w-35 rounded-[6px] text-[14px]  font-medium  text-white hover:text-gray">
+                <button className="bg-red-500 hover:bg-red-900 p-2 cursor-pointer md:w-40 w-35 rounded-[6px] text-[14px]  font-medium  text-white hover:text-gray">
                   Удалить
                 </button>
               </Popconfirm>
             )}
             {post.user?.login && (
-              <>
-                <p className="text-xs md:text-l text-[0.8rem] text-left text-[#9CA3AF]">
-                  Опубиловал: {" "}
-                  <Link href={`/users-profile?user=${post.user.id}`}>
-                    { post.user.login}
-                  </Link>
-                </p>
-              </>
+              <div className="ml-3">
+                <LikeCustom toggle={likeToggle} click={likeToPost} num={num} size="20"/>
+              </div>
             )}
             <p className="text-xs md::text-l text-[0.8rem] text-right text-[#9CA3AF] ">
               Дата публикации: {formateDate(post.date)}
             </p>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

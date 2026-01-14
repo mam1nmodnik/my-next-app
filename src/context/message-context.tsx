@@ -14,6 +14,7 @@ type TypeMessageContext = {
     message: string;
   }) => void;
 };
+
 const MessageContext = createContext<TypeMessageContext | undefined>(undefined);
 
 export function MessageContextProvider({ children }: { children: ReactNode }) {
