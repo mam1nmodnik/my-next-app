@@ -36,7 +36,7 @@ export default function UsersProfile() {
   });
 
   if (isLoading) {
-    return <SceletonePosts />;
+    return <SceletonePosts count={4} />;
   }
 
   if (error) return "An error has occurred: " + error.message;
