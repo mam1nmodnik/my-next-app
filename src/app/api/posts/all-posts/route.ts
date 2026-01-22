@@ -1,24 +1,42 @@
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server"
+import { PrismaClient } from "@prisma/client"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth-options"
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export async function GET() {
-  try {
-    const posts = await prisma.post.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: { 
-      user: {
-        select: {
-          id: true,
-          login: true
-        },
-      } 
-    }
-    });
-    return NextResponse.json(posts);
-  } catch (error) {
-    console.error('Ошибка при получении постов:', error);
-    return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
+  const session = await getServerSession(authOptions)
+  const userId = session?.user?.id
+
+  const posts = await prisma.post.findMany({
+  orderBy: { createdAt: "desc" },
+  include: {
+    user: {
+      select: { id: true, login: true, name: true },
+    },
+    likes: {
+      where: {
+        userId: Number(userId), 
+        isLiked: true,  
+      },
+      select: {
+        id: true, 
+      },
+    },
+  },
+})
+
+
+  const result = posts.map(post => {
+  return {
+    ...post,
+    likesCount: post.likesCount,
+    isLiked: post.likes.length > 0,
+
   }
+})
+
+
+  return NextResponse.json(result)
 }

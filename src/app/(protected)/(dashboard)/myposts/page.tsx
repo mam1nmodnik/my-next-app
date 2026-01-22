@@ -22,13 +22,14 @@ export default function MyPosts() {
     title: "",
     content: "",
   });
-    const [loadBtnProfil, setLoadBtnProfil] = useState(false);
+  const [loadBtnProfil, setLoadBtnProfil] = useState(false);
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["my-posts"],
     queryFn: async (): Promise<Array<Post>> => {
       const response = await fetch("/api/posts/post-user");
-      return await response.json();
+      const result = await response.json()
+      return result;
     },
   });
   const deletePostMutation = useMutation({
@@ -75,15 +76,15 @@ export default function MyPosts() {
       content: formValue.content,
       date: new Date(),
     };
-    
+
     createPostMutation.mutate(data);
     setFormValue({ title: "", content: "" });
   }
-
+  
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="p-4 flex flex-col items-center  gap-2">
+    <div className="p-4 flex lg:flex-row flex-col lg:items-start  items-center gap-8">
       <form
         className="bg-slate-900/60 backdrop-blur-lg border border-slate-700 rounded-2xl shadow-2xl w-full max-w-lg p-8 space-y-8 flex flex-col gap-5"
         onSubmit={newPost}
@@ -100,7 +101,7 @@ export default function MyPosts() {
           />
           <textarea
             placeholder="Текст поста"
-            className="p-2 rounded-lg bg-slate-800  text-white max-h-[100px]"
+            className="p-2 rounded-lg bg-slate-800 text-white max-h-[100px]"
             value={formValue.content}
             onChange={(e) =>
               setFormValue({ ...formValue, content: e.target.value })
@@ -108,14 +109,20 @@ export default function MyPosts() {
           />
         </div>
         <MyButton
-          className="w-35 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg transition text-white "
+          className="w-35 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg transition text-white"
           loading={loadBtnProfil}
         >
-        Опубликовать
+          Опубликовать
         </MyButton>
       </form>
+
+
       {isLoading ? (
-        <SceletonePosts />
+
+        <div className="flex flex-col gap-4 w-full">
+          <SceletonePosts count={2} />
+        </div>
+
       ) : (
         data && (
           <UsersPosts

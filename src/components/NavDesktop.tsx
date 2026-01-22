@@ -10,8 +10,8 @@ export default function NavDesktop() {
   const pathname = usePathname();
   return (
     <>
-      <header className="lg:flex hidden top-0 h-[100px] w-full p-6 text-left flex-row items-center justify-between  gap-4">
-        <div className="text-xl flex flex-row items-center gap-4 text-white">
+      <header className="lg:flex hidden top-0 h-[100px] w-full p-6 text-left flex-row items-center justify-center  gap-8">
+        <div className="text-xl flex flex-row items-center gap-6 text-white">
           <Link href="/">
             <span
               className={`${
@@ -56,18 +56,6 @@ export default function NavDesktop() {
           )}
         </div>
         <div className="flex flex-row gap-2">
-          {session && (
-            <button
-              className=" h-[40px] pr-2 pl-2 text-xl text-white hover:text-blue-400 cursor-pointer"
-              onClick={() =>
-                signOut({
-                  callbackUrl: "/login",
-                })
-              }
-            >
-              Выйти
-            </button>
-          )}
           {!session && (
             <Link href="/login" scroll={false}>
               <MyButton className=" h-[40px] pr-2 pl-2 text-xl text-white hover:text-blue-400 cursor-pointer">

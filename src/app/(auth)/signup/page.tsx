@@ -7,7 +7,7 @@ import { useState } from "react";
 type ErrorInput = {
   allError?: string | null;
   email?: { title?: string };
-  password?: { title?: string };
+  password?: { title?: string }[];
 };
 
 export default function SignUp() {
@@ -25,7 +25,7 @@ export default function SignUp() {
     setError({
       allError: null,
       email: { title: undefined },
-      password: { title: undefined },
+      password: [],
     });
 
     if (!form.email || !form.password || !form.login) {
@@ -44,11 +44,13 @@ export default function SignUp() {
       }));
     }
 
-    if (!isValidPassword(form.password)) {
+    const errors = validatePasswordStepByStep(form.password);
+
+    if (errors.length > 0) {
       passwordValid = false;
       setError((prev) => ({
         ...prev,
-        password: { title: "Длина пароля должна быть больше 6" },
+        password: errors,
       }));
     }
 
@@ -81,9 +83,32 @@ export default function SignUp() {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
-  function isValidPassword(password: string) {
-    return password.length >= 6;
+  function validatePasswordStepByStep(password: string) {
+    const errors = [];
+
+    const hasLowercase = /[a-z]/; // хотя бы одна строчная буква
+    const hasUppercase = /[A-Z]/; // хотя бы одна заглавная буква
+    const hasNumber = /\d/; // хотя бы одна цифра
+    const hasSpecial = /[!@#$%^&*]/; // хотя бы один спецсимвол
+    const isValidLength = /^.{8,20}$/; // длина от 8 до 20 символов
+
+    if (!hasLowercase.test(password))
+      errors.push({ title: "Добавьте хотя бы одну строчную букву" });
+    if (!hasUppercase.test(password))
+      errors.push({ title: "Добавьте хотя бы одну заглавную букву" });
+    if (!hasNumber.test(password))
+      errors.push({ title: "Добавьте хотя бы одну цифру" });
+    if (!hasSpecial.test(password))
+      errors.push({ title: "Добавьте хотя бы один спецсимвол (!@#$%^&*)" });
+    if (!isValidLength.test(password))
+      errors.push({ title: "Длина пароля должна быть от 8 до 20 символов" });
+
+    return errors;
   }
+
+  // Пример
+  const password = "Abc123";
+  console.log(validatePasswordStepByStep(password));
 
   return (
     <div className="min-h-screen flex justify-center items-center ">
@@ -123,17 +148,15 @@ export default function SignUp() {
             <MyButton loading={loadbtn}>Sign Up</MyButton>
 
             <div className="relative">
-              {(error.allError ||
-                error.email?.title ||
-                error.password?.title) && (
+              {(error.allError || error.email?.title || error.password) && (
                 <div className="flex flex-col">
                   <p className="text-red-500 text-center ">{error.allError}</p>
                   <p className="text-red-500 text-center ">
                     {error.email?.title}
                   </p>
-                  <p className="text-red-500 text-center ">
-                    {error.password?.title}
-                  </p>
+                  {error.password?.map((el, index) => (
+                    <p key={index} className="text-red-500 text-center ">{el.title}</p>
+                  ))}
                 </div>
               )}
             </div>

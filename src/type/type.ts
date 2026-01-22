@@ -1,18 +1,26 @@
 
+type like = {
+  postId: number;
+  userId: number
+  isLiked: boolean;
+}
+
 export type Post = {
-  id: number;
-  idUser?: number;
-  title?: string;
-  content?: string;
-  date: Date;
-  createdAt: Date;
-  userId: number;
+  id: number
+  title?: string
+  content?: string
+  date: Date
+  createdAt: Date
+  userId: number
+  likesCount: number
+  isLiked: boolean
+  likes: like[]
   user: {
-    id: string;
-    login: string;
+    id: string
+    login: string
     name: string
   }
-};
+}
 
 export type User = {
   id: string;

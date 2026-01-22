@@ -1,5 +1,5 @@
+"use client";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
-import { Tooltip } from "antd";
 
 export default function LikeCustom({
   toggle,
@@ -12,19 +12,27 @@ export default function LikeCustom({
   num: number;
   size: string;
 }) {
+  const content = (
+    <div
+      onClick={click}
+      className="flex flex-row gap-1 items-center select-none cursor-pointer group"
+    >
+      {toggle ? (
+        <HeartFilled 
+          style={{ color: "hotpink", fontSize: `${size}px` }} 
+          className="transition-all duration-300 ease-in-out group-hover:scale-110 group-hover:drop-shadow-lg"
+        />
+      ) : (
+        <HeartOutlined 
+          style={{ color: "#9CA3AF", fontSize: `${size}px` }} 
+          className="transition-all duration-300 ease-in-out group-hover:scale-110 group-hover:drop-shadow-lg"
+        />
+      )}
+      <p className="text-[#9CA3AF] text-xs">{num}</p>
+    </div>
+  );
+
   return (
-    <Tooltip placement="leftTop" title={!toggle ? 'Поставить лайк ': 'Убрать лайк'} color="#9CA3AF">
-      <div
-        onClick={click}
-        className="flex flex-row gap-1 items-center select-none"
-      >
-        {toggle ? (
-          <HeartFilled style={{ color: "hotpink", fontSize: `${size}px` }} />
-        ) : (
-          <HeartOutlined style={{ color: "#9CA3AF", fontSize: `${size}px` }} />
-        )}
-        <p className="text-[#9CA3AF] text-xs">{num}</p>
-      </div>
-    </Tooltip>
+    content
   );
 }

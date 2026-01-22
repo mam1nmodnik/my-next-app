@@ -3,29 +3,60 @@ import { Post } from "@/type/type";
 import { formateDate } from "@/lib/formate-date";
 import { Divider, Popconfirm } from "antd";
 import Link from "next/link";
-import { useState } from "react";
 import LikeCustom from "../IU/likeCustom";
 import Image from "next/image";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUserContext } from "@/context/user-context";
 type UsersPostProps = {
   post?: Post;
   deletePost?: (id: number) => void;
 };
 
-export default function UsersPost({ post, deletePost }: UsersPostProps) {
-  const [likeToggle, setLikeToggle] = useState(false);
-  const [num, setNum] = useState(0);
+export default function UsersPost({
+  post,
+  deletePost,
+}: UsersPostProps) {
+  const { userName } = useUserContext()
+const queryClient = useQueryClient()
 
-  function likeToPost() {
-    setLikeToggle((prev) => !prev);
-    setNum((n) => (likeToggle ? n - 1 : n + 1));
-  }
+const likeMutation = useMutation({
+  mutationFn: async (postId: number) => {
+    const res = await fetch("/api/posts/like", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        postId,
+        userId: userName?.id,
+      }),
+    })
+    return res.json() as Promise<{ post: Post; liked: boolean }>
+  },
 
-  return (
+  onSuccess: ({ post, liked }) => {
+    queryClient.setQueryData<Post[]>(
+      ["all-posts"],
+      (old) => {
+        if (!old) return old
+
+        return old.map((p) =>
+          p.id === post.id
+            ? {
+                ...p,
+                likesCount: post.likesCount,
+                isLiked: liked,
+              }
+            : p
+        )
+      }
+    )
+  },
+})
+
+  return (  
     <div className="flex flex-col justify-between gap-4 font-sans md:pt-8 md:pr-8 md:pl-8 md:pb-4 p-4  min-h-fit md:max-w-[968px] w-full  bg-slate-900/60  border border-slate-700 rounded-2xl shadow-2xl  shadow-indigo-900/20">
       {post && (
         <div className="flex flex-col gap-2">
-          {!deletePost && (
+          {post.user && (
             <>
               <div className="flex flex-row gap-2 items-center">
                 <Image
@@ -33,8 +64,12 @@ export default function UsersPost({ post, deletePost }: UsersPostProps) {
                   alt="avatar"
                   width={50}
                   height={50}
+                  className="rounded-4xl h-[50px] w-[50px] "
                 />
-                <Link href={`/users-profile?user=${post.user.id}`}>
+                <Link
+                  href={`/users-profile?user=${post.user.id}`}
+                  className="text-l md:text-xl font-bold"
+                >
                   {post.user.login}
                 </Link>
               </div>
@@ -69,9 +104,14 @@ export default function UsersPost({ post, deletePost }: UsersPostProps) {
                 </button>
               </Popconfirm>
             )}
-            {post.user?.login && (
+            {post?.user && (
               <div className="ml-3">
-                <LikeCustom toggle={likeToggle} click={likeToPost} num={num} size="20"/>
+                <LikeCustom
+                  toggle={post.isLiked}
+                  click={() => likeMutation.mutate(post.id)}
+                  num={post.likesCount}
+                  size="20"
+                />
               </div>
             )}
             <p className="text-xs md::text-l text-[0.8rem] text-right text-[#9CA3AF] ">

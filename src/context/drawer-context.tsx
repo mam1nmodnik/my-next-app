@@ -50,7 +50,7 @@ export function DrawerContextProvider({ children }: { children: ReactNode }) {
         }}
         extra={
           <button
-            className="lg:hidden block rounded-[20px] h-[40px] pr-2 pl-2  text-white hover:text-blue-400 cursor-pointer"
+            className="block rounded-[20px] h-[40px] pr-2 pl-2  text-white hover:text-blue-400 cursor-pointer"
             onClick={() =>
               signOut({
                 callbackUrl: "/login",
