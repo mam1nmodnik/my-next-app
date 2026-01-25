@@ -2,10 +2,10 @@
 import InfoRow from "@/components/IU/InfoRow";
 import { useSearchParams } from "next/navigation";
 import { RiAccountCircleLine } from "react-icons/ri";
-import Image from "next/image";
 import { formateDate } from "@/lib/formate-date";
 import { useQuery } from "@tanstack/react-query";
-import SceletonePosts from "@/components/posts/SceletonePosts";
+import SceletonePosts from "@/components/Sceletone/post/SceletonePosts";
+import { Avatar } from "antd";
 
 type Post = {
   id: number;
@@ -52,10 +52,10 @@ export default function UsersProfile() {
             <div className="w-28 h-28 rounded-full border-4 border-indigo-500 shadow-md p-[3px] bg-slate-700">
               <div className="relative w-full h-full rounded-full overflow-hidden">
                 {data?.avatar ? (
-                  <Image
+                  <Avatar
                     src={data.avatar}
                     alt="Аватар"
-                    fill
+                    size={100}
                     className="object-cover max-w-none"
                   />
                 ) : (

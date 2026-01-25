@@ -1,10 +1,9 @@
 "use client";
 import { Post } from "@/type/type";
 import { formateDate } from "@/lib/formate-date";
-import { Divider, Popconfirm } from "antd";
+import { Avatar, Divider, Popconfirm } from "antd";
 import Link from "next/link";
 import LikeCustom from "../IU/likeCustom";
-import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserContext } from "@/context/user-context";
 type UsersPostProps = {
@@ -12,31 +11,26 @@ type UsersPostProps = {
   deletePost?: (id: number) => void;
 };
 
-export default function UsersPost({
-  post,
-  deletePost,
-}: UsersPostProps) {
-  const { userName } = useUserContext()
-const queryClient = useQueryClient()
+export default function UsersPost({ post, deletePost }: UsersPostProps) {
+  const { userName } = useUserContext();
+  const queryClient = useQueryClient();
 
-const likeMutation = useMutation({
-  mutationFn: async (postId: number) => {
-    const res = await fetch("/api/posts/like", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        postId,
-        userId: userName?.id,
-      }),
-    })
-    return res.json() as Promise<{ post: Post; liked: boolean }>
-  },
+  const likeMutation = useMutation({
+    mutationFn: async (postId: number) => {
+      const res = await fetch("/api/posts/like", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          postId,
+          userId: userName?.id,
+        }),
+      });
+      return res.json() as Promise<{ post: Post; liked: boolean }>;
+    },
 
-  onSuccess: ({ post, liked }) => {
-    queryClient.setQueryData<Post[]>(
-      ["all-posts"],
-      (old) => {
-        if (!old) return old
+    onSuccess: ({ post, liked }) => {
+      queryClient.setQueryData<Post[]>(["all-posts"], (old) => {
+        if (!old) return old;
 
         return old.map((p) =>
           p.id === post.id
@@ -45,25 +39,22 @@ const likeMutation = useMutation({
                 likesCount: post.likesCount,
                 isLiked: liked,
               }
-            : p
-        )
-      }
-    )
-  },
-})
+            : p,
+        );
+      });
+    },
+  });
 
-  return (  
+  return (
     <div className="flex flex-col justify-between gap-4 font-sans md:pt-8 md:pr-8 md:pl-8 md:pb-4 p-4  min-h-fit md:max-w-[968px] w-full  bg-slate-900/60  border border-slate-700 rounded-2xl shadow-2xl  shadow-indigo-900/20">
       {post && (
         <div className="flex flex-col gap-2">
           {post.user && (
             <>
               <div className="flex flex-row gap-2 items-center">
-                <Image
+                <Avatar
                   src="https://i.pinimg.com/736x/d4/38/c3/d438c31d0caf10b0dc17a5fcb503a38e.jpg"
                   alt="avatar"
-                  width={50}
-                  height={50}
                   className="rounded-4xl h-[50px] w-[50px] "
                 />
                 <Link

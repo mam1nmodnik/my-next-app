@@ -9,7 +9,6 @@ export default function MyContent({ children }: { children: React.ReactNode }) {
   const { loader } = useUserContext();
   const pathname = usePathname();
   
-
   const authcontent = ["/login", "/signup"].includes(pathname);
 
   if (loader) {

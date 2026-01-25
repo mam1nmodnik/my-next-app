@@ -7,12 +7,14 @@ import { MessageContextProvider } from "@/context/message-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DrawerContextProvider } from "@/context/drawer-context";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ModalUnregisteredContextProvider } from "@/context/modal-unregistered";
 
 const queryClient = new QueryClient();
 
 export default function AppProvider({ children }: { children: ReactNode }) {
   return (
     <SessionProvider>
+      <ModalUnregisteredContextProvider>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools />
         <MessageContextProvider>
@@ -54,6 +56,7 @@ export default function AppProvider({ children }: { children: ReactNode }) {
           </UserContextProvider>
         </MessageContextProvider>
       </QueryClientProvider>
+      </ModalUnregisteredContextProvider>
     </SessionProvider>
   );
 }

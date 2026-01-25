@@ -34,6 +34,8 @@ export function MessageContextProvider({ children }: { children: ReactNode }) {
       content: response.message,
     });
   }
+  
+
   return (
     <MessageContext.Provider value={{ openMessage }}>
       {contextHolder}
@@ -46,7 +48,7 @@ export function useMessageContext() {
   const context = useContext(MessageContext);
   if (!context)
     throw new Error(
-      "useMessageContext must be used inside MessageContextProvider"
+      "useMessageContext must be used inside MessageContextProvider",
     );
   return context;
 }

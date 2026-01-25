@@ -3,13 +3,11 @@ import { Post } from "@/type/type";
 import UsersPost from "./UsersPost";
 import React from "react";
 
-
 type UsersPostsProps = {
   posts: Post[];
   suspens: string;
   deletePost?: (id: number) => void;
 };
-
 
 const UserPosts = React.memo(function UsersPosts({
   posts,

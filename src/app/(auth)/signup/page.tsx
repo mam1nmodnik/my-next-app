@@ -105,11 +105,6 @@ export default function SignUp() {
 
     return errors;
   }
-
-  // Пример
-  const password = "Abc123";
-  console.log(validatePasswordStepByStep(password));
-
   return (
     <div className="min-h-screen flex justify-center items-center ">
       <div className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl w-[25rem] pt-10 pr-10 pl-10 pb-5 shadow-lg hover:shadow-2xl transition-shadow duration-300">

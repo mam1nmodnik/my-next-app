@@ -1,5 +1,7 @@
 "use client";
+import {  useModalUnregistered } from "@/context/modal-unregistered";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
+import { useSession } from "next-auth/react";
 
 export default function LikeCustom({
   toggle,
@@ -12,9 +14,12 @@ export default function LikeCustom({
   num: number;
   size: string;
 }) {
+  const { openModal } = useModalUnregistered()
+  const { data: session } = useSession()
+
   const content = (
     <div
-      onClick={click}
+      onClick={session ? click : openModal}
       className="flex flex-row gap-1 items-center select-none cursor-pointer group"
     >
       {toggle ? (

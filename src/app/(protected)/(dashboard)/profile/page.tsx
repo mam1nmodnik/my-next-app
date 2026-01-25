@@ -4,9 +4,9 @@ import React from "react";
 import InputField from "@/components/IU/InputField";
 import InfoRow from "@/components/IU/InfoRow";
 import { useUserContext } from "@/context/user-context";
-import Image from "next/image";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { MyButton } from "@/components/IU/MyButton";
+import { Avatar } from "antd";
 
 export default function Profile() {
   const {
@@ -39,10 +39,10 @@ export default function Profile() {
           <div className="w-28 h-28 rounded-full border-4 border-indigo-500 shadow-md p-[3px] bg-slate-700">
             <div className="relative w-full h-full rounded-full overflow-hidden">
               {inputValue.image ? (
-                <Image
+                <Avatar
                   src={inputValue.image}
+                  size={100}
                   alt="Аватар"
-                  fill
                   className="object-cover max-w-none"
                 />
               ) : (

@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 
 export async function GET() {
   const session = await getServerSession(authOptions)
-  const userId = session?.user?.id
+  const userId = session?.user?.id || null
 
   const posts = await prisma.post.findMany({
   orderBy: { createdAt: "desc" },
@@ -33,7 +33,6 @@ export async function GET() {
     ...post,
     likesCount: post.likesCount,
     isLiked: post.likes.length > 0,
-
   }
 })
 

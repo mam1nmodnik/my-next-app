@@ -6,7 +6,7 @@ import { useMessageContext } from "@/context/message-context";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import { useUserContext } from "@/context/user-context";
-import SceletonePosts from "@/components/posts/SceletonePosts";
+import SceletonePosts from "@/components/Sceletone/post/SceletonePosts";
 import { MyButton } from "@/components/IU/MyButton";
 
 type FormValueType = {
