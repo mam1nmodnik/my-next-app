@@ -1,0 +1,31 @@
+<svg
+  width="48"
+  height="48"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Echo.social favicon"
+>
+  <!-- Черный фон -->
+  <rect width="48" height="48" rx="8" fill="#000000" />
+
+  <!-- Точка -->
+  <circle cx="18" cy="24" r="6" fill="#FFFFFF" />
+
+  <!-- Волны -->
+  <path
+    d="M27 18 C33 22, 33 26, 27 30"
+    stroke="#FFFFFF"
+    stroke-width="3"
+    fill="none"
+    stroke-linecap="round"
+  />
+  <path
+    d="M33 15 C41 24, 41 24, 33 33"
+    stroke="#FFFFFF"
+    stroke-width="3"
+    fill="none"
+    stroke-linecap="round"
+  />
+</svg>

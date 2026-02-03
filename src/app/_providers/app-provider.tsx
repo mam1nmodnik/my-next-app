@@ -14,49 +14,52 @@ const queryClient = new QueryClient();
 export default function AppProvider({ children }: { children: ReactNode }) {
   return (
     <SessionProvider>
-      <ModalUnregisteredContextProvider>
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools />
-        <MessageContextProvider>
-          <UserContextProvider>
-            <DrawerContextProvider>
-              <ConfigProvider
-                getPopupContainer={(node) =>
-                  node?.parentElement || document.body
-                }
-                theme={{
-                  token: {
-                    colorLinkActive: "black",
-                    colorLink: "#fff",
-                    colorLinkHover: "#60a5fa",
-                  },
-                  components: {
-                    Modal: {
-                      contentBg: "ghosthub-card",
-                      titleColor: "#E2E8F0",
-                    },
-                    Layout: {
-                      headerBg: "transparent",
-                      footerBg: "transparent",
-                      footerPadding: "none",
-                      siderBg: "transparent",
-                    },
-                    Button: {
-                      colorText: "black",
-                    },
-                    Input: {
-                      activeBg: "none",
-                    },
-                  },
-                }}
-              >
-                {children}
-              </ConfigProvider>
-            </DrawerContextProvider>
-          </UserContextProvider>
-        </MessageContextProvider>
-      </QueryClientProvider>
-      </ModalUnregisteredContextProvider>
+      <ConfigProvider
+        getPopupContainer={(node) => node?.parentElement || document.body}
+        theme={{
+          token: {
+            colorLinkActive: "black",
+            colorLink: "#fff",
+            colorLinkHover: "#60a5fa",
+          },
+          components: {
+            Modal: {
+              contentBg: "#000000",
+              titleColor: "#e5e7eb",
+              headerBg: "#000000",
+              colorIcon: "#e5e7eb",
+              colorBgMask: "rgb(91 112 131 / 40%)",
+            },
+            Layout: {
+              bodyBg: 'black',
+              headerBg: "transparent",
+              footerBg: "transparent",
+              footerPadding: "none",
+              siderBg: "transparent",
+            },
+            Button: {
+              colorText: "black",
+            },
+            Input: {
+              activeBg: "none",
+              activeShadow: "none",
+            },
+          },
+        }}
+      >
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools />
+          <MessageContextProvider>
+            <UserContextProvider>
+              <DrawerContextProvider>
+                <ModalUnregisteredContextProvider>
+                  {children}
+                </ModalUnregisteredContextProvider>
+              </DrawerContextProvider>
+            </UserContextProvider>
+          </MessageContextProvider>
+        </QueryClientProvider>
+      </ConfigProvider>
     </SessionProvider>
   );
 }

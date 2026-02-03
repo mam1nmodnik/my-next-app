@@ -1,32 +1,24 @@
+import { authOptions } from '@/lib/auth-options';
 import { PrismaClient } from '@prisma/client';
+import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
   type Data = {
-      id: number;
       name?: string;
       email?: string
       login?: string
       avatar?: string;
+      bio?: string,
   }
 const prisma = new PrismaClient();
 
-function isValidEmail(email: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-export async function PATCH(req: Request) {
+export async function POST(req: Request) {
+  const session = await getServerSession(authOptions)
+  const userId = session?.user?.id
   try {
     const data: Data = await req.json();
-    if (!data.id) {
-      return NextResponse.json({ error: 'ID не передан' }, { status: 400 });
-    }
-    if(data.email){
-      if (!isValidEmail(data.email)) {
-        return NextResponse.json({ notice: 'error', message: 'Некорректный email' }, { status: 400 });
-      }
-    }
     await prisma.user.update({
-      where: { id: data.id },
+      where: { id: Number(userId)},
       data: data
     });
     return NextResponse.json({ notice: 'success', message: 'Данные успешно изменены' }, { status: 200 });

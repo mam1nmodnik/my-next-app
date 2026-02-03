@@ -60,6 +60,7 @@ export default function LogIn() {
       });
 
       if (res?.error) {
+        setLoadBtn(() => false);
         setError((prev) => ({
           ...prev,
           allError: res.error,
@@ -70,6 +71,7 @@ export default function LogIn() {
       setLoadBtn(() => false);
     } catch (err) {
       console.log(err);
+      setLoadBtn(() => false);
     }
   };
 

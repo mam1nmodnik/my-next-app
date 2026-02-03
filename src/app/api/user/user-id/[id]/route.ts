@@ -3,10 +3,11 @@ import { NextResponse, NextRequest } from 'next/server';
 
 const prisma = new PrismaClient();
 
-export async function GET(req: NextRequest,context: { params: Promise<{ id: string }> }) {
-  
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+
   const { id } = await context.params; 
   const userId = Number(id);
+
     try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -16,26 +17,10 @@ export async function GET(req: NextRequest,context: { params: Promise<{ id: stri
         name: true,
         email: true,
         avatar: true,
-        posts: {
-          select: {
-            id: true,
-            title: true,
-            content: true,
-            date: true,
-            createdAt: true,
-            userId: true, 
-            user: {
-              select: {
-                id: true,
-                login: true,
-                name: true,
-              }
-            }
-          }
-        }
+        bio: true
       }
     });
-
+    
     return NextResponse.json(user);
   } catch (error) {
     console.error('Ошибка при получении пользоватея:', error);

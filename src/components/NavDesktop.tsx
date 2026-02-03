@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useDrawerContext } from "@/context/drawer-context";
 import { MyButton } from "./IU/MyButton";
 import { usePathname } from "next/navigation";
@@ -34,17 +34,7 @@ export default function NavDesktop() {
               Профиль
             </span>
           </Link>
-          <Link href="/myposts" scroll={false}>
-            <span
-              className={`${
-                pathname == "/myposts"
-                  ? "text-gray-500"
-                  : "text-white hover:text-blue-400"
-              }`}
-            >
-              Мои посты
-            </span>
-          </Link>
+          
           {session && (
             <button
               type="submit"

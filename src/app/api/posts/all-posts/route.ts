@@ -13,7 +13,7 @@ export async function GET() {
   orderBy: { createdAt: "desc" },
   include: {
     user: {
-      select: { id: true, login: true, name: true },
+      select: { id: true, login: true, name: true, avatar: true },
     },
     likes: {
       where: {

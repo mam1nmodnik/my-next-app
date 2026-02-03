@@ -1,4 +1,4 @@
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 type ModalUnregisteredType = {
@@ -26,19 +26,27 @@ export function ModalUnregisteredContextProvider({
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const toLink = () => {
+    window.location.href = "/signup";
+  };
 
   return (
     <ModalUnregistered.Provider value={{ openModal }}>
       <>
         {children}
-
         <Modal
-          title="Похоже, что вы не зарегистрировались..."
+          title="Похоже, что вы не авторизовались..."
           closable={{ "aria-label": "Custom Close Button" }}
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
-          footer={<></>}
+          className=""
+          footer={
+            <div className="flex gap-2">
+              <Button onClick={toLink}>Зарегестрироваться</Button>
+              <Button onClick={handleCancel}>Остаться</Button>
+            </div>
+          }
         />
       </>
     </ModalUnregistered.Provider>

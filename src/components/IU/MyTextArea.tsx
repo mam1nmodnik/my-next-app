@@ -1,5 +1,4 @@
-import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import React, { useState } from "react";
+import React from "react";
 
 type InputProps = {
   label?: string;
@@ -7,64 +6,41 @@ type InputProps = {
 
   error?: boolean;
   helperText?: string;
-
+  maxLength: number;
   className?: string;
   placeholder?: string;
   value?: string;
-  type?:
-    | "password"
-    | "text"
-    | "email"
-    | "button"
-    | "file"
-    | "radio"
-    | "reset"
-    | "submit";
 
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
-
-  togglePassword?: boolean;
-  IconShow?: React.ReactNode;
-  IconHide?: React.ReactNode;
 };
 
-export default function MyInput({
+export default function MyTextArea({
   label,
   name,
   placeholder,
   className,
   value,
-  type = "text",
   onChange,
   onBlur,
-
+  maxLength,
   error = false,
   helperText,
-
-  togglePassword = false,
-  IconShow = <EyeTwoTone />,
-  IconHide = <EyeInvisibleOutlined />,
 }: InputProps) {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const finalType =
-    type === "password" ? (showPassword ? "text" : "password") : type;
-
   const errorId = `${name}-error`;
 
   return (
     <label className="relative flex flex-col gap-1">
       {label && <span className="text-[#6D6D71] text-sm">{label}</span>}
 
-      <input
-        type={finalType}
+      <textarea
         name={name}
         placeholder={placeholder}
         value={value}
-        onChange={onChange}
+        onChange={() => onChange}
         onBlur={onBlur}
         aria-invalid={error}
+        maxLength={maxLength}
         aria-describedby={error ? errorId : undefined}
         className={`
           ${
@@ -85,15 +61,6 @@ export default function MyInput({
           }
         `}
       />
-
-      {type === "password" && togglePassword && (
-        <div
-          onClick={() => setShowPassword((el) => !el)}
-          className="absolute right-3 top-[9px] cursor-pointer"
-        >
-          {showPassword ? IconShow : IconHide}
-        </div>
-      )}
 
       {helperText && (
         <span

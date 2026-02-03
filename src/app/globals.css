@@ -36,7 +36,6 @@
 }
 
 
-/* 🌫 Базовый стеклянный блок */
 .glass {
   position: relative;
   background: rgba(255,255,255,0.08);
@@ -47,10 +46,8 @@
   transition: all 0.5s ease;
 }
 
-/* 🌈 Мягкий перелив и свечение */
 
 
-/* 🌕 Светлый вариант */
 .glass-light {
   background: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(16px) saturate(180%);
@@ -60,7 +57,6 @@
   color: #111;
 }
 
-/* 🌑 Тёмный вариант */
 .glass-dark {
   background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(18px) saturate(180%);
@@ -69,7 +65,6 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   color: #f1f5f9;
 }
-
 
 .ghosthub-card {
   background-color: rgba(15, 23, 42, 0.5); 
@@ -83,4 +78,16 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); 
   
 }
+ #bio::placeholder {
+    color: #9ca3af; 
+    opacity: 1; 
+  }
 
+#post::placeholder {
+    color: #9ca3af; 
+    opacity: 1; 
+  }
+  #bio:focus {
+  border: 1px solid hsl(254, 16%, 71%); /* почти как твой oklch */
+  outline: none;
+}

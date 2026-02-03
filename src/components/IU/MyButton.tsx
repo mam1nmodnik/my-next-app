@@ -4,12 +4,20 @@ type ButtonProps = {
   loading?: boolean;
   className?: string;
   onClick?: () => void;
-  children: string
+  children: string;
+  disabled?: boolean;
 };
 
-export function MyButton({ loading,  className, onClick, children }: ButtonProps) {
+export function MyButton({
+  loading,
+  className,
+  onClick,
+  children,
+  disabled,
+}: ButtonProps) {
   return (
     <button
+      disabled={disabled}
       className={
         className
           ? className

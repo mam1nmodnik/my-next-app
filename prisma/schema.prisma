@@ -10,43 +10,87 @@ generator client {
 model User {
   id Int @id @default(autoincrement())
 
-  email    String  @unique
-  login    String  @unique
-  name     String?
-  avatar   String?
-  password String
-
+  email     String  @unique
+  login     String  @unique
+  name      String?
+  avatar    String?
+  password  String
+  date      DateTime?
+  bio       String?
   createdAt DateTime @default(now())
 
   posts Post[]
   likes Like[]
+
+  chats Chat[]
+  chatLikes ChatLike[]
 }
 
 model Post {
   id Int @id @default(autoincrement())
 
-  title   String
   content String
   date    DateTime
   userId  Int
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  likesCount Int    @default(0)
-  likes      Like[]
+  likesCount Int @default(0)
+  likes Like[]
+
+  comments Chat[]
 
   createdAt DateTime @default(now())
 }
 
+
 model Like {
   id Int @id @default(autoincrement())
 
-  userId Int
-  postId Int
+  userId  Int
+  postId  Int
   isLiked Boolean @default(true)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post    Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+
   @@unique([userId, postId])
   @@index([postId])
+}
+
+model Chat {
+  id Int @id @default(autoincrement())
+
+  content String
+
+  postId Int
+  userId Int
+
+  parentId Int?
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  parent Chat?  @relation("ChatToChat", fields: [parentId], references: [id])
+  replies Chat[] @relation("ChatToChat")
+
+  likesCount Int @default(0)
+  likes ChatLike[]
+
+  createdAt DateTime @default(now())
+}
+
+
+model ChatLike {
+  id Int @id @default(autoincrement())
+
+  userId Int
+  chatId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, chatId])
+  @@index([chatId])
 }

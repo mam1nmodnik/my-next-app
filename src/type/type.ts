@@ -7,7 +7,6 @@ type like = {
 
 export type Post = {
   id: number
-  title?: string
   content?: string
   date: Date
   createdAt: Date
@@ -19,14 +18,15 @@ export type Post = {
     id: string
     login: string
     name: string
+    avatar: string
   }
 }
 
 export type User = {
-  id: string;
   name?: string | null;
   email: string;
   login: string;
-  image: string | null;
+  avatar: string | null;
+  bio: string;
 };
 
