@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useUserContext } from "@/context/user-context";
 import { MyButton } from "@/components/IU/MyButton";
 import { Avatar, Divider, Modal } from "antd";
@@ -141,7 +141,6 @@ export default function Profile() {
   };
   if (dataUser?.name === "") {
     showModal();
-    // openMessage({ notice: "error", message: "Заполните имя пользоватея!!" });
   }
   if (isLoadingUser)
     return (
