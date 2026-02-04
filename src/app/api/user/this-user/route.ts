@@ -20,6 +20,7 @@ export async function GET() {
         avatar: true,
         bio: true,
         date: true,
+        avatarPublicId: true,
       }
     });
 

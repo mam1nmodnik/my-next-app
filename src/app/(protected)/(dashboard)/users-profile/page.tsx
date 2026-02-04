@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Avatar, Divider } from "antd";
 import MyLoader from "@/components/IU/MyLoader";
 import UserProfilePost from "@/components/posts/UserProfilePost";
+import { AiOutlineUser } from "react-icons/ai";
 
 type User = {
   name?: string | null;
@@ -42,15 +43,17 @@ export default function UsersProfile() {
         <div className="w-full aspect-[3/1] max-h-[200px] bg-[#3E3E3E]"></div>
         <div className="p-6  flex flex-col gap-4">
           <div className="flex flex-row justify-between items-end mt-[-17%] ">
-            {data && (
+            {data?.avatar ? (
               <Avatar
                 src={data?.avatar}
                 size={130}
                 alt="Аватар"
                 className="object-cover relative "
               />
-            )}
-            <button className="text-white border-[0.5px] border-whtie rounded-4xl p-1 pr-3 pl-3 cursor-pointer hover:bg-gray-800 text-l">
+            ): <div className="bg-white/13 rounded-[100px] p-2">
+                <AiOutlineUser className="text-white" style={{fontSize: '90px'}} />
+              </div>}
+            <button className="text-white border-[0.5px] border-white rounded-4xl p-1 pr-3 pl-3 cursor-pointer hover:bg-gray-800 text-l">
               Follow
             </button>
           </div>

@@ -10,19 +10,20 @@ generator client {
 model User {
   id Int @id @default(autoincrement())
 
-  email     String  @unique
-  login     String  @unique
-  name      String?
-  avatar    String?
-  password  String
-  date      DateTime?
-  bio       String?
-  createdAt DateTime @default(now())
+  email          String    @unique
+  login          String    @unique
+  name           String?
+  avatar         String?
+  avatarPublicId String?
+  password       String
+  date           DateTime?
+  bio            String?
+  createdAt      DateTime  @default(now())
 
   posts Post[]
   likes Like[]
 
-  chats Chat[]
+  chats     Chat[]
   chatLikes ChatLike[]
 }
 
@@ -35,14 +36,13 @@ model Post {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  likesCount Int @default(0)
-  likes Like[]
+  likesCount Int    @default(0)
+  likes      Like[]
 
   comments Chat[]
 
   createdAt DateTime @default(now())
 }
-
 
 model Like {
   id Int @id @default(autoincrement())
@@ -67,18 +67,17 @@ model Chat {
 
   parentId Int?
 
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  parent Chat?  @relation("ChatToChat", fields: [parentId], references: [id])
+  parent  Chat?  @relation("ChatToChat", fields: [parentId], references: [id])
   replies Chat[] @relation("ChatToChat")
 
-  likesCount Int @default(0)
-  likes ChatLike[]
+  likesCount Int        @default(0)
+  likes      ChatLike[]
 
   createdAt DateTime @default(now())
 }
-
 
 model ChatLike {
   id Int @id @default(autoincrement())

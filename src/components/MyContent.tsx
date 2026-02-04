@@ -1,5 +1,4 @@
 "use client";
-import { Layout } from "antd";
 import { FooterMobile } from "./FooterMobile";
 import { usePathname } from "next/navigation";
 
@@ -17,7 +16,7 @@ export default function MyContent({ children }: { children: React.ReactNode }) {
 
   return (
     <div>
-      <div className="flex flex-row justify-center flex-1 items-stretch h-full w-full gap-4 px-4 md:px-0 max-w-[1280px] mx-auto ">
+      <div className="flex flex-row justify-center flex-1 items-stretch h-full w-full gap-4  max-w-[1280px] mx-auto ">
         {!authcontent && (
           <div className="lg:flex hidden flex-col gap-2 max-w-[260px] w-full mt-5">
             <div className="sticky top-5">

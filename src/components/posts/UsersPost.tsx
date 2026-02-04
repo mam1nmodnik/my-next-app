@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import MessageCustom from "../IU/messageCustom";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { AiOutlineUser } from "react-icons/ai";
 type UsersPostProps = {
   post?: Post;
   deletePost?: (id: number) => void;
@@ -66,12 +67,17 @@ export default function UsersPost({
             {post.user && (
               <div className="flex flex-row justify-between items-center relative">
                 <div className="flex flex-row gap-2 items-center">
+                  {post.user.avatar ? ( 
                   <Avatar
                     src={post.user.avatar}
                     alt="avatar"
                     className="rounded-4xl h-[70px] w-[70px]"
                     size={50}
-                  />
+                  /> ) : (
+                    <div className="bg-white/13 rounded-[100px] p-2">
+                      <AiOutlineUser className="text-white" style={{fontSize: '30px'}} />
+                    </div>
+                  )}
                   <Link
                     href={
                       Number(session?.user.id) === Number(post.user.id)

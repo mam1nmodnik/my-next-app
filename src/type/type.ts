@@ -23,10 +23,11 @@ export type Post = {
 }
 
 export type User = {
-  name?: string | null;
+  name: string;
   email: string;
   login: string;
-  avatar: string | null;
+  avatar?: string;
+  avatarPublicId?: string;
   bio: string;
 };
 

@@ -69,6 +69,7 @@ export default function SignUp() {
           ...prev,
           allError: data.error,
         }));
+        setLoadBtn(() => false);
         return;
       }
 
@@ -150,7 +151,9 @@ export default function SignUp() {
                     {error.email?.title}
                   </p>
                   {error.password?.map((el, index) => (
-                    <p key={index} className="text-red-500 text-center ">{el.title}</p>
+                    <p key={index} className="text-red-500 text-center ">
+                      {el.title}
+                    </p>
                   ))}
                 </div>
               )}

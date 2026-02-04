@@ -48,29 +48,7 @@ export function FooterMobile({ pathname }: { pathname: string }) {
           </Link>
           Профиль
         </li>
-        <li
-          className={`flex flex-col items-center justify-center  p-2 h-fit w-full rounded-4xl  cursor-pointer  ${
-            pathname == "/myposts" ? "text-white bg-gray-800" : "text-black"
-          }  `}
-        >
-          <Link href="/myposts" className="flex flex-col items-center hover:bg-white">
-            <LiaBookOpenSolid
-              size={30}
-              className=""
-              color={`${pathname == "/myposts" ? "white" : "black"}`}
-            />
-          </Link>
-          Посты
-        </li>
-        {session ? (
-          <li
-            className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl text-black hover:text-gray text-[16px] hover:text-white active:text-white cursor-pointer `}
-            onClick={showDrawer}
-          >
-            <FiMenu size={30} />
-            Меню
-          </li>
-        ) : (
+        {!session && (
           <li
             className={`flex flex-col items-center justify-center  p-1 h-fit w-full rounded-3xl text-black hover:text-gray active:text-white cursor-pointer `}
           >
