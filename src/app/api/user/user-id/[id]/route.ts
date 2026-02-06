@@ -1,13 +1,12 @@
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
+import {  NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
  
   try {
@@ -16,7 +15,7 @@ export async function GET(
       ? Number(session.user.id)
       : null;
 
-    const userId = Number(params.id);
+    const userId = Number((await params).id)
 
     if (!userId || Number.isNaN(userId)) {
       return NextResponse.json(
