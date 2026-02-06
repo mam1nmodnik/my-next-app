@@ -7,15 +7,18 @@ const prisma = new PrismaClient();
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) {
+ 
   try {
     const session = await getServerSession(authOptions);
     const sessionId = session?.user?.id
       ? Number(session.user.id)
       : null;
 
-    if (!params.id || Number.isNaN(params.id)) {
+    const userId = Number(params.id);
+
+    if (!userId || Number.isNaN(userId)) {
       return NextResponse.json(
         { error: "Invalid user id" },
         { status: 400 }
@@ -23,7 +26,7 @@ export async function GET(
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id: userId },
       select: {
         id: true,
         login: true,
@@ -55,7 +58,7 @@ export async function GET(
         where: {
           followerId_followingId: {
             followerId: sessionId,
-            followingId: params.id,
+            followingId: userId,
           },
         },
       });
