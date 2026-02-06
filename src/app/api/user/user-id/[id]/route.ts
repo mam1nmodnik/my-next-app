@@ -1,12 +1,12 @@
 import { authOptions } from "@/lib/auth-options";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import {  NextResponse } from "next/server";
+import {  NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(
-  { params }: { params: Promise<{ id: string }> }
+export async function GET(req: NextRequest,
+  context: { params: Promise<{ id: string }> } 
 ) {
  
   try {
@@ -15,14 +15,8 @@ export async function GET(
       ? Number(session.user.id)
       : null;
 
-    const userId = Number((await params).id)
-
-    if (!userId || Number.isNaN(userId)) {
-      return NextResponse.json(
-        { error: "Invalid user id" },
-        { status: 400 }
-      );
-    }
+    const { id } = await context.params; 
+    const userId = Number(id)
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
