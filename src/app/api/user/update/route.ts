@@ -9,6 +9,7 @@ import { NextResponse } from 'next/server';
       login?: string
       avatar?: string;
       bio?: string,
+      avatarPublicId?: string;
   }
 const prisma = new PrismaClient();
 

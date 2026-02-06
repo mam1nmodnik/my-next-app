@@ -2,17 +2,24 @@
 
 import React, { useEffect, useState } from "react";
 import { useUserContext } from "@/context/user-context";
-import { MyButton } from "@/components/IU/MyButton";
+import { MyButton } from "@/components/ui/MyButton";
 import { Avatar, Divider, Modal, Input, Upload } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMessageContext } from "@/context/message-context";
-import MyInput from "@/components/IU/MyInput";
-import ProfilePost from "@/components/posts/ProfilePost";
+import MyInput from "@/components/ui/MyInput";
+import ProfilePost from "@/components/features/posts/container/MyPostContainer";
 import type { UploadFile, UploadProps } from "antd";
-import MyLoader from "@/components/IU/MyLoader";
+import MyLoader from "@/components/ui/MyLoader";
 import { User } from "@/type/type";
-import { SmileOutlined } from "@ant-design/icons";
 import { AiOutlineUser } from "react-icons/ai";
+type InpUser = {
+  name: string;
+  email: string;
+  login: string;
+  avatar?: string | null;
+  avatarPublicId?: string | null;
+  bio: string;
+};
 export default function Profile() {
   const { TextArea } = Input;
   const { isLoadingUser, dataUser, errorUser } = useUserContext();
@@ -25,6 +32,12 @@ export default function Profile() {
     email: "",
     login: "",
     bio: "",
+    avatar: null,
+    avatarPublicId: null,
+    _count: {
+      followers: 0,
+      following: 0,
+    },
   });
   const [inpErrors, setInpErrors] = useState({
     name: { error: false, text: "" },
@@ -42,20 +55,24 @@ export default function Profile() {
         email: dataUser.email || "",
         login: dataUser.login || "",
         bio: dataUser.bio || "",
+        avatar: dataUser.avatar || null,
+        avatarPublicId: dataUser.avatarPublicId || null,
+        _count: {
+          followers: dataUser._count.followers,
+          following: dataUser._count.following,
+        },
       });
     }
   }, [dataUser]);
 
-  // открыть/закрыть модалку
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-  // Валидация
   const isValidEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const updateInfoUserMutation = useMutation({
-    mutationFn: async (data: User) => {
+    mutationFn: async (data: InpUser) => {
       const res = await fetch("/api/user/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -95,7 +112,10 @@ export default function Profile() {
             }),
           });
 
-          if (!res.ok) throw new Error("Upload failed");
+          if (!res.ok) {
+            setLoadBtnProfile(false);
+            throw new Error("Upload failed");
+          }
 
           const data = await res.json();
           resolve({ url: data.url, publicId: data.publicId });
@@ -132,18 +152,21 @@ export default function Profile() {
       publicId: inputValue.avatarPublicId || "",
     };
 
-    if (fileList[0]?.originFileObj) {
+    if (fileList[0]?.originFileObj && dataUser?.avatarPublicId) {
       avatarUrl = await uploadToCloudinary(
         fileList[0].originFileObj as File,
         dataUser?.avatarPublicId,
       );
     }
-
-    updateInfoUserMutation.mutate({
-      ...inputValue,
-      avatar: avatarUrl.url,
-      avatarPublicId: avatarUrl.publicId,
-    });
+    const newData = {
+      avatar: avatarUrl.url || null,
+      avatarPublicId: avatarUrl.publicId || null,
+      bio: inputValue.bio,
+      email: inputValue.email,
+      login: inputValue.login,
+      name: inputValue.name,
+    }
+    updateInfoUserMutation.mutate(newData);
   };
 
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
@@ -214,6 +237,20 @@ export default function Profile() {
               <p className="w-fit text-white whitespace-pre-wrap">
                 {dataUser?.bio}
               </p>
+              <div className="flex flex-row gap-4 mt-2">
+                <p className="text-[#6D6D71] text-sm">
+                  <span className="font-bold text-white">
+                    {dataUser?._count.followers}
+                  </span>{" "}
+                  Followers
+                </p>
+                <p className="text-[#6D6D71] text-sm">
+                  <span className="font-bold text-white">
+                    {dataUser?._count.following}
+                  </span>{" "}
+                  Following
+                </p>
+              </div>
             </div>
           </div>
           <Divider

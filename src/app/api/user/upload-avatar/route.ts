@@ -15,13 +15,11 @@ export async function POST(req: NextRequest) {
     }
 
     if (oldPublicId) {
-      const destroyResult = await cloudinary.uploader.destroy(oldPublicId, {
+      await cloudinary.uploader.destroy(oldPublicId, {
         resource_type: "image", 
       });
-      console.log("Удаление старого аватара:", destroyResult);
     }
 
-    // Загружаем новый
     const uploaded = await cloudinary.uploader.upload(file, {
       folder: "avatars",
       transformation: [

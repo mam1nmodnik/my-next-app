@@ -1,11 +1,14 @@
+import { authOptions } from "@/lib/auth-options"
 import { PrismaClient, Prisma } from "@prisma/client"
+import { getServerSession } from "next-auth"
 import { NextRequest, NextResponse } from "next/server"
 
 const prisma = new PrismaClient()
 
 export async function POST(req: NextRequest) {
-  const { userId, postId } = await req.json()
-
+  const {  postId } = await req.json()
+  const session = await getServerSession(authOptions)
+  const userId = session?.user?.id || null
   if (!userId || !postId) {
     return NextResponse.json(
       { message: "userId и postId обязательны" },
@@ -53,14 +56,14 @@ export async function POST(req: NextRequest) {
             },
           })
 
-          return { post, liked: false }
+          return { ...post, liked: false }
         }
 
         throw e
       }
     })
 
-    return NextResponse.json({ success: true, ...result })
+    return NextResponse.json(result )
 
   } catch (error) {
     console.error("TOGGLE LIKE ERROR:", error)

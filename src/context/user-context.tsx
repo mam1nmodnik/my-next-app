@@ -2,7 +2,7 @@
 import { createContext, useContext, ReactNode } from "react";
 import { User } from "@/type/type";
 import { useQuery } from "@tanstack/react-query";
-import MyLoader from "@/components/IU/MyLoader";
+import MyLoader from "@/components/ui/MyLoader";
 
 type UserContextType = {
   dataUser: User | undefined;
@@ -21,6 +21,8 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
       return result;
     },
   });
+    
+  
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -33,7 +35,7 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
       value={{
         dataUser: data,
         isLoadingUser: isLoading,
-        errorUser: error,
+        errorUser: error,        
       }}
     >
       {children}

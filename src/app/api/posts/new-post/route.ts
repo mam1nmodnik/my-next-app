@@ -5,9 +5,9 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
-    const { id,  content, date } = await req.json();
+    const { id,  content } = await req.json();
 
-    if (!id || !content || !date) {
+    if (!id || !content) {
       return NextResponse.json({ notice: 'error', message: 'Все поля обязательны' }, { status: 400 });
     }
 
@@ -22,7 +22,6 @@ export async function POST(req: Request) {
     await prisma.post.create({
       data: {
         content,
-        date: new Date(date),
         user: { connect: { id: Number(id) } },
       },
     });

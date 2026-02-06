@@ -20,18 +20,36 @@ model User {
   bio            String?
   createdAt      DateTime  @default(now())
 
-  posts Post[]
-  likes Like[]
+  posts     Post[]
+  likes     Like[]
+
+  following Follow[]   @relation("UserFollows")
+  followers Follow[]   @relation("UserFollowers")
 
   chats     Chat[]
   chatLikes ChatLike[]
+
 }
+
+model Follow {
+  id Int @id @default(autoincrement())
+
+  followerId  Int
+  followingId Int
+
+  follower  User @relation("UserFollows", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([followerId, followingId])
+}
+
 
 model Post {
   id Int @id @default(autoincrement())
 
   content String
-  date    DateTime
   userId  Int
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

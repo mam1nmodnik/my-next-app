@@ -21,6 +21,12 @@ export async function GET() {
         bio: true,
         date: true,
         avatarPublicId: true,
+        _count: {
+          select: {
+            followers: true,
+            following: true,
+          },
+        },
       }
     });
 

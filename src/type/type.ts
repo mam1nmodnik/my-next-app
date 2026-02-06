@@ -8,14 +8,13 @@ type like = {
 export type Post = {
   id: number
   content?: string
-  date: Date
   createdAt: Date
   userId: number
   likesCount: number
   isLiked: boolean
   likes: like[]
   user: {
-    id: string
+    id: number
     login: string
     name: string
     avatar: string
@@ -26,8 +25,12 @@ export type User = {
   name: string;
   email: string;
   login: string;
-  avatar?: string;
-  avatarPublicId?: string;
+  avatar?: string | null;
+  avatarPublicId?: string | null;
   bio: string;
+  _count: {
+    followers: number;
+    following: number;
+  }
 };
 

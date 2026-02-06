@@ -1,6 +1,6 @@
 "use client";
-import { MyButton } from "@/components/IU/MyButton";
-import MyInput from "@/components/IU/MyInput";
+import { MyButton } from "@/components/ui/MyButton";
+import MyInput from "@/components/ui/MyInput";
 import Link from "next/link";
 import { useState } from "react";
 

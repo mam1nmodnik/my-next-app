@@ -3,8 +3,8 @@
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
-import MyInput from "@/components/IU/MyInput";
-import { MyButton } from "@/components/IU/MyButton";
+import MyInput from "@/components/ui/MyInput";
+import { MyButton } from "@/components/ui/MyButton";
 type ErrorInput = {
   allError?: string | null;
   email?: { title?: string };

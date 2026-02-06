@@ -1,7 +1,7 @@
 import "@ant-design/v5-patch-for-react-19";
 import "@/app/globals.css";
-import { LayoutWrapper } from "@/components/layoutWrapper";
 import AppProvider from "./_providers/app-provider";
+import LayoutWrapper from "@/components/layout/layoutWrapper";
 
 export default function RootLayout({
   children,

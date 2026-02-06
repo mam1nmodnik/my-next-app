@@ -1,15 +1,34 @@
-import { NoticeType } from "antd/es/message/interface";
+import { Post } from "@/type/type";
 
-type DeletePost = {
-    id: number; 
-    openMessege: (response:{ notice: NoticeType | undefined, message: string} ) => void
-}
+type PostsParams = {
+  type: "all" | "my" | "user";
+  userId?: number;
+};
 
+export async function fetchPosts(params: PostsParams): Promise<Post[]> {
+  let url = "";
 
-export const deletePost = async ({id, openMessege}: DeletePost) => {
-    const response = await fetch(`/api/posts/delete-post/${id}`, {
-        method: "DELETE",
-    });
-    const res = await response.json();
-    openMessege(res)
+  switch (params.type) {
+    case "all":
+      url = "/api/posts/all-posts";
+      break;
+
+    case "my":
+      url = "/api/posts/my-posts";
+      break;
+
+    case "user":
+      if (!params.userId) {
+        throw new Error("userId is required");
+      }
+      url = `/api/posts/user-posts/${params.userId}`;
+      break;
+  }
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error("Failed to fetch posts");
+  }
+
+  return res.json();
 }
