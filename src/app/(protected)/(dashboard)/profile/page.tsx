@@ -10,7 +10,6 @@ import MyInput from "@/components/ui/MyInput";
 import ProfilePost from "@/components/features/posts/container/MyPostContainer";
 import type { UploadFile, UploadProps } from "antd";
 import MyLoader from "@/components/ui/MyLoader";
-import { User } from "@/type/type";
 import { AiOutlineUser } from "react-icons/ai";
 type InpUser = {
   name: string;
@@ -27,23 +26,18 @@ export default function Profile() {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
-  const [inputValue, setInputValue] = useState<User>({
+  const [inputValue, setInputValue] = useState<InpUser>({
     name: "",
     email: "",
     login: "",
     bio: "",
     avatar: null,
     avatarPublicId: null,
-    _count: {
-      followers: 0,
-      following: 0,
-    },
   });
   const [inpErrors, setInpErrors] = useState({
     name: { error: false, text: "" },
     email: { error: false, text: "" },
     login: { error: false, text: "" },
-    bio: { error: false, text: "" },
   });
   const [loadBtnProfile, setLoadBtnProfile] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -57,10 +51,6 @@ export default function Profile() {
         bio: dataUser.bio || "",
         avatar: dataUser.avatar || null,
         avatarPublicId: dataUser.avatarPublicId || null,
-        _count: {
-          followers: dataUser._count.followers,
-          following: dataUser._count.following,
-        },
       });
     }
   }, [dataUser]);
@@ -79,11 +69,12 @@ export default function Profile() {
         body: JSON.stringify(data),
       });
       const result = await res.json();
+      
       openMessage(result);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["this-user"] });
-      queryClient.invalidateQueries({ queryKey: ["my-posts"] });
+      queryClient.invalidateQueries({ queryKey: ["users"]} );
       setLoadBtnProfile(false);
       closeModal();
     },
@@ -142,7 +133,6 @@ export default function Profile() {
         text: emailError ? "Некорректный email" : "",
       },
       login: { error: false, text: "" },
-      bio: { error: false, text: "" },
     });
 
     if (nameError || emailError) return;
@@ -165,7 +155,7 @@ export default function Profile() {
       email: inputValue.email,
       login: inputValue.login,
       name: inputValue.name,
-    }
+    };
     updateInfoUserMutation.mutate(newData);
   };
 

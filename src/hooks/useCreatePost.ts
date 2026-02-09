@@ -1,6 +1,5 @@
 import { useMessageContext } from "@/context/message-context";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 export function useCreatePost( 
@@ -8,19 +7,13 @@ export function useCreatePost(
   const [content, setContent] = useState("");
   const queryClient = useQueryClient();
   const { openMessage } = useMessageContext();
-  const { data: session } = useSession();
-
-  const data = {
-    id: session?.user.id,
-    content: content,
-  };
 
   const createPostMutation = useMutation({
     mutationFn: async () => {
       const response = await fetch("/api/posts/new-post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ content }),
       });
       const res = await response.json();
       openMessage(res);
@@ -29,9 +22,14 @@ export function useCreatePost(
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
+  
+   const createPost = () => {
+    
+    createPostMutation.mutate()
+   }
 
   return {
-    createPost: createPostMutation.mutate,
+    createPost: createPost,
     content,
     setContent,
     isLoading: createPostMutation.isPending,

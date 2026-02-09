@@ -1,18 +1,18 @@
+import { authOptions } from '@/lib/auth-options';
 import { PrismaClient } from '@prisma/client';
+import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
+      const session = await getServerSession(authOptions)
+      const userId = session?.user?.id
   try {
-    const { id,  content } = await req.json();
-
-    if (!id || !content) {
-      return NextResponse.json({ notice: 'error', message: 'Все поля обязательны' }, { status: 400 });
-    }
+    const {  content } = await req.json();
 
     const user = await prisma.user.findUnique({
-      where: { id: Number(id) },
+      where: { id: Number(userId) },
     });
 
     if (!user) {
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     await prisma.post.create({
       data: {
         content,
-        user: { connect: { id: Number(id) } },
+        user: { connect: { id: Number(userId) } },
       },
     });
 

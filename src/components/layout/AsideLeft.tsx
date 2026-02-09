@@ -1,17 +1,19 @@
 import { TbUser, TbUserFilled } from "react-icons/tb";
-import { LogoutOutlined } from "@ant-design/icons";
 import { GoHome, GoHomeFill } from "react-icons/go";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
 import { EchoLogo } from "../ui/EchoLogo";
 import { usePathname } from "next/navigation";
+import { useUserContext } from "@/context/user-context";
+import UserIdentity from "../ui/UserIdentity";
 export default function AsideLeft() {
   const pathname = usePathname();
+  const { dataUser, isLoadingUser } = useUserContext();
+
 
   return (
     <>
-      <div className="lg:flex hidden flex-col gap-2 max-w-[260px] max-h-screen h-full w-full mt-5">
-        <div className="sticky top-5">
+      <div className="lg:flex hidden flex-col justify-between gap-2 max-w-[260px] w-full mt-5 relative">
+        <div className="fixed top-5 flex flex-col ">
           <Link href="/">
             <div className=" cursor-pointer max-w-[220px] pl-4 hover:bg-white/10 rounded-[45px]">
               <EchoLogo
@@ -46,21 +48,10 @@ export default function AsideLeft() {
                 <p className="text-white text-[18px] font-bold">Profile</p>
               </div>
             </Link>
-            <div
-              className="flex flex-row gap-4 items-center cursor-pointer w-fit pt-2 pb-2 pl-4 pr-4 hover:bg-white/10 rounded-[45px]"
-              onClick={() =>
-                signOut({
-                  callbackUrl: "/login",
-                })
-              }
-            >
-              <LogoutOutlined
-                size={40}
-                style={{ color: "white", fontSize: 35 }}
-              />
-              <p className="text-white text-[18px] font-bold">Logout</p>
-            </div>
           </div>
+        </div>
+        <div className="fixed bottom-5 "> 
+          <UserIdentity avatar={dataUser?.avatar} login={dataUser?.login} name={dataUser?.name}/>
         </div>
       </div>
     </>

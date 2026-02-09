@@ -39,21 +39,19 @@ export default function WhoToFollow() {
 
   return (
     <div className="flex flex-col gap-4 mt-5 p-4">
-      <div className="border border-white/30 rounded-2xl h-fit w-[350px] p-4">
+      <div className="border border-white/30 rounded-2xl h-fit w-full p-4">
         <h1 className="text-xl font-bold ">Who to follow</h1>
         <div className="flex flex-col gap-2">
-          {
-            isLoading && (
-              <div className="mt-5 mb-5 flex justify-center">
-                <MyLoader size={32} />
-              </div>
-            )
-          }
+          {isLoading && (
+            <div className="mt-5 mb-5 flex justify-center">
+              <MyLoader size={32} />
+            </div>
+          )}
           {data &&
             data.map((user) => (
               <div
                 key={user.id}
-                className="flex flex-row items-center justify-between p-1"
+                className="flex flex-row gap-2 items-center justify-between pt-2.5 pb-2.5 pl-4 pr-4 rounded-[35px] hover:bg-white/10  cursor-pointer"
               >
                 <div className="flex flex-row gap-2 items-center">
                   {user.avatar ? (
@@ -93,7 +91,10 @@ export default function WhoToFollow() {
                     </p>
                   </Link>
                 ) : (
-                  <FollowContainer userId={user.id} isFollowedByMe={user.isFollowedByMe} />
+                  <FollowContainer
+                    userId={user.id}
+                    isFollowedByMe={user.isFollowedByMe}
+                  />
                 )}
               </div>
             ))}
