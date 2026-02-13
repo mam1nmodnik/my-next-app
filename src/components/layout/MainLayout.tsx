@@ -13,13 +13,14 @@ export default function MainLayout({
 }) {
   return (
     <>
-      <div className="flex flex-row justify-center flex-1 items-stretch h-full w-full gap-4  max-w-[1280px] mx-auto ">
-        <AsideLeft  />
+      <div className="flex flex-row justify-center items-stretch max-w-[1280px] h-full w-full gap-4 mx-auto">
+        <AsideLeft />
+
         <Feed>{children}</Feed>
         <AsideRight />
       </div>
 
-      <FooterMobile  />
+      <FooterMobile />
     </>
   );
 }

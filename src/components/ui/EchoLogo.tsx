@@ -19,7 +19,7 @@ export const EchoLogo: React.FC<EchoLogoProps> = ({
   waveColor,
   textColor,
   waveCount = 2,
-  text = "echo",
+  text = "",
   fontSize = 18,
   strokeWidth = 2,
 }) => {
@@ -27,7 +27,6 @@ export const EchoLogo: React.FC<EchoLogoProps> = ({
   const wColor = waveColor || color;
   const tColor = textColor || color;
 
-  // массив для волн
   const waves = Array.from({ length: waveCount });
 
   return (
@@ -39,10 +38,8 @@ export const EchoLogo: React.FC<EchoLogoProps> = ({
       role="img"
       aria-label="echo logo"
     >
-      {/* Центр / точка */}
       <circle cx="12" cy="20" r={size / 9} fill={cColor} />
 
-      {/* Волны */}
       {waves.map((_, i) => (
         <path
           key={i}
@@ -57,7 +54,6 @@ export const EchoLogo: React.FC<EchoLogoProps> = ({
         />
       ))}
 
-      {/* Текст */}
       <text
         x={44}
         y={26}

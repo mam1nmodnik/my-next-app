@@ -1,34 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { AiOutlineUser } from "react-icons/ai";
 import { Avatar } from "antd";
 import { useSession } from "next-auth/react";
 import MyLoader from "@/components/ui/MyLoader";
 import FollowContainer from "./container/FollowContainer";
+import { useUsers } from "@/hooks/useUsers";
 
-type UserWithFollowInfo = {
-  id: number;
-  login: string;
-  name: string | null;
-  avatar: string | null;
-  avatarPublicId: string | null;
-  bio: string | null;
-  followersCount: number;
-  followingCount: number;
-  isFollowedByMe: boolean;
-};
+
 
 export default function WhoToFollow() {
   const { data: session } = useSession();
-
-  const { isLoading, data } = useQuery({
-    queryKey: ["users"],
-    queryFn: async (): Promise<Array<UserWithFollowInfo>> => {
-      const response = await fetch("/api/user/users");
-      const result = await response.json();
-      return result;
-    },
-  });
+  const {data, isLoading } = useUsers()
+ 
   if (isLoading) {
     return (
       <div className="mt-25 mb-5 flex justify-center">
@@ -38,10 +21,10 @@ export default function WhoToFollow() {
   }
 
   return (
-    <div className="flex flex-col gap-4 mt-5 p-4">
+    <div className="flex flex-col gap-4 mt-5 p-4 w-full">
       <div className="border border-white/30 rounded-2xl h-fit w-full p-4">
         <h1 className="text-xl font-bold ">Who to follow</h1>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           {isLoading && (
             <div className="mt-5 mb-5 flex justify-center">
               <MyLoader size={32} />
@@ -77,11 +60,11 @@ export default function WhoToFollow() {
                           ? "/profile"
                           : `/users-profile?user=${user.id}`
                       }
-                      className="text-[15px] font-bold"
+                      className="text-[15px] font-bold "
                     >
-                      {user.name}
+                      <span className="truncate">{user.name}</span>зайди 
                     </Link>
-                    <p className="text-[#6D6D71] text-[15px]">@{user.login}</p>
+                    <span className="text-[#6D6D71] text-[15px] truncate">@{user.login}</span>
                   </div>
                 </div>
                 {Number(session?.user.id) === Number(user.id) ? (

@@ -1,4 +1,4 @@
-
+import { useSession } from "next-auth/react";
 import LikeButton from "../ui/LikeButton";
 import { useLikePost } from "@/hooks/useLikePost";
 
@@ -10,7 +10,9 @@ type Props = {
 
 export default function LikeContainer({ postId, isLiked, likesCount }: Props) {
   const likeMutation = useLikePost(postId);
+  const { data: session } = useSession();
   const handleClick = () => {
+    if (!session) return null;
     likeMutation.like();
   };
 
