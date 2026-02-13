@@ -62,7 +62,7 @@ export default function WhoToFollow() {
                       }
                       className="text-[15px] font-bold "
                     >
-                      <span className="truncate">{user.name}</span>зайди 
+                      <span className="truncate">{user.name}</span> 
                     </Link>
                     <span className="text-[#6D6D71] text-[15px] truncate">@{user.login}</span>
                   </div>
