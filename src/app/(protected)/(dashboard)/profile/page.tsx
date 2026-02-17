@@ -69,12 +69,14 @@ export default function Profile() {
         body: JSON.stringify(data),
       });
       const result = await res.json();
-      
+
       openMessage(result);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["this-user"] });
-      queryClient.invalidateQueries({ queryKey: ["users"]} );
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+
       setLoadBtnProfile(false);
       closeModal();
     },
@@ -102,13 +104,14 @@ export default function Profile() {
               oldPublicId,
             }),
           });
-
           if (!res.ok) {
             setLoadBtnProfile(false);
+            console.log(res);
             throw new Error("Upload failed");
           }
 
           const data = await res.json();
+          console.log(data);
           resolve({ url: data.url, publicId: data.publicId });
         } catch (err) {
           reject(err);
@@ -141,11 +144,12 @@ export default function Profile() {
       url: inputValue.avatar || "",
       publicId: inputValue.avatarPublicId || "",
     };
+    console.log(dataUser);
 
-    if (fileList[0]?.originFileObj && dataUser?.avatarPublicId) {
+    if (fileList[0]?.originFileObj) {
       avatarUrl = await uploadToCloudinary(
         fileList[0].originFileObj as File,
-        dataUser?.avatarPublicId,
+        inputValue.avatarPublicId || undefined,
       );
     }
     const newData = {

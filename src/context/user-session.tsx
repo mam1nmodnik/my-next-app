@@ -9,6 +9,9 @@ export default async function UserSessionPage({
 }) {
   const session = await getServerSession(authOptions);
 
-  if (!session) redirect("/login"); 
-  if (session) return  children ;
+  if (!session) {
+    return redirect("/login");
+  }
+
+  return <>{children}</>;
 }
