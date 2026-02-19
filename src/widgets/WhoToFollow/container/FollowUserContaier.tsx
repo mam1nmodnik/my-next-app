@@ -1,9 +1,9 @@
 'use client';
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import FollowContainer from "@/components/features/follow/container/FollowContainer";
 import { UserWithFollowInfo } from "@/shared/hooks/useUsers";
 import IsUserContainer from "@/entities/user/container/IsUserContainer";
+import FollowContainer from "@/components/features/follow/container/FollowContainer";
 
 
 export default function FollowUserContainer({ user }: { user: UserWithFollowInfo }) {

@@ -1,6 +1,6 @@
 import { useUserContext } from "@/app/_providers/infra/user-provider";
-import IsAvatarUser from "@/app/entities/user/ui/IsAvatarUser";
 import { useCreatePost } from "@/components/features/сreatePost/model/useCreatePost";
+import IsAvatarUser from "@/entities/user/ui/IsAvatarUser";
 import { MyButton } from "@/shared/ui/MyButton";
 import TextArea from "antd/es/input/TextArea";
 import { useSession } from "next-auth/react";

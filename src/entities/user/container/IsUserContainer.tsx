@@ -1,5 +1,5 @@
-import IsNameUser from "@/app/entities/user/ui/IsNameUser";
-import IsAvatarUser from "@/app/entities/user/ui/IsAvatarUser";
+import IsAvatarUser from "../ui/IsAvatarUser";
+import IsNameUser from "../ui/IsNameUser";
 
 
 export default function IsUserContainer({ id, avatar, name, login }: { id: number | null | undefined, avatar: string | null | undefined, name: string | null | undefined, login: string | null | undefined }) {

@@ -1,8 +1,8 @@
 "use client";
+import MyLoader from "@/shared/ui/MyLoader";
+import { usePosts } from "../model/usePost";
 import PostCardList from "../ui/PostCardList";
-import MyLoader from "../../../../shared/ui/MyLoader";
 import { useSearchParams } from "next/navigation";
-import { usePosts } from "@/app/entities/post/model/usePost";
 
 export default function UserProfilePost() {
   const searchParams = useSearchParams();

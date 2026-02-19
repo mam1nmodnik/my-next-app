@@ -11,7 +11,7 @@ import type { UploadFile, UploadProps } from "antd";
 import MyLoader from "@/shared/ui/MyLoader";
 import { AiOutlineUser } from "react-icons/ai";
 import InfoProfileUser from "@/shared/ui/InfoProfileUser";
-import ProfilePost from "@/app/entities/post/container/MyPostContainer";
+import ProfilePost from "@/entities/post/container/MyPostContainer";
 type InpUser = {
   name: string;
   email: string;

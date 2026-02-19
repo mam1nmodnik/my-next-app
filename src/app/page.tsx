@@ -3,9 +3,9 @@
 import { Divider } from "antd";
 
 import { useState } from "react";
-import PopularPost from "./entities/post/container/AllPostContainer";
-import FeedSwitcher from "./widgets/FeedSwitcher/FeedSwitcher";
 import CreatePostForm from "../components/features/сreatePost/CreatePostForm";
+import FeedSwitcher from "@/widgets/FeedSwitcher/FeedSwitcher";
+import PopularPost from "@/entities/post/container/AllPostContainer";
 
 export default function Home() {
 

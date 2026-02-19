@@ -1,6 +1,6 @@
 import MyLoader from "@/shared/ui/MyLoader";
 import { useUsers } from "@/shared/hooks/useUsers";
-import FollowUserItem from "@/app/widgets/WhoToFollow/container/FollowUserContaier";
+import FollowUserContainer from "./container/FollowUserContaier";
 
 export default function WhoToFollow() {
   const { data, isLoading } = useUsers();
@@ -17,7 +17,7 @@ export default function WhoToFollow() {
         <h1 className="text-xl font-bold ">Who to follow</h1>
         <div className="flex flex-col gap-2 w-full">
           {data &&
-            data.map((user) => <FollowUserItem key={user.id} user={user} />)}
+            data.map((user) => <FollowUserContainer key={user.id} user={user} />)}
         </div>
       </div>
     </div>

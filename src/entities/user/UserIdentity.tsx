@@ -1,8 +1,8 @@
-import IsAvatarUser from "@/app/entities/user/ui/IsAvatarUser";
 import {  Popover } from "antd";
 import {  signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import IsAvatarUser from "./ui/IsAvatarUser";
 
 type UserIdentityProps = {
   avatar?: string | null;

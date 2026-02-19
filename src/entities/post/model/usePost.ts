@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Post } from "@/type/type";
-import { fetchPosts } from "@/app/entities/post/model/post";
+import { fetchPosts } from "./post";
 
 type UsePostsParams = {
     type: "all" | "my" | "user";

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { EchoLogo } from "../../../shared/ui/EchoLogo";
 import { usePathname } from "next/navigation";
 import { useUserContext } from "@/app/_providers/infra/user-provider";
-import UserIdentity from "@/app/entities/user/UserIdentity";
+import UserIdentity from "@/entities/user/UserIdentity";
 export default function AsideLeft() {
   const pathname = usePathname();
   const { dataUser } = useUserContext();

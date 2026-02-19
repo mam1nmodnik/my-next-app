@@ -5,7 +5,7 @@ import { Avatar, Divider } from "antd";
 import MyLoader from "@/shared/ui/MyLoader";
 import { AiOutlineUser } from "react-icons/ai";
 import FollowContainer from "@/components/features/follow/container/FollowContainer";
-import UserProfilePost from "@/app/entities/post/container/UserPostContainer";
+import UserProfilePost from "@/entities/post/container/UserPostContainer";
 
 type User = {
   id: number;

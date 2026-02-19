@@ -1,6 +1,7 @@
+import MyLoader from "@/shared/ui/MyLoader";
 import PostCardList from "../ui/PostCardList";
-import MyLoader from "../../../../shared/ui/MyLoader";
-import { usePosts } from "@/app/entities/post/model/usePost";
+import { usePosts } from "../model/usePost";
+
 
 export default function ProfilePost() {
   const { isLoading, data } = usePosts({ type: "my" });
