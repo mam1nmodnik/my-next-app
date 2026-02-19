@@ -1,13 +1,13 @@
 "use client";
-import { UserContextProvider } from "@/context/user-context";
+import { UserContextProvider } from "@/app/_providers/infra/user-provider";
 import { ReactNode } from "react";
 import { ConfigProvider } from "antd";
 import { SessionProvider } from "next-auth/react";
-import { MessageContextProvider } from "@/context/message-context";
+import { MessageContextProvider } from "@/app/_providers/ui/message-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { DrawerContextProvider } from "@/context/drawer-context";
+import { DrawerContextProvider } from "@/app/_providers/ui/drawer-provider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ModalUnregisteredContextProvider } from "@/context/modal-unregistered";
+import { ModalUnregisteredContextProvider } from "@/app/_providers/ui/modal-provider";
 
 const queryClient = new QueryClient();
 

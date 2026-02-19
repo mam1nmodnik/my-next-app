@@ -1,16 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useUserContext } from "@/context/user-context";
-import { MyButton } from "@/components/ui/MyButton";
+import { useUserContext } from "@/app/_providers/infra/user-provider";
+import { MyButton } from "@/shared/ui/MyButton";
 import { Avatar, Divider, Modal, Input, Upload } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useMessageContext } from "@/context/message-context";
-import MyInput from "@/components/ui/MyInput";
-import ProfilePost from "@/components/features/posts/container/MyPostContainer";
+import { useMessageContext } from "@/app/_providers/ui/message-provider";
+import MyInput from "@/shared/ui/MyInput";
 import type { UploadFile, UploadProps } from "antd";
-import MyLoader from "@/components/ui/MyLoader";
+import MyLoader from "@/shared/ui/MyLoader";
 import { AiOutlineUser } from "react-icons/ai";
+import InfoProfileUser from "@/shared/ui/InfoProfileUser";
+import ProfilePost from "@/app/entities/post/container/MyPostContainer";
 type InpUser = {
   name: string;
   email: string;
@@ -198,13 +199,8 @@ export default function Profile() {
           <div className="w-full aspect-[3/1] max-h-[200px] bg-[#3E3E3E]" />
           <div className="p-6 flex flex-col gap-4">
             <div className="flex flex-row justify-between items-end mt-[-17%]">
-              {dataUser?.avatar != null ? (
-                <Avatar
-                  src={dataUser.avatar}
-                  size={130}
-                  alt="Аватар"
-                  className="object-cover relative"
-                />
+              {dataUser?.avatar ? (
+                <Avatar src={dataUser.avatar} size={130} alt="Аватар" />
               ) : (
                 <div className="bg-white/13 rounded-[100px] p-2">
                   <AiOutlineUser
@@ -221,31 +217,12 @@ export default function Profile() {
                 Edit profile
               </button>
             </div>
-            <div className="flex flex-col">
-              <div className="flex flex-col">
-                <h1 className="text-[20px] text-white font-bold w-fit">
-                  {dataUser?.name}
-                </h1>
-                <p className="text-[#6D6D71] w-fit">@{dataUser?.login}</p>
-              </div>
-              <p className="w-fit text-white whitespace-pre-wrap">
-                {dataUser?.bio}
-              </p>
-              <div className="flex flex-row gap-4 mt-2">
-                <p className="text-[#6D6D71] text-sm">
-                  <span className="font-bold text-white">
-                    {dataUser?._count.followers}
-                  </span>{" "}
-                  Followers
-                </p>
-                <p className="text-[#6D6D71] text-sm">
-                  <span className="font-bold text-white">
-                    {dataUser?._count.following}
-                  </span>{" "}
-                  Following
-                </p>
-              </div>
-            </div>
+            <InfoProfileUser
+              login={dataUser?.login}
+              name={dataUser?.name}
+              bio={dataUser?.bio}
+              _count={dataUser?._count}
+            />
           </div>
           <Divider
             size="small"

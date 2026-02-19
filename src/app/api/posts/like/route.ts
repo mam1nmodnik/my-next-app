@@ -9,13 +9,6 @@ export async function POST(req: NextRequest) {
   const {  postId } = await req.json()
   const session = await getServerSession(authOptions)
   const userId = session?.user?.id || null
-  if (!userId || !postId) {
-    return NextResponse.json(
-      { message: "userId и postId обязательны" },
-      { status: 400 }
-    )
-  }
-
   try {
     const result = await prisma.$transaction(async (tx) => {
       try {
@@ -63,12 +56,12 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    return NextResponse.json(result )
+    return NextResponse.json(result)
 
   } catch (error) {
     console.error("TOGGLE LIKE ERROR:", error)
     return NextResponse.json(
-      { message: "Ошибка сервера" },
+      { statusText: "Ошибка сервера" },
       { status: 500 }
     )
   }

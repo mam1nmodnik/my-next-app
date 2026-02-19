@@ -1,6 +1,6 @@
 "use client";
-import { MyButton } from "@/components/ui/MyButton";
-import MyInput from "@/components/ui/MyInput";
+import { MyButton } from "@/shared/ui/MyButton";
+import MyInput from "@/shared/ui/MyInput";
 import Link from "next/link";
 import { useState } from "react";
 

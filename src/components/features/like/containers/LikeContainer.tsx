@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 import LikeButton from "../ui/LikeButton";
-import { useLikePost } from "@/hooks/useLikePost";
+import { useLikePost } from "@/components/features/like/model/useLikePost";
 
 type Props = {
   postId: number;

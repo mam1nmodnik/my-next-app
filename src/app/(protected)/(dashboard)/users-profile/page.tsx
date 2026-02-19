@@ -2,10 +2,10 @@
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Avatar, Divider } from "antd";
-import MyLoader from "@/components/ui/MyLoader";
-import UserProfilePost from "@/components/features/posts/container/UserPostContainer";
+import MyLoader from "@/shared/ui/MyLoader";
 import { AiOutlineUser } from "react-icons/ai";
 import FollowContainer from "@/components/features/follow/container/FollowContainer";
+import UserProfilePost from "@/app/entities/post/container/UserPostContainer";
 
 type User = {
   id: number;

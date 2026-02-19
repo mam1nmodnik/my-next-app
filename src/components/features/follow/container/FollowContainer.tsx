@@ -1,4 +1,4 @@
-import { useFollowUser } from "@/hooks/useFollowUser";
+import { useFollowUser } from "@/components/features/follow/model/useFollowUser";
 import { useState } from "react";
 import FollowButton from "../ui/FollowButton";
 

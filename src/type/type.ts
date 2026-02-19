@@ -22,6 +22,7 @@ export type Post = {
 }
 
 export type User = {
+  id: number;
   name: string;
   email: string;
   login: string;
