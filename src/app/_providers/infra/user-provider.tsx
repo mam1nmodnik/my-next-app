@@ -15,7 +15,6 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserContextProvider({ children }: { children: ReactNode }) {
   const {data: session} = useSession()
-  console.log(session)
   const { isLoading, error, data } = useQuery({
     queryKey: ["this-user"],
     queryFn: async (): Promise<User> => {
