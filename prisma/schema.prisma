@@ -1,5 +1,6 @@
 datasource db {
   provider = "sqlite"
+  url      = "file:./prisma/dev.db"
 }
 
 generator client {
@@ -19,15 +20,14 @@ model User {
   bio            String?
   createdAt      DateTime  @default(now())
 
-  posts     Post[]
-  likes     Like[]
+  posts Post[]
+  likes Like[]
 
-  following Follow[]   @relation("UserFollows")
-  followers Follow[]   @relation("UserFollowers")
+  following Follow[] @relation("UserFollows")
+  followers Follow[] @relation("UserFollowers")
 
   chats     Chat[]
   chatLikes ChatLike[]
-
 }
 
 model Follow {
@@ -43,7 +43,6 @@ model Follow {
 
   @@unique([followerId, followingId])
 }
-
 
 model Post {
   id Int @id @default(autoincrement())
