@@ -7,7 +7,11 @@ import { NextResponse } from 'next/server';
 export async function GET() {
 
     const session = await getServerSession(authOptions)
-    const userId = session?.user?.id || null
+      if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
+    }
+    
+    const userId = Number(session.user.id);
 
     try {
     const user = await prisma.user.findUnique({
