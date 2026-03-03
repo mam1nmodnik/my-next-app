@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary";
-
 export const config = {
   api: { bodyParser: { sizeLimit: "5mb" } },
 };
