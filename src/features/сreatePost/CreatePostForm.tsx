@@ -1,13 +1,13 @@
 import { useUserContext } from "@/app/_providers/infra/user-provider";
-import { useCreatePost } from "@/components/features/сreatePost/model/useCreatePost";
 import IsAvatarUser from "@/entities/user/ui/IsAvatarUser";
 import { MyButton } from "@/shared/ui/MyButton";
 import TextArea from "antd/es/input/TextArea";
 import { useSession } from "next-auth/react";
+import { useCreatePost } from "./model/useCreatePost";
 
 export default function CreatePostForm() {
   const { dataUser, isLoadingUser } = useUserContext();
-  const { content, setContent, createPost } = useCreatePost();
+  const { content, setContent, createPost, loadBtn } = useCreatePost();
   const { data: session } = useSession();
 
   return session ? (
@@ -49,11 +49,12 @@ export default function CreatePostForm() {
         </div>
       </div>
 
-      <div className="flex justify-end p-2">
+      <div className="flex lg:justify-end lg:p-2 p-4">
         <MyButton
           disabled={content.length > 0 ? false : true}
           onClick={() => createPost()}
-          className={`text-black bg-white rounded-4xl p-1 pr-3 pl-3 hover:bg-gray-400 text-[17px] font-semibold right-0 ${content.length > 0 ? " cursor-pointer" : "opacity-50 cursor-not-allowed"}`}
+          className={`lg:w-fit w-full text-black bg-white rounded-4xl p-1 pr-3 pl-3 hover:bg-gray-400 lg:text-[18px] text-[20px] font-semibold right-0 ${content.length > 0 ? " cursor-pointer" : "opacity-50 cursor-not-allowed"}`}
+          loading={loadBtn}
         >
           Post
         </MyButton>

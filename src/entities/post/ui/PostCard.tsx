@@ -1,20 +1,25 @@
 "use client";
 import { Post } from "@/type/type";
-import { formateDate } from "@/lib/formate-date";
-import {  Divider } from "antd";
+import { formateDate } from "@/lib/help";
+import { Divider, Popover } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import React from "react";
-import DeleteContainer from "@/components/features/delete/container/DeleteContainer";
-import LikeContainer from "@/components/features/like/containers/LikeContainer";
 import MessageCustom from "@/shared/ui/messageCustom";
 import IsUserContainer from "../../user/container/IsUserContainer";
+import LikeContainer from "@/features/like/containers/LikeContainer";
+import DeleteContainer from "@/features/delete/container/DeleteContainer";
+
 type PostCardProps = {
   post?: Post;
 };
 
 const UsersPost = React.memo(function PostCard({ post }: PostCardProps) {
   const [open, setOpen] = useState(false);
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+  };
 
   return (
     <div className="bg-black rounded-2xl shadow-2xl w-full max-w-[650px] shadow-indigo-900/20 border-r-white/45 border-l-white/45">
@@ -25,18 +30,30 @@ const UsersPost = React.memo(function PostCard({ post }: PostCardProps) {
               <div className="flex flex-row justify-between items-center relative">
                 <IsUserContainer {...post.user} />
 
-                <div className="cursor-pointer hover:bg-white/10 pl-1 pr-1 pt-1 rounded-full text-white ">
-                  <EllipsisOutlined
-                    style={{ fontSize: "25px" }}
-                    onClick={() => setOpen(!open)}
-                  />
-                </div>
-
-                <div
-                  className={`absolute top-0 right-[-110px] bg-gray-800 rounded-md shadow-lg z-10 ${open ? "" : "hidden"}`}
+                <Popover
+                  content={
+                    <div className="flex flex-row gap-4 items-center cursor-pointer  hover:bg-white/10 ">
+                      <DeleteContainer postId={post.id} />
+                    </div>
+                  }
+                  trigger="click"
+                  open={open}
+                  onOpenChange={handleOpenChange}
+                  styles={{
+                    body: {
+                      width: 'fit-content',
+                      backgroundColor: "black",
+                      boxShadow:
+                        "rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px",
+                      padding: "15px 0 15px 0",
+                    },
+                  }}
+                  color="black"
                 >
-                  <DeleteContainer postId={post.id} />
-                </div>
+                  <div className="cursor-pointer hover:bg-white/10 pl-1 pr-1 pt-1 rounded-full text-white">
+                    <EllipsisOutlined style={{ fontSize: "25px" }} />
+                  </div>
+                </Popover>
               </div>
             )}
             <p className="text-[#E5E7EB] text-l md:text-xl font-medium pb-5 break-words">

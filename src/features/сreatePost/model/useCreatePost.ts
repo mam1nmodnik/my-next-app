@@ -7,9 +7,11 @@ export function useCreatePost(
   const [content, setContent] = useState("");
   const queryClient = useQueryClient();
   const { openMessage } = useMessageContext();
-
+  const [loadBtn, setLoadBtn] = useState(false)
   const createPostMutation = useMutation({
+    
     mutationFn: async () => {
+      
       const response = await fetch("/api/posts/new", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -17,6 +19,8 @@ export function useCreatePost(
       });
       const res = await response.json();
       openMessage(res);
+      setLoadBtn(el => !el)
+      setContent('')
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
@@ -24,7 +28,7 @@ export function useCreatePost(
   });
   
    const createPost = () => {
-    
+    setLoadBtn(el => !el)
     createPostMutation.mutate()
    }
 
@@ -32,6 +36,7 @@ export function useCreatePost(
     createPost: createPost,
     content,
     setContent,
+    loadBtn,
     isLoading: createPostMutation.isPending,
   };
 }

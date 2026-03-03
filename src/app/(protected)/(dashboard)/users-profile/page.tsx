@@ -4,8 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Avatar, Divider } from "antd";
 import MyLoader from "@/shared/ui/MyLoader";
 import { AiOutlineUser } from "react-icons/ai";
-import FollowContainer from "@/components/features/follow/container/FollowContainer";
 import UserProfilePost from "@/entities/post/container/UserPostContainer";
+import FollowContainer from "@/features/follow/container/FollowContainer";
 
 type User = {
   id: number;
