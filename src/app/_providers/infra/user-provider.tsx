@@ -22,10 +22,11 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
       if (!response.ok) throw new Error("Unauthorized");
       return response.json();
     },
-    enabled: status === "authenticated",
+    enabled: !!session?.user, 
+    retry: false,
   });
 
-  if (isLoading) {
+  if (status === "loading" || isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <MyLoader />
