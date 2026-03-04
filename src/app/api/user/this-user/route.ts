@@ -1,6 +1,6 @@
 import { authOptions } from '@/lib/auth-options';
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from "next-auth/next";
 import { NextResponse } from 'next/server';
 
 
@@ -36,6 +36,6 @@ export async function GET() {
     return NextResponse.json(user);
   } catch (error) {
     console.error('Ошибка при получении пользоватея:', error);
-    return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
+    return NextResponse.json({ error: `Ошибка сервера: ${error}` }, { status: 500 });
   }
 }

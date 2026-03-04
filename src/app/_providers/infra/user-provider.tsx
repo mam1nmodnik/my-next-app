@@ -14,31 +14,31 @@ type UserContextType = {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserContextProvider({ children }: { children: ReactNode }) {
-  const {data: session} = useSession()
+  const { data: session, status } = useSession();
   const { isLoading, error, data } = useQuery({
     queryKey: ["this-user"],
     queryFn: async (): Promise<User> => {
       const response = await fetch("/api/user/this-user");
-      const result = await response.json();
-      return result;
+      if (!response.ok) throw new Error("Unauthorized");
+      return response.json();
     },
+    enabled: status === "authenticated",
   });
-    
-  
-  if ( isLoading) {
+
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <MyLoader />
       </div>
     );
   }
-    
+
   return (
     <UserContext.Provider
       value={{
         dataUser: session ? (data as User) : undefined,
         isLoadingUser: isLoading,
-        errorUser: error,        
+        errorUser: error,
       }}
     >
       {children}
