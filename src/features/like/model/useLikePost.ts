@@ -13,14 +13,17 @@ export function useLikePost(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ postId }),
       });
-      if(res.status === 500){
-        return console.error(res.statusText)
+
+      if (!res.ok) {
+        const errorBody = await res.json().catch(() => null);
+        throw new Error(errorBody?.message ?? "Не удалось поставить лайк");
       }
+
       return res.json() as Promise<{ post: Post; liked: boolean }>;
     },
 
     onSuccess: async () => {
-        queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 

@@ -13,7 +13,7 @@ export default function CreatePostForm() {
   return session ? (
     <div className="flex flex-col gap-1">
       <div className=" flex flex-row items-center p-4">
-        <div className="max-w-[60px] w-full">
+        <div className="max-w-[60px] ">
           <IsAvatarUser avatar={dataUser?.avatar} />
         </div>
         <div className="w-full">

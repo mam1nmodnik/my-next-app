@@ -10,7 +10,7 @@ export default function IsAvatarUser({ avatar, size = 50 }: { avatar: string | n
     />
   ) : (
     <div className="bg-white/13 rounded-[100px] p-2">
-      <AiOutlineUser className="text-white" style={{ fontSize: "35px" }} />
+      <AiOutlineUser className="text-white" style={{ fontSize: `35px` }} />
     </div>
   );
 }

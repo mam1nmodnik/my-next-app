@@ -5,10 +5,10 @@ import { Divider } from "antd";
 import { useState } from "react";
 import FeedSwitcher from "@/widgets/FeedSwitcher/FeedSwitcher";
 import PopularPost from "@/entities/post/container/AllPostContainer";
-import CreatePostForm from "@/features/сreatePost/CreatePostForm";
+import CreatePostForm from "@/features/createPost/CreatePostForm";
+import { PostCardActions } from "@/widgets/post/PostCardActions";
 
 export default function Home() {
-
   const [toggle, setToggle] = useState(true);
 
   return (
@@ -29,7 +29,11 @@ export default function Home() {
           style={{ margin: 0 }}
         />
 
-        {toggle ? <PopularPost /> : null}
+        {toggle ? (
+          <PopularPost
+            renderActions={(post) => <PostCardActions post={post} />}
+          />
+        ) : null}
       </div>
     </div>
   );

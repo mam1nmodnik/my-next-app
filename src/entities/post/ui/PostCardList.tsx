@@ -5,14 +5,17 @@ import React from "react";
 
 type PostCardListProps = {
   posts: Post[];
-  suspens: string;  
+  suspens: string;
+  renderActions?: (post: Post) => React.ReactNode;
+  renderMenu?: (post: Post) => React.ReactNode;
 };
 
 const UserPosts = React.memo(function PostCardList({
   posts,
   suspens,
+  renderActions,
+  renderMenu,
 }: PostCardListProps) {
-
   return (
     <div className="flex flex-col w-full gap-4 ">
       <div className="flex flex-col items-center w-full h-fit  ">
@@ -27,6 +30,8 @@ const UserPosts = React.memo(function PostCardList({
             <UsersPost
               key={post.id}
               post={post}
+              renderActions={renderActions}
+              renderMenu={renderMenu}
             />
           ))
         )}

@@ -6,6 +6,7 @@ import MyLoader from "@/shared/ui/MyLoader";
 import { AiOutlineUser } from "react-icons/ai";
 import UserProfilePost from "@/entities/post/container/UserPostContainer";
 import FollowContainer from "@/features/follow/container/FollowContainer";
+import { PostCardActions } from "@/widgets/post/PostCardActions";
 
 type User = {
   id: number;
@@ -93,7 +94,9 @@ export default function UsersProfile() {
           className="border border-white/35 m-0"
           style={{ margin: 0 }}
         />
-        <UserProfilePost />
+        <UserProfilePost
+          renderActions={(post) => <PostCardActions post={post} />}
+        />
       </div>
     </div>
   );

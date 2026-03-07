@@ -12,18 +12,20 @@ export type UserWithFollowInfo = {
   isFollowedByMe: boolean;
 };
 export function useUsers() {
-     const { isLoading, data } = useQuery({
-        queryKey: ["users"],
-        queryFn: async (): Promise<Array<UserWithFollowInfo>> => {
-          const response = await fetch("/api/user/users");
-          const result = await response.json();
-          return result;
-        },
-      });
-    return (
-        {
-           data: data, 
-           isLoading: isLoading    
-        }
-    )
+  const { isLoading, data } = useQuery({
+    queryKey: ["users"],
+    queryFn: async (): Promise<Array<UserWithFollowInfo>> => {
+      const response = await fetch("/api/user/users");
+      if (!response.ok) {
+        throw new Error("Failed to fetch users");
+      }
+      const result = await response.json();
+      return result;
+    },
+  });
+
+  return {
+    data,
+    isLoading,
+  };
 }

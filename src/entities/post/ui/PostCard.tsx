@@ -5,17 +5,22 @@ import { Divider, Popover } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import React from "react";
-import MessageCustom from "@/shared/ui/messageCustom";
 import IsUserContainer from "../../user/container/IsUserContainer";
-import LikeContainer from "@/features/like/containers/LikeContainer";
-import DeleteContainer from "@/features/delete/container/DeleteContainer";
 
 type PostCardProps = {
-  post?: Post;
+  post: Post;
+  renderActions?: (post: Post) => React.ReactNode;
+  renderMenu?: (post: Post) => React.ReactNode;
 };
 
-const UsersPost = React.memo(function PostCard({ post }: PostCardProps) {
+const UsersPost = React.memo(function PostCard({
+  post,
+  renderActions,
+  renderMenu,
+}: PostCardProps) {
   const [open, setOpen] = useState(false);
+  const menuContent = renderMenu ? renderMenu(post) : null;
+  const hasMenu = menuContent !== null && menuContent !== undefined;
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
@@ -24,16 +29,15 @@ const UsersPost = React.memo(function PostCard({ post }: PostCardProps) {
   return (
     <div className="bg-black rounded-2xl shadow-2xl w-full max-w-[650px] shadow-indigo-900/20 border-r-white/45 border-l-white/45">
       <div className="flex flex-col justify-between font-sans md:pt-4 md:pr-4 md:pl-4 md:pb-4 p-4 min-h-fit w-full ">
-        {post && (
-          <div className="flex flex-col gap-2">
-            {post.user && (
-              <div className="flex flex-row justify-between items-center relative">
-                <IsUserContainer {...post.user} />
-
+        <div className="flex flex-col gap-2">
+          {post.user && (
+            <div className="flex flex-row justify-between items-center relative">
+              <IsUserContainer {...post.user} />
+              {hasMenu ? (
                 <Popover
                   content={
-                    <div className="flex flex-row gap-4 items-center cursor-pointer  hover:bg-white/10 ">
-                      <DeleteContainer postId={post.id} />
+                    <div className="flex flex-row gap-4 items-center cursor-pointer hover:bg-white/10">
+                      {menuContent}
                     </div>
                   }
                   trigger="click"
@@ -41,7 +45,7 @@ const UsersPost = React.memo(function PostCard({ post }: PostCardProps) {
                   onOpenChange={handleOpenChange}
                   styles={{
                     body: {
-                      width: 'fit-content',
+                      width: "fit-content",
                       backgroundColor: "black",
                       boxShadow:
                         "rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px",
@@ -54,29 +58,20 @@ const UsersPost = React.memo(function PostCard({ post }: PostCardProps) {
                     <EllipsisOutlined style={{ fontSize: "25px" }} />
                   </div>
                 </Popover>
-              </div>
-            )}
-            <p className="text-[#E5E7EB] text-l md:text-xl font-medium pb-5 break-words">
-              {post.content}
-            </p>
-            <div className="flex items-center flex-row justify-between  ">
-              {post?.user && (
-                <div className="flex flex-row gap-4">
-                  <LikeContainer
-                    postId={post.id}
-                    isLiked={post.isLiked}
-                    likesCount={post.likesCount}
-                  />
-                  <MessageCustom num={0} size="20" />
-                </div>
-              )}
-
-              <p className=" md:text-[14px] text-[0.8rem] text-right text-[#9CA3AF] ">
-                {formateDate(post.createdAt)}
-              </p>
+              ) : null}
             </div>
+          )}
+          <p className="text-[#E5E7EB] text-l md:text-xl font-medium pb-5 break-words">
+            {post.content}
+          </p>
+          <div className="flex items-center flex-row justify-between  ">
+            {post.user && renderActions ? renderActions(post) : null}
+
+            <p className=" md:text-[14px] text-[0.8rem] text-right text-[#9CA3AF] ">
+              {formateDate(post.createdAt)}
+            </p>
           </div>
-        )}
+        </div>
       </div>
       <Divider
         variant="solid"

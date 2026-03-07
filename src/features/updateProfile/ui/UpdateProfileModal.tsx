@@ -1,5 +1,5 @@
 import { Modal } from "antd";
-import { useUpdateProfile } from "../model/ UpdateProfileContext";
+import { useUpdateProfile } from "../model/UpdateProfileContext";
 import UpdateProfileForm from "./UpdateProfileForm";
 
 export default function UpdateProfileModal() {

@@ -1,9 +1,18 @@
 import MyLoader from "@/shared/ui/MyLoader";
 import PostCardList from "../ui/PostCardList";
 import { usePosts } from "../model/usePost";
+import { Post } from "@/type/type";
+import { ReactNode } from "react";
 
+type ProfilePostProps = {
+  renderActions?: (post: Post) => ReactNode;
+  renderMenu?: (post: Post) => ReactNode;
+};
 
-export default function ProfilePost() {
+export default function ProfilePost({
+  renderActions,
+  renderMenu,
+}: ProfilePostProps) {
   const { isLoading, data } = usePosts({ type: "my" });
 
   if (isLoading) {
@@ -19,6 +28,8 @@ export default function ProfilePost() {
       <PostCardList
         posts={data}
         suspens="Пока тут пусто...."
+        renderActions={renderActions}
+        renderMenu={renderMenu}
       />
     )
   );

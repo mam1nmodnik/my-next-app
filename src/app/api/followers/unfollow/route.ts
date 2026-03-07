@@ -1,31 +1,36 @@
 import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth-options";
-import { getServerSession } from "next-auth";
+import { getSessionUserId } from "@/lib/get-session-user-id";
 import { NextRequest, NextResponse } from "next/server";
 
-type UnfollowRequestBody = {
-  followingId: number;
-};
-
 export async function POST(req: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions);
-    const followerId = session?.user?.id
-      ? Number(session.user.id)
-      : null;
+  const followerId = await getSessionUserId();
+  if (!followerId) {
+    return NextResponse.json(
+      { ok: false, message: "Не авторизован" },
+      { status: 401 },
+    );
+  }
 
-    const { id } = await req.json()
-   
-    await prisma.follow.deleteMany({
+  const body = await req.json().catch(() => null);
+  const followingId = Number(body?.id);
+  if (!Number.isInteger(followingId) || followingId <= 0) {
+    return NextResponse.json(
+      { ok: false, message: "Некорректный id пользователя" },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const deleted = await prisma.follow.deleteMany({
       where: {
-        followerId: Number(followerId),
-        followingId: Number(id),
+        followerId,
+        followingId,
       },
     });
 
     return NextResponse.json({
       ok: true,
-      message: "Unfollowed successfully",
+      message: deleted.count > 0 ? "Unfollowed successfully" : "Already unfollowed",
     });
   } catch (error) {
     console.error("Unfollow error:", error);

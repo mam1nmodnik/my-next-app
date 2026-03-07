@@ -1,32 +1,41 @@
-import { authOptions } from "@/lib/auth-options"
-import {  Prisma } from "@prisma/client"
-import { getServerSession } from "next-auth"
-import { NextRequest, NextResponse } from "next/server"
+import { Prisma } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+import { getSessionUserId } from "@/lib/get-session-user-id";
+import { prisma } from "@/lib/prisma";
 
-import { prisma } from '@/lib/prisma';
 export async function POST(req: NextRequest) {
-  const {  postId } = await req.json()
-  const session = await getServerSession(authOptions)
-  const userId = session?.user?.id || null
+  const userId = await getSessionUserId();
+  if (!userId) {
+    return NextResponse.json({ message: "Не авторизован" }, { status: 401 });
+  }
+
+  const body = await req.json().catch(() => null);
+  const postId = Number(body?.postId);
+  if (!Number.isInteger(postId) || postId <= 0) {
+    return NextResponse.json(
+      { message: "Некорректный id поста" },
+      { status: 400 },
+    );
+  }
+
   try {
     const result = await prisma.$transaction(async (tx) => {
       try {
         await tx.like.create({
           data: {
-            userId: Number(userId),
-            postId: Number(postId),
+            userId,
+            postId,
           },
-        })
+        });
 
         const post = await tx.post.update({
-          where: { id: Number(postId) },
+          where: { id: postId },
           data: {
             likesCount: { increment: 1 },
           },
-        })
+        });
 
-        return { post, liked: true }
-
+        return { post, liked: true };
       } catch (e) {
         if (
           e instanceof Prisma.PrismaClientKnownRequestError &&
@@ -35,33 +44,39 @@ export async function POST(req: NextRequest) {
           await tx.like.delete({
             where: {
               userId_postId: {
-                userId: Number(userId),
-                postId: Number(postId),
+                userId,
+                postId,
               },
             },
-          })
+          });
 
           const post = await tx.post.update({
-            where: { id: Number(postId) },
+            where: { id: postId },
             data: {
               likesCount: { decrement: 1 },
             },
-          })
+          });
 
-          return { ...post, liked: false }
+          return { post, liked: false };
         }
 
-        throw e
+        throw e;
       }
-    })
+    });
 
-    return NextResponse.json(result)
-
+    return NextResponse.json(result);
   } catch (error) {
-    console.error("TOGGLE LIKE ERROR:", error)
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      (error.code === "P2003" || error.code === "P2025")
+    ) {
+      return NextResponse.json({ message: "Пост не найден" }, { status: 404 });
+    }
+
+    console.error("TOGGLE LIKE ERROR:", error);
     return NextResponse.json(
-      { statusText: "Ошибка сервера" },
-      { status: 500 }
-    )
+      { message: "Ошибка сервера" },
+      { status: 500 },
+    );
   }
 }

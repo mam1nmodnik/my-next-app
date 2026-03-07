@@ -11,7 +11,7 @@ type InputProps = {
   placeholder?: string;
   value?: string;
 
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur?: () => void;
 };
 
@@ -37,7 +37,7 @@ export default function MyTextArea({
         name={name}
         placeholder={placeholder}
         value={value}
-        onChange={() => onChange}
+        onChange={onChange}
         onBlur={onBlur}
         aria-invalid={error}
         maxLength={maxLength}
