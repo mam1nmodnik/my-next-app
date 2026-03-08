@@ -1,11 +1,11 @@
 "use client";
 import { Post } from "@/type/type";
-import { formateDate } from "@/lib/help";
 import { Divider, Popover } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import React from "react";
 import IsUserContainer from "../../user/container/IsUserContainer";
+import PostDate from "@/shared/ui/PostDate";
 
 type PostCardProps = {
   post: Post;
@@ -68,7 +68,7 @@ const UsersPost = React.memo(function PostCard({
             {post.user && renderActions ? renderActions(post) : null}
 
             <p className=" md:text-[14px] text-[0.8rem] text-right text-[#9CA3AF] ">
-              {formateDate(post.createdAt)}
+              <PostDate date={post.createdAt} />
             </p>
           </div>
         </div>

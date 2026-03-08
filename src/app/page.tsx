@@ -11,6 +11,8 @@ import { PostCardActions } from "@/widgets/post/PostCardActions";
 export default function Home() {
   const [toggle, setToggle] = useState(true);
 
+ 
+
   return (
     <div className="w-full flex justify-center">
       <div className="max-w-[568px] w-full border border-r-white/45 border-l-white/45 h-full min-h-screen">

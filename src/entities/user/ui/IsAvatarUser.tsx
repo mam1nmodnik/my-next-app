@@ -1,6 +1,6 @@
 import { AiOutlineUser } from "react-icons/ai";
 import { Avatar } from "antd";
-export default function IsAvatarUser({ avatar, size = 50 }: { avatar: string | null | undefined, size?: number }) {
+export default function IsAvatarUser({ avatar, size = 50, sizeNoAvatar = 35 }: { avatar: string | null | undefined, size?: number, sizeNoAvatar?: number }) {
   return avatar ? (
     <Avatar
       src={avatar}
@@ -10,7 +10,7 @@ export default function IsAvatarUser({ avatar, size = 50 }: { avatar: string | n
     />
   ) : (
     <div className="bg-white/13 rounded-[100px] p-2">
-      <AiOutlineUser className="text-white" style={{ fontSize: `35px` }} />
+      <AiOutlineUser className="text-white" style={{ fontSize: `${sizeNoAvatar}px` }} />
     </div>
   );
 }

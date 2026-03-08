@@ -74,6 +74,7 @@ export default function UpdateProfileForm() {
   });
 
   const editProfile = async () => {
+    setLoadBtnProfile(true);
     const nameError = inputValue.name.trim().length === 0;
     const emailError = !isValidEmail(inputValue.email);
 
@@ -89,8 +90,7 @@ export default function UpdateProfileForm() {
       login: { error: false, text: "" },
     });
 
-    if (nameError || emailError) return;
-
+    if (nameError || emailError) return setLoadBtnProfile(false);
     let avatarUrl = {
       url: inputValue.avatar || "",
       publicId: inputValue.avatarPublicId || "",

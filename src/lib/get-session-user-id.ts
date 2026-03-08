@@ -8,7 +8,7 @@ export async function getSessionUserId(): Promise<number | null> {
   if (!rawId) {
     return null;
   }
-
+  
   const userId = Number(rawId);
   if (!Number.isInteger(userId) || userId <= 0) {
     return null;

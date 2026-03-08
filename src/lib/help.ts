@@ -1,13 +1,37 @@
 
 export function formateDate(date: Date) {
-  const d = new Date(date);
-  const formattedDate =
-    d.toLocaleTimeString("ru-RU", {
+  
+  const postDate = new Date(date);
+  const now = new Date();
+
+  const sameDay =
+    postDate.getDate() === now.getDate() &&
+    postDate.getMonth() === now.getMonth() &&
+    postDate.getFullYear() === now.getFullYear();
+
+  const sameYear = postDate.getFullYear() === now.getFullYear();
+
+  if (sameDay) {
+    return postDate.toLocaleTimeString(undefined, {
       hour: "2-digit",
       minute: "2-digit",
     });
-  return formattedDate;
+  }
+
+  if (sameYear) {
+    return postDate.toLocaleDateString(undefined, {
+      day: "numeric",
+      month: "long",
+    });
+  }
+
+  return postDate.toLocaleDateString(undefined, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
+
 // email validator
 export const isValidEmail = (email: string) =>  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 

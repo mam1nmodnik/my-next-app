@@ -53,7 +53,7 @@ export default function UsersProfile() {
                 src={data?.avatar}
                 size={130}
                 alt="Аватар"
-                className="object-cover relative "
+                className="object-cover relative"
               />
             ) : (
               <div className="bg-white/13 rounded-[100px] p-2">
