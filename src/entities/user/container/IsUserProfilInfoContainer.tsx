@@ -14,7 +14,7 @@ export default function IsUserProfilInfoContainer({
   return (
     <div className="p-6 flex flex-col gap-4">
       <div className="flex flex-row justify-between items-end mt-[-17%]">
-        <IsAvatarUser avatar={dataUser?.avatar} size={150} sizeNoAvatar={90} />
+        <IsAvatarUser avatar={dataUser?.avatar} size={110} sizeNoAvatar={90} />
         <MyButton
           onClick={onEditProfile}
           className="text-white border-[0.5px] border-white rounded-4xl p-1 pr-3 pl-3 cursor-pointer hover:bg-gray-800 text-l"

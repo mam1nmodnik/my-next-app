@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function InfoProfileUser({
   login,
   name,
@@ -7,7 +9,7 @@ export default function InfoProfileUser({
   login?: string;
   name?: string | null;
   bio?: string | null;
-  _count?: { followers: number; following: number } | null;
+  _count?: { followers?: number; following?: number } | null;
 }) {
   return (
     <div className="flex flex-col">
@@ -17,14 +19,18 @@ export default function InfoProfileUser({
       </div>
       <p className="w-fit text-white whitespace-pre-wrap">{bio}</p>
       <div className="flex flex-row gap-4 mt-2">
-        <p className="text-[#6D6D71] text-sm">
-          <span className="font-bold text-white">{_count?.followers}</span>{" "}
-          Followers
-        </p>
-        <p className="text-[#6D6D71] text-sm">
-          <span className="font-bold text-white">{_count?.following}</span>{" "}
-          Following
-        </p>
+        <Link href={`/profile/follow/${login}/followers`}>
+          <p className="text-[#6D6D71] text-sm">
+            <span className="font-bold text-white">{_count?.followers}</span>{" "}
+            Followers
+          </p>
+        </Link>
+        <Link href={`/profile/follow/${login}/following`}>
+          <p className="text-[#6D6D71] text-sm">
+            <span className="font-bold text-white">{_count?.following}</span>{" "}
+            Following
+          </p>
+        </Link>
       </div>
     </div>
   );

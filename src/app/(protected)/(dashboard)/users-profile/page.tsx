@@ -7,6 +7,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import UserProfilePost from "@/entities/post/container/UserPostContainer";
 import FollowContainer from "@/features/follow/container/FollowContainer";
 import { PostCardActions } from "@/widgets/post/PostCardActions";
+import InfoProfileUser from "@/entities/user/ui/isInfoUserProfile";
 
 type User = {
   id: number;
@@ -63,31 +64,17 @@ export default function UsersProfile() {
                 />
               </div>
             )}
-              <FollowContainer userId={data?.id || 0} isFollowedByMe={data?.isFollowedByMe || false} />
+            <FollowContainer
+              userId={data?.id || 0}
+              isFollowedByMe={data?.isFollowedByMe || false}
+            />
           </div>
-          <div className="flex flex-col">
-            <div className="flex flex-col">
-              <h1 className="text-[20px] text-white font-bold w-fit">
-                {data?.name}
-              </h1>
-              <p className="text-[#6D6D71] w-fit ">@{data?.login}</p>
-            </div>
-            <p className="w-fit text-white whitespace-pre-wrap ">{data?.bio}</p>
-            <div className="flex flex-row gap-4 mt-2">
-              <p className="text-[#6D6D71] text-sm">
-                <span className="font-bold text-white">
-                  {data?.followersCount}
-                </span>{" "}
-                Followers
-              </p>
-              <p className="text-[#6D6D71] text-sm">
-                <span className="font-bold text-white">
-                  {data?.followingCount}
-                </span>{" "}
-                Following
-              </p>
-            </div>
-          </div>
+          <InfoProfileUser
+            login={data?.login}
+            name={data?.name}
+            bio={data?.bio}
+            _count={{ followers: data?.followersCount, following: data?.followingCount}}
+          />
         </div>
         <Divider
           size="small"

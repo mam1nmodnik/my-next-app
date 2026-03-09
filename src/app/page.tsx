@@ -17,6 +17,7 @@ export default function Home() {
     <div className="w-full flex justify-center">
       <div className="max-w-[568px] w-full border border-r-white/45 border-l-white/45 h-full min-h-screen">
         <FeedSwitcher toggle={toggle} setToggle={setToggle} />
+
         <Divider
           size="small"
           className="border border-white/35 m-0"
@@ -24,13 +25,6 @@ export default function Home() {
         />
 
         <CreatePostForm />
-
-        <Divider
-          size="small"
-          className="border border-white/35"
-          style={{ margin: 0 }}
-        />
-
         {toggle ? (
           <PopularPost
             renderActions={(post) => <PostCardActions post={post} />}
