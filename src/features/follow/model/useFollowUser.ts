@@ -1,12 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 
 export function useFollowUser(userId: number) {
   const queryClient = useQueryClient();
-
   const handleSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ["users"] });
     queryClient.invalidateQueries({ queryKey: ["user"] });
     queryClient.invalidateQueries({ queryKey: ["this-user"] });
+    queryClient.invalidateQueries({ queryKey: ["followers"] });
+    queryClient.invalidateQueries({ queryKey: ["following"] });
   };
 
   const follow = useMutation({

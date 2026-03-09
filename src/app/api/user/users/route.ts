@@ -18,14 +18,6 @@ export async function GET() {
         login: true,
         avatar: true,
         name: true,
-        bio: true,
-        avatarPublicId: true,
-        _count: {
-          select: {
-            followers: true,
-            following: true,
-          },
-        },
         followers: {
           where: {
             followerId: sessionId || 0,
@@ -42,10 +34,6 @@ export async function GET() {
       login: user.login,
       name: user.name,
       avatar: user.avatar,
-      avatarPublicId: user.avatarPublicId,
-      bio: user.bio,
-      followersCount: user._count.followers,
-      followingCount: user._count.following,
       isFollowedByMe: user.followers.length > 0,
     }));
 
@@ -53,6 +41,6 @@ export async function GET() {
 
   } catch (error) {
     console.error('Ошибка при получении пользователей:', error);
-    return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
+    return NextResponse.json({ error: 'Error server' }, { status: 500 });
   }
 }

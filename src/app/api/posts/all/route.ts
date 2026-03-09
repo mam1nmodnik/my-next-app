@@ -28,7 +28,6 @@ export async function GET() {
           },
       })
 
-
       const result = posts.map(post => {
         return {
           ...post,
@@ -37,10 +36,9 @@ export async function GET() {
         }
       })
 
-
       return NextResponse.json(result)
     } catch (error) {
       console.error('Ошибка при получении постов:', error);
-      return NextResponse.json({ error: `Ошибка сервера: ${error}` }, { status: 500 });
+      return NextResponse.json({ error: `Ошибка сервера` }, { status: 500 });
     }
 }

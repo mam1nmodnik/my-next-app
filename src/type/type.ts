@@ -35,3 +35,10 @@ export type User = {
   }
 };
 
+export type FollowType = {
+  id: number;
+  login: string;
+  name: string | null;
+  avatar: string | null;
+  isFollowedByMe: boolean
+}

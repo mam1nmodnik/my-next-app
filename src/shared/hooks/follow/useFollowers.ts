@@ -1,11 +1,11 @@
 import { FollowType } from "@/type/type";
 import { useQuery } from "@tanstack/react-query";
 
-export function useUsers() {
+export function useFollowers(login: string) {
   const { isLoading, data } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["followers", `${login}`],
     queryFn: async (): Promise<Array<FollowType>> => {
-      const response = await fetch("/api/user/users");
+      const response = await fetch(`/api/user/follow/followers/${login}`);
       if (!response.ok) {
         throw new Error("Failed to fetch users");
       }
