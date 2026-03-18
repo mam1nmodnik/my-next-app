@@ -1,7 +1,7 @@
 "use client";
 import { useFollowers } from "@/shared/hooks/follow/useFollowers";
 import MyLoader from "@/shared/ui/MyLoader";
-import FollowUserContainer from "@/widgets/WhoToFollow/container/FollowUserContaier";
+import FollowUserContainer from "@/entities/follow/FollowUserContaier";
 import { useParams } from "next/navigation";
 
 export default function Page() {
@@ -17,7 +17,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 mt-1.5">
       {data &&
         data.map((user) => (
           <FollowUserContainer key={user.login} user={user} />

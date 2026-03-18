@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 
 export function useFollowUser(userId: number) {
   const queryClient = useQueryClient();

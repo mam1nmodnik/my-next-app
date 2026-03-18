@@ -1,7 +1,7 @@
 "use client";
 import MyLoader from "@/shared/ui/MyLoader";
 import { useUsers } from "@/shared/hooks/useUsers";
-import FollowUserContainer from "./container/FollowUserContaier";
+import FollowUserContainer from "../../entities/follow/FollowUserContaier";
 
 export default function WhoToFollow() {
   const { data, isLoading } = useUsers();
