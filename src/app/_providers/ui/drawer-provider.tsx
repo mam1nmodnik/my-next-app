@@ -44,9 +44,10 @@ export function DrawerContextProvider({ children }: { children: ReactNode }) {
         onClose={onClose}
         open={open}
         mask={true}
+        size="large"
         classNames={{
-          header: "bg-slate-800 text-white",
-          body: "bg-slate-800 ",
+          header: "bg-black text-white",
+          body: "bg-black ",
         }}
         extra={
           <button
@@ -78,7 +79,7 @@ export function DrawerContextProvider({ children }: { children: ReactNode }) {
                   {el.label}
                 </span>
               </Link>
-            )
+            ),
           )}
         </div>
       </Drawer>
@@ -90,7 +91,7 @@ export function useDrawerContext() {
   const context = useContext(DrawerContext);
   if (!context)
     throw new Error(
-      "useDrawerContext must be used inside DrawerContextProvider"
+      "useDrawerContext must be used inside DrawerContextProvider",
     );
   return context;
 }

@@ -8,6 +8,7 @@ import UserProfilePost from "@/entities/post/container/UserPostContainer";
 import FollowContainer from "@/features/follow/container/FollowContainer";
 import { PostCardActions } from "@/widgets/post/PostCardActions";
 import InfoProfileUser from "@/entities/user/ui/isInfoUserProfile";
+import IsAvatarUser from "@/entities/user/ui/IsAvatarUser";
 
 type User = {
   id: number;
@@ -49,21 +50,8 @@ export default function UsersProfile() {
         <div className="w-full aspect-[3/1] max-h-[200px] bg-[#3E3E3E]"></div>
         <div className="p-6  flex flex-col gap-4">
           <div className="flex flex-row justify-between items-end mt-[-17%] ">
-            {data?.avatar ? (
-              <Avatar
-                src={data?.avatar}
-                size={130}
-                alt="Аватар"
-                className="object-cover relative"
-              />
-            ) : (
-              <div className="bg-white/13 rounded-[100px] p-2">
-                <AiOutlineUser
-                  className="text-white"
-                  style={{ fontSize: "90px" }}
-                />
-              </div>
-            )}
+            <IsAvatarUser avatar={data?.avatar} size={110} sizeNoAvatar={90} />
+            
             <FollowContainer
               userId={data?.id || 0}
               isFollowedByMe={data?.isFollowedByMe || false}
@@ -73,7 +61,10 @@ export default function UsersProfile() {
             login={data?.login}
             name={data?.name}
             bio={data?.bio}
-            _count={{ followers: data?.followersCount, following: data?.followingCount}}
+            _count={{
+              followers: data?.followersCount,
+              following: data?.followingCount,
+            }}
           />
         </div>
         <Divider

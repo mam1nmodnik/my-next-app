@@ -6,7 +6,7 @@ interface EchoLogoProps {
   iconColor?: string; // цвет точки
   waveColor?: string; // цвет волн
   textColor?: string; // цвет текста
-  waveCount?: number; // количество волн
+  waveCount?: number;
   text?: string; // надпись
   fontSize?: number;
   strokeWidth?: number;

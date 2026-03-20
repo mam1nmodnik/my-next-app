@@ -1,15 +1,17 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { FiHome } from "react-icons/fi";
-import { AiOutlineUser } from "react-icons/ai";
 import FooterButton from "./FooterButton";
 
+import { FiHome } from "react-icons/fi";
+import { AiOutlineUser } from "react-icons/ai";
+import { FooterButtonType } from "./type";
 
 export default function FooterContainer() {
   const pathname = usePathname();
 
-  const btn = [
+
+  const btn: FooterButtonType[] = [
     {
       link: "/",
       text: "Home",
@@ -31,6 +33,7 @@ export default function FooterContainer() {
           link={el.link}
           text={el.text}
           icon={el.icon}
+          click={el.click}
         />
       ))}
     </div>

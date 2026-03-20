@@ -6,7 +6,7 @@ import MyLoader from "@/shared/ui/MyLoader";
 import { useSession } from "next-auth/react";
 
 type UserContextType = {
-  dataUser: User | undefined;
+  dataUser: User | null;
   isLoadingUser: boolean;
   errorUser: Error | null;
 };
@@ -37,7 +37,7 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
   return (
     <UserContext.Provider
       value={{
-        dataUser: session ? (data as User) : undefined,
+        dataUser: session && (data as User)  ,
         isLoadingUser: isLoading,
         errorUser: error,
       }}

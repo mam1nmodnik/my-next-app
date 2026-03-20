@@ -8,11 +8,13 @@ type UserIdentityProps = {
   avatar?: string | null;
   name?: string;
   login?: string;
+  isChat: boolean;
 };
 export default function UserIdentity({
   avatar,
   name,
   login,
+  isChat,
 }: UserIdentityProps) {
   const { data: session } = useSession();
 
@@ -28,7 +30,7 @@ export default function UserIdentity({
         <Link href="/login">
           <div className="text-center xl:pt-2.5 xl:pb-2.5  pt-1.5 pb-1.5  xl:pl-4 xl:pr-4 pl-2.5 pr-2.5  rounded-[35px] hover:bg-white/10 xl:w-[256px] w-fit cursor-pointer ">
             <p className="text-[18px] xl:block hidden">Log In to account</p>
-            <p className="text-[18px] block xl:hidden" >Log In</p>
+            <p className="text-[18px] block xl:hidden">Log In</p>
           </div>
         </Link>
       </div>
@@ -68,12 +70,16 @@ export default function UserIdentity({
         }}
         color="black"
       >
-        <div className="flex flex-row gap-2 items-center pt-2.5 pb-2.5  pl-4 pr-4 rounded-[35px] hover:bg-white/10 xl:w-[256px] w-[80px] cursor-pointer">
+        <div
+          className={`flex flex-row gap-2 items-center pt-2.5 pb-2.5  pl-4 pr-4 rounded-[35px] hover:bg-white/10  ${isChat ? " w-[80px] " : "xl:w-[256px] w-[80px]"} cursor-pointer`}
+        >
           <IsAvatarUser avatar={avatar} />
-          <div className="xl:flex flex-col gap-[0.5px] hidden ">
-            {name}
-            <p className="text-[#6D6D71] text-[15px]">@{login}</p>
-          </div>
+          {!isChat && (
+            <div className="xl:flex flex-col gap-[0.5px] hidden ">
+              {name}
+              <p className="text-[#6D6D71] text-[15px]">@{login}</p>
+            </div>
+          )}
         </div>
       </Popover>
     </div>

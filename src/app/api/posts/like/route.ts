@@ -11,57 +11,60 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json().catch(() => null);
   const postId = Number(body?.postId);
+
   if (!Number.isInteger(postId) || postId <= 0) {
     return NextResponse.json(
       { message: "Некорректный id поста" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   try {
-    const result = await prisma.$transaction(async (tx) => {
-      try {
-        await tx.like.create({
-          data: {
+    const result = await prisma.$transaction(async (prisma) => {
+      const existing = await prisma.like.findUnique({
+        where: {
+          userId_postId: {
             userId,
             postId,
           },
-        });
+        },
+      });
 
-        const post = await tx.post.update({
-          where: { id: postId },
-          data: {
-            likesCount: { increment: 1 },
+      if (existing) {
+        await prisma.like.delete({
+          where: {
+            userId_postId: {
+              userId,
+              postId,
+            },
           },
         });
 
-        return { post, liked: true };
-      } catch (e) {
-        if (
-          e instanceof Prisma.PrismaClientKnownRequestError &&
-          e.code === "P2002"
-        ) {
-          await tx.like.delete({
-            where: {
-              userId_postId: {
-                userId,
-                postId,
-              },
-            },
-          });
+        const post = await prisma.post.update({
+          where: { id: postId },
+          data: {
+            likesCount: { decrement: 1 },
+          },
+        });
 
-          const post = await tx.post.update({
-            where: { id: postId },
-            data: {
-              likesCount: { decrement: 1 },
-            },
-          });
-
-          return { post, liked: false };
-        }
-
-        throw e;
+        return { post, liked: false };
       }
+
+      await prisma.like.create({
+        data: {
+          userId,
+          postId,
+        },
+      });
+
+      const post = await prisma.post.update({
+        where: { id: postId },
+        data: {
+          likesCount: { increment: 1 },
+        },
+      });
+
+      return { post, liked: true };
     });
 
     return NextResponse.json(result);
@@ -74,9 +77,10 @@ export async function POST(req: NextRequest) {
     }
 
     console.error("TOGGLE LIKE ERROR:", error);
+
     return NextResponse.json(
       { message: "Ошибка сервера" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

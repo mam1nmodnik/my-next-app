@@ -2,7 +2,8 @@ import { ReactElement } from "react";
 
 export type FooterButtonType = {
     pathname?: string;
-    link: string;
+    link?: string;
     text?: string;
     icon?: ReactElement;
+    click?: () => void
 }
