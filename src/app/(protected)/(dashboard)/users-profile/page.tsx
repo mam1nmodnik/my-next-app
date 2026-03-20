@@ -1,9 +1,8 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar, Divider } from "antd";
+import { Divider } from "antd";
 import MyLoader from "@/shared/ui/MyLoader";
-import { AiOutlineUser } from "react-icons/ai";
 import UserProfilePost from "@/entities/post/container/UserPostContainer";
 import FollowContainer from "@/features/follow/container/FollowContainer";
 import { PostCardActions } from "@/widgets/post/PostCardActions";
@@ -51,7 +50,7 @@ export default function UsersProfile() {
         <div className="p-6  flex flex-col gap-4">
           <div className="flex flex-row justify-between items-end mt-[-17%] ">
             <IsAvatarUser avatar={data?.avatar} size={110} sizeNoAvatar={90} />
-            
+
             <FollowContainer
               userId={data?.id || 0}
               isFollowedByMe={data?.isFollowedByMe || false}
