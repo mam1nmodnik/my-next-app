@@ -1,19 +1,19 @@
 // src/app/api/posts/my/route.ts
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { prisma } from "@/lib/prisma";
+import { apiError, apiSuccess } from "@/shared/api/server";
+import { getServerSession } from "next-auth";
 
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
+      return apiError("Не авторизован", { status: 401, notice: "warning" });
     }
 
     const sessioId = Number(session.user.id);
 
-    const userPosts = await prisma.post.findMany({
+    const posts = await prisma.post.findMany({
         where: { userId: sessioId }, 
         orderBy: { createdAt: "desc" },
         include: {
@@ -31,17 +31,18 @@ export async function GET() {
           },
         },
       });
-      const result = userPosts.map(post => {
-        return {
-          ...post,
-          likesCount: post.likesCount,
-          isLiked: post.likes.length > 0,
-        }
-      });
 
-    return NextResponse.json(result);
+    const result = posts.map((post) => ({
+      ...post,
+      likesCount: post.likesCount,
+      isLiked: post.likes.length > 0,
+    }));
+
+    return apiSuccess("Посты пользователя загружены", result, {
+      notice: "info",
+    });
   } catch (error) {
     console.error("Ошибка при получении постов пользователя:", error);
-    return NextResponse.json({ error: "Ошибка сервера" }, { status: 500 });
+    return apiError("Ошибка сервера", { status: 500 });
   }
 }

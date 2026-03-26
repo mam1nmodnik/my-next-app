@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { getSessionUserId } from "@/lib/get-session-user-id";
 import { prisma } from "@/lib/prisma";
+import { apiError, apiSuccess } from "@/shared/api/server";
 
 export async function DELETE(
   _req: NextRequest,
@@ -8,19 +9,16 @@ export async function DELETE(
 ) {
   const userId = await getSessionUserId();
   if (!userId) {
-    return NextResponse.json(
-      { notice: "error", message: "Не авторизован" },
-      { status: 401 },
-    );
+    return apiError("Не авторизован", { status: 401, notice: "warning" });
   }
 
   const { id } = await context.params;
   const postId = Number(id);
   if (!Number.isInteger(postId) || postId <= 0) {
-    return NextResponse.json(
-      { notice: "error", message: "Некорректный id поста" },
-      { status: 400 },
-    );
+    return apiError("Некорректный id поста", {
+      status: 400,
+      notice: "warning",
+    });
   }
 
   try {
@@ -30,31 +28,20 @@ export async function DELETE(
     });
 
     if (!post) {
-      return NextResponse.json(
-        { notice: "error", message: "Пост не найден" },
-        { status: 404 },
-      );
+      return apiError("Пост не найден", { status: 404 });
     }
 
     if (post.userId !== userId) {
-      return NextResponse.json(
-        { notice: "error", message: "Нет прав на удаление этого поста" },
-        { status: 403 },
-      );
+      return apiError("Нет прав на удаление этого поста", { status: 403 });
     }
 
     await prisma.post.delete({
       where: { id: postId },
     });
-    return NextResponse.json(
-      { notice: "success", message: "Пост успешно удален" },
-      { status: 200 },
-    );
+
+    return apiSuccess("Пост успешно удален", { id: postId });
   } catch (error) {
     console.error("Ошибка при удалении поста:", error);
-    return NextResponse.json(
-      { notice: "error", message: "Не удалось удалить пост" },
-      { status: 500 },
-    );
+    return apiError("Не удалось удалить пост", { status: 500 });
   }
 }

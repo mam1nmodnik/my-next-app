@@ -1,10 +1,10 @@
 "use client";
 import { Post } from "@/type/type";
-import { Divider, Popover } from "antd";
+import { Popover } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import React from "react";
-import IsUserContainer from "../../user/container/IsUserContainer";
+import IsUserContainer from "../../user/ui/UserCard";
 import PostDate from "@/shared/ui/PostDate";
 
 type PostCardProps = {
@@ -27,12 +27,12 @@ const UsersPost = React.memo(function PostCard({
   };
 
   return (
-    <div className="bg-black rounded-2xl shadow-2xl w-full max-w-[650px] shadow-indigo-900/20 border-r-white/45 border-l-white/45">
+    <div className="bg-black shadow-2xl w-full max-w-[650px] shadow-indigo-900/20 border-b border-b-white/45">
       <div className="flex flex-col justify-between font-sans md:pt-4 md:pr-4 md:pl-4 md:pb-4 p-4 min-h-fit w-full ">
         <div className="flex flex-col gap-2">
           {post.user && (
             <div className="flex flex-row justify-between items-center relative">
-              <IsUserContainer {...post.user} />
+              <IsUserContainer {...post.user} link={true} />
               {hasMenu ? (
                 <Popover
                   content={
@@ -66,20 +66,10 @@ const UsersPost = React.memo(function PostCard({
           </p>
           <div className="flex items-center flex-row justify-between  ">
             {post.user && renderActions ? renderActions(post) : null}
-
-            <p className=" md:text-[14px] text-[0.8rem] text-right text-[#9CA3AF] ">
-              <PostDate date={post.createdAt} />
-            </p>
+            <PostDate date={post.createdAt} />
           </div>
         </div>
       </div>
-      <Divider
-        variant="solid"
-        style={{
-          margin: "0",
-          backgroundColor: "#9CA3AF",
-        }}
-      />
     </div>
   );
 });

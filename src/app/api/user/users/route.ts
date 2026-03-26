@@ -1,7 +1,7 @@
-import { authOptions } from '@/lib/auth-options';
-import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { authOptions } from "@/lib/auth-options";
+import { prisma } from "@/lib/prisma";
+import { apiError, apiSuccess } from "@/shared/api/server";
+import { getServerSession } from "next-auth";
 
 export async function GET() {
   try {
@@ -29,7 +29,7 @@ export async function GET() {
       },
     });
 
-   const result = users.map((user) => ({
+    const result = users.map((user) => ({
       id: user.id,
       login: user.login,
       name: user.name,
@@ -37,10 +37,9 @@ export async function GET() {
       isFollowedByMe: user.followers.length > 0,
     }));
 
-    return NextResponse.json(result);
-
+    return apiSuccess("Пользователи загружены", result, { notice: "info" });
   } catch (error) {
-    console.error('Ошибка при получении пользователей:', error);
-    return NextResponse.json({ error: 'Error server' }, { status: 500 });
+    console.error("Ошибка при получении пользователей:", error);
+    return apiError("Ошибка сервера", { status: 500 });
   }
 }

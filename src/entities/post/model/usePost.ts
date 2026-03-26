@@ -10,7 +10,7 @@ type UsePostsParams = {
 
 export function usePosts({ type, userId, enabled = true }: UsePostsParams) {
   const queryKey = userId ? ["posts", type, userId] : ["posts", type];
-
+  
   return useQuery<Post[]>({
     queryKey,
     queryFn: () => fetchPosts({ type, userId }),

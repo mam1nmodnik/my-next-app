@@ -1,8 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { apiError, apiSuccess } from "@/shared/api/server";
 import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 
 interface PrismaP2002Meta {
@@ -26,17 +26,24 @@ export async function POST(req: Request) {
         },
       });
 
-      return NextResponse.json({ message: "Пользователь успешно создан!", userId: user.id }, { status: 201 });
+      return apiSuccess(
+        "Пользователь успешно создан",
+        { userId: user.id },
+        { status: 201 },
+      );
     } catch (err: unknown) {
       if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
         const meta = err.meta as PrismaP2002Meta;
         const targetField = meta.target?.[0];
-        return NextResponse.json({ error: `${targetField} уже занят` }, { status: 400 });
+        return apiError(`${targetField} уже занят`, {
+          status: 400,
+          notice: "warning",
+        });
       }
       throw err;
     }
   } catch (e) {
     console.error(e);
-    return NextResponse.json({ error: "Ошибка сервера, попробуйте позже" }, { status: 500 });
+    return apiError("Ошибка сервера, попробуйте позже", { status: 500 });
   }
 }

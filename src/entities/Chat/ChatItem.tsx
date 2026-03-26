@@ -1,4 +1,4 @@
-import IsAvatarUser from "@/entities/user/ui/IsAvatarUser";
+import IsAvatarUser from "@/entities/user/ui/AvatarUser";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { memo } from "react";

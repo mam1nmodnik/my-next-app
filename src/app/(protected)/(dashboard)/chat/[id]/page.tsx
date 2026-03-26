@@ -1,7 +1,5 @@
-"use client";
-import { useParams } from "next/navigation";
+import ChatDetailPage from "@/views/chat/detail/ChatDetailPage";
 
 export default function Page() {
-  const patams = useParams();
-  return <div className="w-full border-r border-r-white/45">{patams.id}</div>;
+  return <ChatDetailPage />;
 }

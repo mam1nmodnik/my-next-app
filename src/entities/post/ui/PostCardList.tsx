@@ -10,7 +10,7 @@ type PostCardListProps = {
   renderMenu?: (post: Post) => React.ReactNode;
 };
 
-const UserPosts = React.memo(function PostCardList({
+const UserPosts = function PostCardList({
   posts,
   suspens,
   renderActions,
@@ -38,5 +38,5 @@ const UserPosts = React.memo(function PostCardList({
       </div>
     </div>
   );
-});
+};
 export default UserPosts;

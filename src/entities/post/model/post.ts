@@ -1,3 +1,4 @@
+import { requireApiData } from "@/shared/api/client";
 import { Post } from "@/type/type";
 
 type PostsParams = {
@@ -7,7 +8,7 @@ type PostsParams = {
 
 export async function fetchPosts(params: PostsParams): Promise<Post[]> {
   let url = "";
-
+  
   switch (params.type) {
     case "all":
       url = "/api/posts/all";
@@ -25,10 +26,6 @@ export async function fetchPosts(params: PostsParams): Promise<Post[]> {
       break;
   }
 
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error("Failed to fetch posts");
-  }
-
-  return res.json();
+  const response = await fetch(url);
+  return requireApiData<Post[]>(response, "Не удалось загрузить посты");
 }

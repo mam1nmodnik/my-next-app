@@ -1,7 +1,12 @@
+import { useMessageContext } from "@/_providers/ui/message-provider";
+import { getApiErrorResponse, requireApiResponse } from "@/shared/api/client";
+import type { ApiResponse } from "@/shared/api/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useFollowUser(userId: number) {
   const queryClient = useQueryClient();
+  const { openMessage } = useMessageContext();
+
   const handleSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ["users"] });
     queryClient.invalidateQueries({ queryKey: ["user"] });
@@ -12,17 +17,26 @@ export function useFollowUser(userId: number) {
 
   const follow = useMutation({
     mutationFn: async () => {
-      const response = await fetch("/api/followers/follow", {
+      const response  = await fetch("/api/followers/follow", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: userId }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to follow user");
-      }
+      return requireApiResponse<{ followingId: number }>(
+        response,
+        "Не удалось подписаться на пользователя",
+      );
     },
-    onSuccess: handleSuccess,
+    onSuccess: (response) => {
+      openMessage(response);
+      handleSuccess();
+    },
+    onError: (error) => {
+      openMessage(
+        getApiErrorResponse(error, "Не удалось подписаться на пользователя"),
+      );
+    },
   });
 
   const unfollow = useMutation({
@@ -33,11 +47,18 @@ export function useFollowUser(userId: number) {
         body: JSON.stringify({ id: userId }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to unfollow user");
-      }
+      return requireApiResponse<{ followingId: number; removed: boolean }>(
+        response,
+        "Не удалось отменить подписку",
+      );
     },
-    onSuccess: handleSuccess,
+    onSuccess: (response: ApiResponse<{ followingId: number; removed: boolean }>) => {
+      openMessage(response);
+      handleSuccess();
+    },
+    onError: (error) => {
+      openMessage(getApiErrorResponse(error, "Не удалось отменить подписку"));
+    },
   });
 
   return {

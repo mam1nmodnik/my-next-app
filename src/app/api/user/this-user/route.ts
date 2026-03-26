@@ -1,22 +1,21 @@
-import { authOptions } from '@/lib/auth-options';
-import { prisma } from '@/lib/prisma';
+import { authOptions } from "@/lib/auth-options";
+import { prisma } from "@/lib/prisma";
+import { apiError, apiSuccess } from "@/shared/api/server";
 import { getServerSession } from "next-auth/next";
-import { NextResponse } from 'next/server';
-
+ 
 
 export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return apiError("Не авторизован", { status: 401, notice: "warning" });
+  }
+  const userId = Number(session.user.id);
 
-    const session = await getServerSession(authOptions)
-      if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
-    }
-    
-    const userId = Number(session.user.id);
-
-    try {
+  try {
     const user = await prisma.user.findUnique({
-      where: { id: Number(userId) },
+      where: { id: userId },
       select: {
+        id: true,
         login: true,
         name: true,
         email: true,
@@ -30,12 +29,16 @@ export async function GET() {
             following: true,
           },
         },
-      }
+      },
     });
 
-    return NextResponse.json(user);
+    if (!user) {
+      return apiError("Пользователь не найден", { status: 404 });
+    }
+
+    return apiSuccess("Профиль загружен", user, { notice: "info" });
   } catch (error) {
-    console.error('Ошибка при получении пользоватея:', error);
-    return NextResponse.json({ error: `Ошибка сервера: ${error}` }, { status: 500 });
+    console.error("Ошибка при получении пользователя:", error);
+    return apiError("Ошибка сервера", { status: 500 });
   }
 }

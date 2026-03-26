@@ -1,3 +1,4 @@
+"use client";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import React, { useState } from "react";
 

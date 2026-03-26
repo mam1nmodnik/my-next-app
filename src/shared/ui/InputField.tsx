@@ -1,3 +1,4 @@
+"use client";
 export default function InputField({
   id,
   label,
@@ -15,7 +16,9 @@ export default function InputField({
 }) {
   return (
     <div className="flex flex-col">
-      <label className="text-sm text-slate-400 mb-1" htmlFor={id} >{label}</label>
+      <label className="text-sm text-slate-400 mb-1" htmlFor={id}>
+        {label}
+      </label>
       <input
         id={id}
         disabled={disabled}

@@ -1,4 +1,4 @@
-import ChatSwitcher from "@/widgets/ChatSwitcher/ChatSwitcher";
+import ChatSwitcher from "@/widgets/switcher/ChatSwitcher";
 
 export default async function Layout({
   children,
@@ -7,7 +7,7 @@ export default async function Layout({
 }) {
   return (
     <div className="flex flex-row">
-      <div className="max-w-[420px] h-screen w-full border-r border-r-white/45 border-l border-l-white/45">
+      <div className="max-w-[420px] h-screen w-full border-r border-r-white/45 ">
         <ChatSwitcher />
       </div>
       {children}

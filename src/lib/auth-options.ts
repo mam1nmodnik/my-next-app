@@ -14,13 +14,14 @@ export const authOptions: AuthOptions = {
       },
 
       async authorize(credentials) {
+      
         if (!credentials?.email || !credentials?.password) throw new Error('Все поля обязательны');
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
 
-        if (!user) throw new Error('Неверный email');
+        if (!user?.email) throw new Error('Неверный email');
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) throw new Error('Неверный пароль');
@@ -31,6 +32,8 @@ export const authOptions: AuthOptions = {
           name: user.name,
           login: user.login,
           avatar: user.avatar,
+          avatarPublicId:user.avatarPublicId,
+          bio: user.bio,
         };
       },
     }),
@@ -40,14 +43,15 @@ export const authOptions: AuthOptions = {
     maxAge: 60 * 60 * 24 * 7, 
   },
   callbacks: {
-   async jwt({ token, user }) {
+  async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
-      if (token?.id) {
+      
+          if (token?.id) {
         const user = await prisma.user.findUnique({
           where: { id: Number(token.id)},
         });
@@ -63,7 +67,7 @@ export const authOptions: AuthOptions = {
         }
       }
       return session;
+      
     },
-
   },
 };
