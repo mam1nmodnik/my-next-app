@@ -2,11 +2,13 @@ import Link from "next/link";
 
 export default function InfoProfile({
   login,
+  id,
   name,
   bio,
   _count,
 }: {
   login?: string;
+  id?: number;
   name?: string | null;
   bio?: string | null;
   _count?: { followers?: number; following?: number } | null;
@@ -19,13 +21,13 @@ export default function InfoProfile({
       </div>
       <p className="w-fit text-white whitespace-pre-wrap">{bio}</p>
       <div className="flex flex-row gap-4 mt-2">
-        <Link href={`/follow/${login}/followers`}>
+        <Link href={`/follow/${id}/followers`}>
           <p className="text-[#6D6D71] text-sm">
             <span className="font-bold text-white">{_count?.followers}</span>{" "}
             Followers
           </p>
         </Link>
-        <Link href={`/follow/${login}/following`}>
+        <Link href={`/follow/${id}/following`}>
           <p className="text-[#6D6D71] text-sm">
             <span className="font-bold text-white">{_count?.following}</span>{" "}
             Following

@@ -14,10 +14,11 @@ export function MyButton({
   className,
   onClick,
   children,
+  disabled
 }: ButtonProps) {
   return (
     <button
-      disabled={loading}
+      disabled={disabled}
       className={
         className
           ? className

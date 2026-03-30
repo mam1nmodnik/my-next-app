@@ -32,9 +32,13 @@ export function FooterMobile() {
           onClick={showDrawer}
         >
           <div>
-            <IoSettingsOutline size={25} className="" color={`${"white"}`} />
+            <IoSettingsOutline
+              size={25}
+              className="opacity-50"
+              color={`${"white"}`}
+            />
           </div>
-          <p className={"text-white"}>Settings</p>
+          <p className={"text-white/35"}>Settings</p>
         </div>
       )}
     </Footer>

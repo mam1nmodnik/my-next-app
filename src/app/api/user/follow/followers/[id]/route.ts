@@ -13,9 +13,12 @@ export async function GET(
 
   try {
     const { id } = await context.params;
-
+    const idNumber = Number(id);
+    if (isNaN(idNumber)) {
+      return apiError("Некорректный ID пользователя", { status: 400 });
+    }
     const user = await prisma.user.findUnique({
-      where: { login: id },
+      where: { id: idNumber },
       select: {
         followers: {
           select: {

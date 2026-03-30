@@ -2,7 +2,6 @@
 import { MyButton } from "@/shared/ui/MyButton";
 import { User } from "@/type/type";
 import FollowContainer from "@/features/follow/container/FollowContainer";
-import { usePathname } from "next/navigation";
 import AvatarUser from "../ui/AvatarUser";
 import InfoProfile from "./InfoProfile";
 
@@ -13,10 +12,6 @@ export default function ProfileHeader({
   data?: User | null;
   openModal?: () => void;
 }) {
-  const pathname = usePathname();
-  const userId = data?.id;
-  const canFollowUser = pathname !== "/profile" && typeof userId === "number";
-
   return (
     <div className="p-6 flex flex-col gap-4">
       <div className="flex flex-row justify-between items-end mt-[-17%]">
@@ -28,15 +23,16 @@ export default function ProfileHeader({
           >
             Edit profile
           </MyButton>
-        ) : canFollowUser ? (
+        ) : (
           <FollowContainer
-            userId={userId}
+            userId={data?.id}
             isFollowedByMe={data?.isFollowedByMe ?? false}
           />
-        ) : null}
+        )}
       </div>
       <InfoProfile
         login={data?.login}
+        id={data?.id}
         name={data?.name}
         bio={data?.bio}
         _count={data?._count}

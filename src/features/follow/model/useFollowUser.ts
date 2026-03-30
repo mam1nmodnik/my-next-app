@@ -3,7 +3,7 @@ import { getApiErrorResponse, requireApiResponse } from "@/shared/api/client";
 import type { ApiResponse } from "@/shared/api/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useFollowUser(userId: number) {
+export function useFollowUser(userId?: number) {
   const queryClient = useQueryClient();
   const { openMessage } = useMessageContext();
 

@@ -8,7 +8,7 @@ type props = {
   active: boolean;
   icon: ReactElement;
   iconFill: ReactElement;
-  isChat: boolean;
+  isChat?: boolean;
 };
 
 export default function NavButton({
