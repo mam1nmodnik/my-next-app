@@ -65,12 +65,14 @@ export default function LoginPage() {
         setLoadBtn(false);
         setError((prev) => ({
           ...prev,
-          allError: "Error server",
+          allError: res.error,
         }));
         return;
       }
 
-      window.location.href = "/";
+      console.log(res);
+       window.location.href = "/";
+
       setLoadBtn(false);
     } catch (err) {
       console.log(err);

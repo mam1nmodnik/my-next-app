@@ -1,6 +1,6 @@
 import { authOptions } from "@/lib/auth-options";
-import { prisma } from "@/lib/prisma";
 import { apiError, apiSuccess } from "@/shared/api/server";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
 import { getServerSession } from "next-auth/next";
 
 export async function GET() {
@@ -8,31 +8,23 @@ export async function GET() {
   const userId = session?.user?.id || null;
 
   try {
-    const posts = await prisma.post.findMany({
-      orderBy: { createdAt: "desc" },
-      include: {
-        user: {
-          select: { id: true, login: true, name: true, avatar: true },
-        },
-        likes: {
-          where: {
-            userId: Number(userId),
-            isLiked: true,
-          },
-          select: {
-            id: true,
-          },
-        },
+    const posts = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/auth/posts-all?id=${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
     });
 
-    const result = posts.map((post) => ({
-      ...post,
-      likesCount: post.likesCount,
-      isLiked: post.likes.length > 0,
-    }));
+    const result = await posts.json().catch(() => null);
 
-    return apiSuccess("Посты загружены", result, { notice: "info" });
+    if (!posts.ok) {
+      return apiError(result?.message || "Ошибка при загрузке постов", {
+        status: posts.status,
+        notice: "warning",
+      });
+    }
+    const postsData = Array.isArray(result?.posts) ? result.posts : [];
+    return apiSuccess("Посты загружены", postsData, { notice: "info" });
   } catch {
     return apiError("Ошибка сервера", { status: 500 });
   }

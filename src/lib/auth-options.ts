@@ -1,7 +1,7 @@
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
+import {  NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
+
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -14,27 +14,39 @@ export const authOptions: AuthOptions = {
       },
 
       async authorize(credentials) {
-      
+
+        console.log("Login response status:", credentials);
+
         if (!credentials?.email || !credentials?.password) throw new Error('Все поля обязательны');
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+        try{
+          const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/auth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+          });
+          if (!res.ok) throw new Error('Ошибка при авторизации');
+          console.log("Login response status:", res.status);
 
-        if (!user?.email) throw new Error('Неверный email');
+          const data = await res.json().catch(() => null);
+            if (!data?.user?.id) throw new Error('id пользователя не найден в ответе');
 
-        const isValid = await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) throw new Error('Неверный пароль');
-
-        return {
-          id: String(user.id),
-          email: user.email,
-          name: user.name,
-          login: user.login,
-          avatar: user.avatar,
-          avatarPublicId:user.avatarPublicId,
-          bio: user.bio,
-        };
+          return {
+            id: data?.user?.id,
+            email: data.user?.email,
+            login: data?.user?.login,
+            accessToken: data?.accessToken,
+            refreshToken: data?.refreshToken,
+          };
+        } catch (error) {
+          console.error("Login error", error);
+          throw new Error('Ошибка при авторизации');
+        }
       },
     }),
   ],
@@ -46,25 +58,24 @@ export const authOptions: AuthOptions = {
   async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.email = String(user.email);
+        token.login = user.login;
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
       }
       return token;
     },
-    async session({ session, token }) {
+  async session({ session, token }) {
       
           if (token?.id) {
-        const user = await prisma.user.findUnique({
-          where: { id: Number(token.id)},
-        });
+        
 
-        if (user) {
           session.user = {
-            id: String(user.id),
-            name: user.name,
-            email: user.email,
-            login: user.login,
-            image: user.avatar,
+            id: String(token.id),
+            email: token.email,
+            login: token.login,
           };
-        }
+        
       }
       return session;
       

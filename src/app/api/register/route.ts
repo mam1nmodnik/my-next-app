@@ -1,9 +1,8 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import { apiError, apiSuccess } from "@/shared/api/server";
-import bcrypt from "bcrypt";
 import { Prisma } from "@prisma/client";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
 
 interface PrismaP2002Meta {
   target?: string[];
@@ -11,25 +10,31 @@ interface PrismaP2002Meta {
 
 export async function POST(req: Request) {
   try {
-    const { email, login, password, name, avatar } = await req.json();
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const { email, login, password, } = await req.json();
 
     try {
-      const user = await prisma.user.create({
-        data: {
+      const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           email,
           login,
-          password: hashedPassword,
-          name: name ?? null,
-          avatar: avatar ?? null,
-        },
+          password,
+        }),
       });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        return apiError(errorData?.message || "Ошибка регистрации", {
+          status: res.status,
+          notice: "warning",
+        });
+      }
 
       return apiSuccess(
         "Пользователь успешно создан",
-        { userId: user.id },
-        { status: 201 },
       );
     } catch (err: unknown) {
       if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
