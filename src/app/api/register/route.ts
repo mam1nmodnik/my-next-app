@@ -1,9 +1,8 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
+import { apiError, apiSuccess } from "@/shared/api/server";
 import { Prisma } from "@prisma/client";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
 
 interface PrismaP2002Meta {
   target?: string[];
@@ -11,32 +10,45 @@ interface PrismaP2002Meta {
 
 export async function POST(req: Request) {
   try {
-    const { email, login, password, name, avatar } = await req.json();
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const { email, login, password, } = await req.json();
 
     try {
-      const user = await prisma.user.create({
-        data: {
+      const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           email,
           login,
-          password: hashedPassword,
-          name: name ?? null,
-          avatar: avatar ?? null,
-        },
+          password,
+        }),
       });
 
-      return NextResponse.json({ message: "Пользователь успешно создан!", userId: user.id }, { status: 201 });
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        return apiError(errorData?.message || "Ошибка регистрации", {
+          status: res.status,
+          notice: "warning",
+        });
+      }
+
+      return apiSuccess(
+        "Пользователь успешно создан",
+      );
     } catch (err: unknown) {
       if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
         const meta = err.meta as PrismaP2002Meta;
         const targetField = meta.target?.[0];
-        return NextResponse.json({ error: `${targetField} уже занят` }, { status: 400 });
+        return apiError(`${targetField} уже занят`, {
+          status: 400,
+          notice: "warning",
+        });
       }
       throw err;
     }
   } catch (e) {
     console.error(e);
-    return NextResponse.json({ error: "Ошибка сервера, попробуйте позже" }, { status: 500 });
+    return apiError("Ошибка сервера, попробуйте позже", { status: 500 });
   }
 }

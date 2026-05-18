@@ -1,41 +1,49 @@
-import { authOptions } from '@/lib/auth-options';
-import { prisma } from '@/lib/prisma';
+import { authOptions } from "@/lib/auth-options";
+import { apiError, apiSuccess } from "@/shared/api/server";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
 import { getServerSession } from "next-auth/next";
-import { NextResponse } from 'next/server';
+import { NextAuthTokenWithAccess } from "../../logout/route";
+import { getToken } from "next-auth/jwt";
+import { NextRequest } from "next/server";
+ 
 
+export async function GET(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return apiError("Не авторизован", { status: 401, notice: "warning" });
+  }
+  const userId = Number(session.user.id);
 
-export async function GET() {
-
-    const session = await getServerSession(authOptions)
-      if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Не авторизован' }, { status: 401 });
-    }
+  try {
+     const token = (await getToken({
+          req: request,
+          secret: process.env.NEXTAUTH_SECRET,
+        })) as NextAuthTokenWithAccess | null;
     
-    const userId = Number(session.user.id);
+    const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/auth/this-user?id=${userId}`,{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.accessToken}`,
+      },
+    })
+    
+    const data = await res.json().catch(() => null);
 
-    try {
-    const user = await prisma.user.findUnique({
-      where: { id: Number(userId) },
-      select: {
-        login: true,
-        name: true,
-        email: true,
-        avatar: true,
-        bio: true,
-        date: true,
-        avatarPublicId: true,
-        _count: {
-          select: {
-            followers: true,
-            following: true,
-          },
-        },
-      }
-    });
+    if (!res.ok) {
+      return apiError(data?.message || "Ошибка при получении данных пользователя", {
+        status: res.status,
+        notice: "warning",
+      });
+    }
 
-    return NextResponse.json(user);
+    if (!data?.user) {
+      return apiError("Пользователь не найден", { status: 404 });
+    }
+
+    return apiSuccess("Профиль загружен", data.user, { notice: "info" });
   } catch (error) {
-    console.error('Ошибка при получении пользоватея:', error);
-    return NextResponse.json({ error: `Ошибка сервера: ${error}` }, { status: 500 });
+    console.error("Ошибка при получении пользователя:", error);
+    return apiError("Ошибка сервера", { status: 500 });
   }
 }

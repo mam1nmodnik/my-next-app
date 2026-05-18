@@ -1,5 +1,5 @@
 "use client";
-import { useModalUnregistered } from "@/app/_providers/ui/modal-provider";
+import { useModalUnregistered } from "@/_providers/ui/modal-provider";
 import { CommentOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 

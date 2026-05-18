@@ -1,12 +1,14 @@
-import { useUserContext } from "@/app/_providers/infra/user-provider";
-import { useMessageContext } from "@/app/_providers/ui/message-provider";
+import { useUserContext } from "@/_providers/infra/user-provider";
+import { useMessageContext } from "@/_providers/ui/message-provider";
 import AddPhotoContainer from "@/features/uploadPhoto/container/AddPhotoContainer";
 import { isValidEmail, uploadToCloudinary } from "@/lib/help";
+import { getApiErrorResponse, requireApiResponse } from "@/shared/api/client";
 import { MyButton } from "@/shared/ui/MyButton";
 import MyInput from "@/shared/ui/MyInput";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UploadFile, Input } from "antd";
 import { useEffect, useState } from "react";
+import { useUpdateProfile } from "../model/UpdateProfileContext";
 
 type InpUser = {
   name: string;
@@ -23,6 +25,7 @@ export default function UpdateProfileForm() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { openMessage } = useMessageContext();
   const { dataUser } = useUserContext();
+  const { closeModal } = useUpdateProfile();
 
   useEffect(() => {
     if (dataUser) {
@@ -61,14 +64,19 @@ export default function UpdateProfileForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      const result = await res.json();
-      openMessage(result);
+      return requireApiResponse(res, "Не удалось обновить профиль");
     },
 
-    onSuccess: () => {
+    onSuccess: (response) => {
+      openMessage(response);
       queryClient.invalidateQueries({ queryKey: ["this-user"] });
       queryClient.invalidateQueries({ queryKey: ["users"] });
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      setLoadBtnProfile(false);
+      closeModal();
+    },
+    onError: (error) => {
+      openMessage(getApiErrorResponse(error, "Не удалось обновить профиль"));
       setLoadBtnProfile(false);
     },
   });
@@ -97,12 +105,18 @@ export default function UpdateProfileForm() {
     };
 
     if (fileList[0]?.originFileObj) {
-      avatarUrl = await uploadToCloudinary(
-        fileList[0].originFileObj as File,
-        inputValue.avatarPublicId || undefined,
-      );
+      try {
+        avatarUrl = await uploadToCloudinary(
+          fileList[0].originFileObj as File,
+          inputValue.avatarPublicId || undefined,
+        );
+      } catch (error) {
+        openMessage(getApiErrorResponse(error, "Не удалось загрузить аватар"));
+        setLoadBtnProfile(false);
+        return;
+      }
     }
-
+    
     const newData = {
       avatar: avatarUrl.url || null,
       avatarPublicId: avatarUrl.publicId || null,

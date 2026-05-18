@@ -4,7 +4,7 @@ import { useFollowUser } from "../model/useFollowUser";
 import { useSession } from "next-auth/react";
 
 type Props = {
-  userId: number;
+  userId?: number;
   isFollowedByMe: boolean;
 };
 

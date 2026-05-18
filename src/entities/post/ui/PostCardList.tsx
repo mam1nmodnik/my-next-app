@@ -10,12 +10,13 @@ type PostCardListProps = {
   renderMenu?: (post: Post) => React.ReactNode;
 };
 
-const UserPosts = React.memo(function PostCardList({
+const UserPosts = function PostCardList({
   posts,
   suspens,
   renderActions,
   renderMenu,
 }: PostCardListProps) {
+  console.log(posts)
   return (
     <div className="flex flex-col w-full gap-4 ">
       <div className="flex flex-col items-center w-full h-fit  ">
@@ -38,5 +39,5 @@ const UserPosts = React.memo(function PostCardList({
       </div>
     </div>
   );
-});
+};
 export default UserPosts;

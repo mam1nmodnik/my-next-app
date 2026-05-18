@@ -33,6 +33,7 @@ export type User = {
     followers: number;
     following: number;
   }
+  isFollowedByMe?: boolean;
 };
 
 export type FollowType = {

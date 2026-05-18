@@ -1,4 +1,6 @@
 
+import { requireApiData } from "@/shared/api/client";
+
 export function formateDate(date: Date) {
   
   const postDate = new Date(date);
@@ -57,11 +59,11 @@ export const uploadToCloudinary = async (
               oldPublicId,
             }),
           });
-          if (!res.ok) {
-            throw new Error("Upload failed");
-          }
-          const data = await res.json();
-          resolve({ url: data.url, publicId: data.publicId });
+          const data = await requireApiData<UploadResponse>(
+            res,
+            "Не удалось загрузить аватар",
+          );
+          resolve(data);
         } catch (err) {
           reject(err);
         }

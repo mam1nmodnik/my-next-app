@@ -1,3 +1,4 @@
+"use client";
 import { LoadingOutlined } from "@ant-design/icons";
 
 type ButtonProps = {
@@ -13,7 +14,7 @@ export function MyButton({
   className,
   onClick,
   children,
-  disabled,
+  disabled
 }: ButtonProps) {
   return (
     <button
@@ -21,7 +22,7 @@ export function MyButton({
       className={
         className
           ? className
-          : "w-full text-lg p-2 rounded-xl bg-white/10 border border-white/20 text-white backdrop-blur-md backdrop-saturate-150 shadow-md hover:shadow-lg hover:backdrop-blur-lg hover:bg-white/20 transition-all duration-300 ease-in-out"
+          : "w-full h-[45px] flex items-center justify-center text-lg p-2  rounded-xl bg-white/10 border border-white/20 text-white backdrop-blur-md backdrop-saturate-150 shadow-md hover:shadow-lg hover:backdrop-blur-lg hover:bg-white/20 transition-all duration-300 ease-in-out"
       }
       onClick={onClick}
     >

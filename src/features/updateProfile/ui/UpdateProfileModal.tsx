@@ -4,6 +4,7 @@ import UpdateProfileForm from "./UpdateProfileForm";
 
 export default function UpdateProfileModal() {
   const { open, closeModal } = useUpdateProfile();
+
   return (
     <Modal
       open={open}

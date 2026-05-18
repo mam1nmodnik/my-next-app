@@ -1,20 +1,22 @@
+import { requireApiData } from "@/shared/api/client";
 import { FollowType } from "@/type/type";
 import { useQuery } from "@tanstack/react-query";
 
 export function useUsers() {
-  const { isLoading, data } = useQuery({
+  const { isLoading, data, error, isError  } = useQuery({
     queryKey: ["users"],
     queryFn: async (): Promise<Array<FollowType>> => {
       const response = await fetch("/api/user/users");
-      if (!response.ok) {
-        throw new Error("Failed to fetch users");
-      }
-      const result = await response.json();
-      return result;
+      return requireApiData<FollowType[]>(
+        response,
+        "Не удалось загрузить пользователей",
+      );
     },
   });
   return {
     data,
     isLoading,
+    error,
+    isError, 
   };
 }

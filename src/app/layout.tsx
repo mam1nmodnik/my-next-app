@@ -1,7 +1,5 @@
 import "@ant-design/v5-patch-for-react-19";
 import "@/app/globals.css";
-import AppProvider from "./_providers/app-provider";
-import LayoutWrapper from "@/app/layout/layoutWrapper";
 
 export default function RootLayout({
   children,
@@ -38,9 +36,7 @@ export default function RootLayout({
       <body
         className={` bg-black text-white scroll-smooth selection:bg-indigo-500 selection:text-white min-h-screen h-full`}
       >
-        <AppProvider>
-          <LayoutWrapper>{children}</LayoutWrapper>
-        </AppProvider>
+        <>{children}</>
       </body>
     </html>
   );

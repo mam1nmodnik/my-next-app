@@ -5,6 +5,8 @@ declare module "next-auth" {
   interface User extends DefaultUser {
     id: string;
     login: string;
+    accessToken?: string;
+    refreshToken?: string;
   }
 
   // Расширяем тип сессии
@@ -24,5 +26,7 @@ declare module "next-auth/jwt" {
     email: string;
     name?: string | null;
     login: string;
+    accessToken?: string;
+    refreshToken?: string;
   }
 }

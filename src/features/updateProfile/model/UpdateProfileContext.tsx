@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
+import UpdateProfileModal from "../ui/UpdateProfileModal";
 
 type UpdateProfileContextType = {
   open: boolean;
@@ -25,6 +26,7 @@ export function UpdateProfileProvider({
   return (
     <UpdateProfileContext.Provider value={{ open, openModal, closeModal }}>
       {children}
+      <UpdateProfileModal />
     </UpdateProfileContext.Provider>
   );
 }

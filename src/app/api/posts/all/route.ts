@@ -1,44 +1,31 @@
-import { NextResponse } from "next/server"
-import { prisma } from '@/lib/prisma';
+import { authOptions } from "@/lib/auth-options";
+import { apiError, apiSuccess } from "@/shared/api/server";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth-options"
-
 
 export async function GET() {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id || null;
 
+  try {
+    const posts = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/auth/posts-all?id=${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  const session = await getServerSession(authOptions)
-  const userId = session?.user?.id || null
-    try {
-      const posts = await prisma.post.findMany({
-          orderBy: { createdAt: "desc" },
-          include: {
-            user: {
-              select: { id: true, login: true, name: true, avatar: true },
-            },
-            likes: {
-              where: {
-                userId: Number(userId), 
-                isLiked: true,  
-              },
-              select: {
-                id: true, 
-              },
-            },
-          },
-      })
+    const result = await posts.json().catch(() => null);
 
-      const result = posts.map(post => {
-        return {
-          ...post,
-          likesCount: post.likesCount,
-          isLiked: post.likes.length > 0,
-        }
-      })
-
-      return NextResponse.json(result)
-    } catch (error) {
-      console.error('Ошибка при получении постов:', error);
-      return NextResponse.json({ error: `Ошибка сервера` }, { status: 500 });
+    if (!posts.ok) {
+      return apiError(result?.message || "Ошибка при загрузке постов", {
+        status: posts.status,
+        notice: "warning",
+      });
     }
+    const postsData = Array.isArray(result?.posts) ? result.posts : [];
+    return apiSuccess("Посты загружены", postsData, { notice: "info" });
+  } catch {
+    return apiError("Ошибка сервера", { status: 500 });
+  }
 }
