@@ -1,48 +1,37 @@
-// src/app/api/posts/my/route.ts
 import { authOptions } from "@/lib/auth-options";
-import { prisma } from "@/lib/prisma";
 import { apiError, apiSuccess } from "@/shared/api/server";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
 import { getServerSession } from "next-auth";
+import { NextRequest } from "next/server";
+import { getTokenFromRequest } from "@/shared/config/token";
 
-export async function GET() {
-  try {
+export async function GET(request: NextRequest) {
+    const token = await getTokenFromRequest(request);
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return apiError("Не авторизован", { status: 401, notice: "warning" });
     }
-
-    const sessioId = Number(session.user.id);
-
-    const posts = await prisma.post.findMany({
-        where: { userId: sessioId }, 
-        orderBy: { createdAt: "desc" },
-        include: {
-          user: {
-            select: { id: true, login: true, name: true, avatar: true },
-          },
-          likes: {
-            where: {
-              userId: Number(sessioId), 
-              isLiked: true,  
-            },
-            select: {
-              id: true, 
-            },
-          },
-        },
-      });
-
-    const result = posts.map((post) => ({
-      ...post,
-      likesCount: post.likesCount,
-      isLiked: post.likes.length > 0,
-    }));
-
-    return apiSuccess("Посты пользователя загружены", result, {
-      notice: "info",
+  try {
+    const posts = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/post/get-my`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.accessToken}`,
+      },
     });
-  } catch (error) {
-    console.error("Ошибка при получении постов пользователя:", error);
+
+    const result = await posts.json().catch(() => null);
+
+    if (!posts.ok) {
+      return apiError(result?.message , {
+        status: posts.status,
+        notice: "warning",
+      });
+    }
+
+    const postsData = Array.isArray(result) ? result : [];
+    return apiSuccess("Посты загружены", postsData, { notice: "info" });
+  } catch {
     return apiError("Ошибка сервера", { status: 500 });
   }
 }

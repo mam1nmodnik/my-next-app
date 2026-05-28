@@ -20,5 +20,11 @@ export default function FollowingPage() {
     return <ErrorResponse error={error} title="Following" />;
   }
 
-  return <FollowUserList data={data} />;
+  return data?.length === 0 ? (
+    <div className="text-center text-sm text-gray-500 py-4">
+      No users to following.
+    </div>
+  ) : (
+    <FollowUserList data={data} />
+  );
 }

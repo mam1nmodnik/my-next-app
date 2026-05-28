@@ -8,8 +8,7 @@ export function useUsers() {
     queryFn: async (): Promise<Array<FollowType>> => {
       const response = await fetch("/api/user/users");
       return requireApiData<FollowType[]>(
-        response,
-        "Не удалось загрузить пользователей",
+        response
       );
     },
   });

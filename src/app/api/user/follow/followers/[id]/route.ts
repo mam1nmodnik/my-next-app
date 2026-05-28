@@ -1,58 +1,47 @@
-import { authOptions } from "@/lib/auth-options";
-import { prisma } from "@/lib/prisma";
 import { apiError, apiSuccess } from "@/shared/api/server";
-import { getServerSession } from "next-auth";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
+import { getTokenFromRequest } from "@/shared/config/token";
 import { NextRequest } from "next/server";
 
 export async function GET(
-  _req: NextRequest,
+  request: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
-  const session = await getServerSession(authOptions);
-  const sessionId = session?.user?.id ? Number(session.user.id) : null;
-
+  const token = await getTokenFromRequest(request);
   try {
     const { id } = await context.params;
     const idNumber = Number(id);
     if (isNaN(idNumber)) {
       return apiError("Некорректный ID пользователя", { status: 400 });
     }
-    const user = await prisma.user.findUnique({
-      where: { id: idNumber },
-      select: {
-        followers: {
-          select: {
-            follower: {
-                select: {
-                id: true,
-                login: true,
-                name: true,
-                avatar: true,
-                followers: {
-                  where: {
-                    followerId: sessionId || 0,
-                  },
-                }
-              },
-            },
-          },
-        },
-      },
-    });
 
-    if (!user) {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (token?.accessToken) {
+      headers.Authorization = `Bearer ${token.accessToken}`;
+    }
+
+    const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/user/followers?id=${idNumber}`,{
+      method: "GET",
+      headers,
+    })
+    
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok) {
+      return apiError(data?.message || "Ошибка при получении данных пользователя", {
+        status: res.status,
+        notice: "warning",
+      });
+    }
+
+    if (!data?.followers) {
       return apiError("Пользователь не найден", { status: 404 });
     }
 
-    const followers = user.followers.map((f) => ({
-      id: f.follower.id,
-      login: f.follower.login,
-      name: f.follower.name,
-      avatar: f.follower.avatar,
-      isFollowedByMe: f.follower.followers.length > 0,
-    }));
-
-    return apiSuccess("Подписчики загружены", followers, { notice: "info" });
+    return apiSuccess("Подписчики загружены", data.followers, { notice: "info" });
 
   } catch {
     return apiError("Ошибка сервера", { status: 500 });

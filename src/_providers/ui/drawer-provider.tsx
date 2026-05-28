@@ -68,10 +68,10 @@ export function DrawerContextProvider({ children }: { children: ReactNode }) {
               <h1 className="text-white text-[24px]">Меню</h1>
             </div>
             <button
-              className="block rounded-[20px] h-[40px] pr-2 pl-2 text-white hover:bg-white/25 hover:text-blue-400 cursor-pointer"
+              className="block rounded-[20px] h-[40px] pr-2 pl-2 text-white hover:bg-white/15 hover:text-white/65 cursor-pointer"
               onClick={() =>
                 signOut({
-                  // callbackUrl: "/login",
+                  callbackUrl: "/login",
                 })
               }
             >

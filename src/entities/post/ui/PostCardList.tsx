@@ -16,7 +16,6 @@ const UserPosts = function PostCardList({
   renderActions,
   renderMenu,
 }: PostCardListProps) {
-  console.log(posts)
   return (
     <div className="flex flex-col w-full gap-4 ">
       <div className="flex flex-col items-center w-full h-fit  ">

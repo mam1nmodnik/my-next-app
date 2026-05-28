@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
 import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
 import { getSessionUserId } from "@/lib/get-session-user-id";
 import { apiError } from "@/shared/api/server";
+import { getTokenFromRequest } from "@/shared/config/token";
 
-export type NextAuthTokenWithAccess = {
-  accessToken?: string;
-  refreshToken?: string;
-};
+
 
 
 export async function POST(request: NextRequest) {
@@ -15,14 +12,9 @@ export async function POST(request: NextRequest) {
   if (!userId) {
       return apiError("Не авторизован", { status: 401, notice: "warning" });
   }
+  const token = await getTokenFromRequest(request);
   
   try {
-    const token = (await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET,
-    })) as NextAuthTokenWithAccess | null;
-
-
     const accessToken = token?.accessToken;
     const refreshToken = token?.refreshToken;
     
