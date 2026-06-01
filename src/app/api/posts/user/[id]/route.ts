@@ -9,7 +9,7 @@ export async function GET(
   context: { params: Promise<{ id: string }> },
 ) {
   const session = await getServerSession(authOptions);
-  const sessioId = session?.user?.id || null;
+  const sessionId = session?.user?.id ? Number(session.user.id) : null;
   const { id } = await context.params;
   const userId = Number(id);
 
@@ -30,7 +30,7 @@ export async function GET(
         },
         likes: {
           where: {
-            userId: Number(sessioId),
+            userId: sessionId ?? 0,
             isLiked: true,
           },
           select: {

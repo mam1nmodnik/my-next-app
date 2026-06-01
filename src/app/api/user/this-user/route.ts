@@ -1,9 +1,8 @@
 import { authOptions } from "@/lib/auth-options";
 import { apiError, apiSuccess } from "@/shared/api/server";
 import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
+import { getTokenFromRequest } from "@/shared/config/token";
 import { getServerSession } from "next-auth/next";
-import { NextAuthTokenWithAccess } from "../../logout/route";
-import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
  
 
@@ -11,16 +10,12 @@ export async function GET(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     return apiError("Не авторизован", { status: 401, notice: "warning" });
-  }
-  const userId = Number(session.user.id);
+  } 
+  const token = await getTokenFromRequest(request);
 
   try {
-     const token = (await getToken({
-          req: request,
-          secret: process.env.NEXTAUTH_SECRET,
-        })) as NextAuthTokenWithAccess | null;
-    
-    const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/auth/this-user?id=${userId}`,{
+ 
+    const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/user/this-user`,{
       method: "GET",
       headers: {
         "Content-Type": "application/json",

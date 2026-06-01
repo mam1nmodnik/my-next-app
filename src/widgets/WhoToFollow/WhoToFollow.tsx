@@ -7,6 +7,7 @@ import FollowUserList from "@/widgets/follow/FollowUserList";
 
 export default function WhoToFollow() {
   const { data, isLoading, error, isError } = useUsers();
+  
   if (isLoading) {
     return (
       <div className="mt-25 mb-5 flex justify-center w-[300px]">
@@ -14,7 +15,7 @@ export default function WhoToFollow() {
       </div>
     );
   }
-
+  
   if (isError || !data) {
     return (
       <UsersBlock>
@@ -22,7 +23,7 @@ export default function WhoToFollow() {
       </UsersBlock>
     );
   }
-
+  
   return (
     <UsersBlock>
       <FollowUserList data={data} />

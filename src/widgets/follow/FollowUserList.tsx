@@ -5,6 +5,7 @@ import UserRow from "../../entities/user/ui/UserRow";
 export default function FollowUserList({data}: {data: FollowType[]}) {
   return (
     <div className="flex flex-col gap-2 w-full">
+     
       {data.map((user) => (
         <UserRow
           id={user.id}

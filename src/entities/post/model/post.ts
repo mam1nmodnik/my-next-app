@@ -27,5 +27,5 @@ export async function fetchPosts(params: PostsParams): Promise<Post[]> {
   }
 
   const response = await fetch(url);
-  return requireApiData<Post[]>(response, "Не удалось загрузить посты");
+  return requireApiData<Post[]>(response);
 }

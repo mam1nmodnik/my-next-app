@@ -8,7 +8,8 @@ export async function GET() {
   const userId = session?.user?.id || null;
 
   try {
-    const posts = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/auth/posts-all?id=${userId}`, {
+    const query = userId ? `?id=${userId}` : "";
+    const posts = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/post/get-all${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -23,7 +24,8 @@ export async function GET() {
         notice: "warning",
       });
     }
-    const postsData = Array.isArray(result?.posts) ? result.posts : [];
+
+    const postsData = Array.isArray(result) ? result : [];
     return apiSuccess("Посты загружены", postsData, { notice: "info" });
   } catch {
     return apiError("Ошибка сервера", { status: 500 });

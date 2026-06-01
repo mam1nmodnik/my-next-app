@@ -1,16 +1,17 @@
-import { Prisma } from "@prisma/client";
 import { NextRequest } from "next/server";
 import { getSessionUserId } from "@/lib/get-session-user-id";
-import { prisma } from "@/lib/prisma";
 import { apiError, apiSuccess } from "@/shared/api/server";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
+import { getTokenFromRequest } from "@/shared/config/token";
 
-export async function POST(req: NextRequest) {
-  const userId = await getSessionUserId();
-  if (!userId) {
+export async function POST(request: NextRequest) {
+  const sessionId = await getSessionUserId();
+  if (!sessionId) {
     return apiError("Не авторизован", { status: 401, notice: "warning" });
   }
+  const token = await getTokenFromRequest(request);
 
-  const body = await req.json().catch(() => null);
+  const body = await request.json().catch(() => null);
   const postId = Number(body?.postId);
 
   if (!Number.isInteger(postId) || postId <= 0) {
@@ -21,66 +22,30 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const result = await prisma.$transaction(async (prisma) => {
-      const existing = await prisma.like.findUnique({
-        where: {
-          userId_postId: {
-            userId,
-            postId,
-          },
-        },
-      });
-      if (existing) {
-        await prisma.like.delete({
-          where: {
-            userId_postId: {
-              userId,
-              postId,
-            },
-          },
-        });
-
-        const post = await prisma.post.update({
-          where: { id: postId },
-          data: {
-            likesCount: { decrement: 1 },
-          },
-        });
-
-        return { post, liked: false };
-      }
-
-      await prisma.like.create({
-        data: {
-          userId,
-          postId,
-        },
-      });
-
-      const post = await prisma.post.update({
-        where: { id: postId },
-        data: {
-          likesCount: { increment: 1 },
-        },
-      });
-
-      return { post, liked: true };
+    const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/post/like`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.accessToken}`,
+      },
+      body: JSON.stringify({ postId }),
     });
+
+    const result = await res.json().catch(() => null);
+
+    if (!res.ok) {
+      return apiError(result?.message || "Не удалось изменить лайк", {
+        status: res.status,
+        notice: res.status === 401 ? "warning" : "error",
+      });
+    }
 
     return apiSuccess(
       result.liked ? "Лайк поставлен" : "Лайк убран",
       result,
     );
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      (error.code === "P2003" || error.code === "P2025")
-    ) {
-      return apiError("Пост не найден", { status: 404 });
-    }
-
-    console.error("TOGGLE LIKE ERROR:", error);
-
+    console.error("Ошибка при изменении лайка:", error);
     return apiError("Ошибка сервера", { status: 500 });
   }
 }

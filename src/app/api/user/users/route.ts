@@ -1,43 +1,35 @@
-import { authOptions } from "@/lib/auth-options";
-import { prisma } from "@/lib/prisma";
 import { apiError, apiSuccess } from "@/shared/api/server";
-import { getServerSession } from "next-auth";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
+import { NextRequest } from "next/server";
+import { getTokenFromRequest } from "@/shared/config/token";
+ 
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const token = await getTokenFromRequest(request);
+
   try {
-    const session = await getServerSession(authOptions);
-    const sessionId = session?.user?.id ? Number(session.user.id) : null;
-
-    const users = await prisma.user.findMany({
-      take: 5,
-      orderBy: {
-        followers: { _count: 'desc' }, 
-      },
-      select: {
-        id: true,
-        login: true,
-        avatar: true,
-        name: true,
-        followers: {
-          where: {
-            followerId: sessionId || 0,
-          },
-          select: {
-            id: true,
-          },
+    const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/user/recommended`,{
+      method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.accessToken}`,
         },
-      },
-    });
+    })
+    
+    const data = await res.json().catch(() => null);
 
-    const result = users.map((user) => ({
-      id: user.id,
-      login: user.login,
-      name: user.name,
-      avatar: user.avatar,
-      isFollowedByMe: user.followers.length > 0,
-    }));
+    if (!res.ok) {
+      return apiError(data?.message || "Ошибка при получении данных пользователя", {
+        status: res.status,
+        notice: "warning",
+      });
+    }
 
-    return apiSuccess("Пользователи загружены", result, { notice: "info" });
+    if (!data?.users) {
+      return apiError("Пользователи не найдены", { status: 404 });
+    }
+
+    return apiSuccess("Пользователи загружены", data.users, { notice: "info" });
   } catch (error) {
     console.error("Ошибка при получении пользователей:", error);
     return apiError("Ошибка сервера", { status: 500 });
