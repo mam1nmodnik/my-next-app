@@ -1,5 +1,5 @@
 "use client";
-import WhoToFollow from "@/widgets/whoToFollow/WhoToFollow";
+import WhoToFollow from "@/widgets/WhoToFollow/WhoToFollow";
 
 export default function AsideRight() {
   return (
