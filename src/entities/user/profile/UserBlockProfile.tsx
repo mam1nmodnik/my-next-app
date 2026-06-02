@@ -4,10 +4,11 @@ import ProfileHeader from "./ProfileHeader";
 import { User } from "@/type/type";
 
 type UserBlockProfileProps = {
-  postContainer: ReactNode;
+  postContainer?: ReactNode;
   openModal?: () => void;
   data: User | null | undefined;
 };
+
 
 export default function UserBlockProfile({
   postContainer,

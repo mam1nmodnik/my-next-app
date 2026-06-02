@@ -5,43 +5,40 @@ import { NextRequest } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> },
-) {
+  { params }: { params: { id: string } }
+){
   const token = await getTokenFromRequest(request);
-  try {
-    
-    const { id } = await context.params;
-    const userId = Number(id);
-
-    if (!Number.isInteger(userId) || userId <= 0) {
-      return apiError("Некорректный id пользователя", {
-        status: 400,
-        notice: "warning",
-      });
+  const { id } = await params;
+  const userId = Number(id);
+  if (!Number.isInteger(userId) || userId <= 0) {
+        return apiError("Некорректный id пользователя", {
+          status: 400,
+          notice: "warning",
+        });
     }
+  try {
+
+    const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/user/user?id=${userId}`,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.accessToken}`,
+        },
+    });
+
+    const data = await res.json()
     
-  const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/user/user?userId=${userId}`,{
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.accessToken}`,
-      },
-  });
-
-    const data = await res.json().catch(() => null);
-
     if (!res.ok) {
       return apiError(data?.message || "Ошибка при получении данных пользователя", {
         status: res.status,
         notice: "warning",
       });
     }
-
-    if (!data) {
+    
+    if (!data.user) {
       return apiError("Пользователь не найден", { status: 404 });
     }
-
-    return apiSuccess("Профиль загружен", data, { notice: "info" });
+    return apiSuccess("Профиль загружен", data.user, { notice: "info" });
 
   } catch (error) {
     console.error("Ошибка при получении пользователя:", error);

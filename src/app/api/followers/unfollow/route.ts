@@ -1,4 +1,3 @@
-import { prisma } from "@/lib/prisma";
 import { getSessionUserId } from "@/lib/get-session-user-id";
 import { apiError, apiSuccess } from "@/shared/api/server";
 import { NextRequest } from "next/server";
@@ -29,7 +28,7 @@ export async function POST(request: NextRequest) {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token?.accessToken}`,
               },
-                        body: JSON.stringify({ id: followingId }),
+              body: JSON.stringify({ id: followingId }),
 
             });
         const result = await res.json().catch(() => null);
