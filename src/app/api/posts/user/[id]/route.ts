@@ -1,6 +1,8 @@
 import { authOptions } from "@/lib/auth-options";
 import { prisma } from "@/lib/prisma";
 import { apiError, apiSuccess } from "@/shared/api/server";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
+import { getTokenFromRequest } from "@/shared/config/token";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 
@@ -8,8 +10,8 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
-  const session = await getServerSession(authOptions);
-  const sessionId = session?.user?.id ? Number(session.user.id) : null;
+  const token = await getTokenFromRequest(request);
+  
   const { id } = await context.params;
   const userId = Number(id);
 
@@ -20,35 +22,26 @@ export async function GET(
     });
   }
 
-  try {
-    const posts = await prisma.post.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      include: {
-        user: {
-          select: { id: true, login: true, name: true, avatar: true },
-        },
-        likes: {
-          where: {
-            userId: sessionId ?? 0,
-            isLiked: true,
-          },
-          select: {
-            id: true,
-          },
-        },
-      },
-    });
-
-    const result = posts.map((post) => ({
-      ...post,
-      likesCount: post.likesCount,
-      isLiked: post.likes.length > 0,
-    }));
-
-    return apiSuccess("Посты пользователя загружены", result, {
-      notice: "info",
-    });
+    try {
+      const posts = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/post/get-user-twits?id=${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.accessToken}`,
+        },  
+      });
+  
+      const result = await posts.json().catch(() => null);
+  
+      if (!posts.ok) {
+        return apiError(result?.message , {
+          status: posts.status,
+          notice: "warning",
+        });
+      }
+  
+      const postsData = Array.isArray(result) ? result : [];
+      return apiSuccess("Посты загружены", postsData, { notice: "info" });
   } catch {
     return apiError("Ошибка сервера", { status: 500 });
   }
