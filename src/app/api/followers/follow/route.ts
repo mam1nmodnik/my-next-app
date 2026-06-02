@@ -1,16 +1,20 @@
 import { getSessionUserId } from "@/lib/get-session-user-id";
-import { prisma } from "@/lib/prisma";
 import { apiError, apiSuccess } from "@/shared/api/server";
-import { Prisma } from "@prisma/client";
+import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
+import { getTokenFromRequest } from "@/shared/config/token";
 import { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
+
+  const token = await getTokenFromRequest(request);
+  
   const followerId = await getSessionUserId();
   if (!followerId) {
     return apiError("Не авторизован", { status: 401, notice: "warning" });
   }
 
-  const body = await req.json().catch(() => null);
+  const body = await request.json().catch(() => null);
+  
   const followingId = Number(body?.id);
   if (!Number.isInteger(followingId) || followingId <= 0) {
     return apiError("Некорректный id пользователя", {
@@ -27,32 +31,31 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    await prisma.follow.create({
-      data: {
-        followerId,
-        followingId,
-      },
-    });
+    const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/user/follow`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token?.accessToken}`,
+          },
+          body: JSON.stringify({ id: followingId }),
+
+        });
+    const result = await res.json().catch(() => null);
+
+    if (!res.ok) {
+      return apiError(result?.message , {
+        status: res.status,
+        notice: "warning",
+      });
+    }
 
     return apiSuccess(
       "Подписка оформлена",
       { followingId },
       { status: 200 },
     );
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        return apiSuccess("Вы уже подписаны на этого пользователя", {
-          followingId,
-        });
-      }
 
-      if (error.code === "P2003") {
-        return apiError("Пользователь не найден", { status: 404 });
-      }
-    }
-
-    console.error("Follow error:", error);
+  } catch  {
     return apiError("Не удалось выполнить подписку", { status: 500 });
   }
 }

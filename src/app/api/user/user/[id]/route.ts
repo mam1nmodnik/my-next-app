@@ -19,29 +19,30 @@ export async function GET(
         notice: "warning",
       });
     }
+    
+  const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/user/user?userId=${userId}`,{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.accessToken}`,
+      },
+  });
 
-   const res = await fetch(`${NEXT_PUBLIC_DATABASE_URL_DEV}/api/user/user?id=${userId}`,{
-         method: "GET",
-         headers: {
-           "Content-Type": "application/json",
-           Authorization: `Bearer ${token?.accessToken}`,
-         },
-       })
-       
-       const data = await res.json().catch(() => null);
-   
-       if (!res.ok) {
-         return apiError(data?.message || "Ошибка при получении данных пользователя", {
-           status: res.status,
-           notice: "warning",
-         });
-       }
-   
-       if (!data) {
-         return apiError("Пользователь не найден", { status: 404 });
-       }
-   
-       return apiSuccess("Профиль загружен", data.user, { notice: "info" });
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok) {
+      return apiError(data?.message || "Ошибка при получении данных пользователя", {
+        status: res.status,
+        notice: "warning",
+      });
+    }
+
+    if (!data) {
+      return apiError("Пользователь не найден", { status: 404 });
+    }
+
+    return apiSuccess("Профиль загружен", data, { notice: "info" });
+
   } catch (error) {
     console.error("Ошибка при получении пользователя:", error);
     return apiError("Ошибка сервера", { status: 500 });

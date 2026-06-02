@@ -25,7 +25,7 @@ export function useFollowUser(userId?: number) {
 
       return requireApiResponse<{ followingId: number }>(
         response,
-        "Не удалось подписаться на пользователя",
+        response.statusText,
       );
     },
     onSuccess: (response) => {
