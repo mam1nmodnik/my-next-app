@@ -1,6 +1,6 @@
 'use client';
 import AppProvider from "@/_providers/app-provider";
-import LayoutWrapper from "@/layout/layout/LayoutWrapper";
+import LayoutWrapper from "@/layout/layout/layoutWrapper";
 
 export default function Layout({
   children,
