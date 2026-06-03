@@ -5,10 +5,10 @@ import { NextRequest } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ){
   const token = await getTokenFromRequest(request);
-  const { id } = await params;
+  const { id } = await context.params;
   const userId = Number(id);
   if (!Number.isInteger(userId) || userId <= 0) {
         return apiError("Некорректный id пользователя", {
@@ -27,7 +27,7 @@ export async function GET(
     });
 
     const data = await res.json()
-    
+
     if (!res.ok) {
       return apiError(data?.message || "Ошибка при получении данных пользователя", {
         status: res.status,
