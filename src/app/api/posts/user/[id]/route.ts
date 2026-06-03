@@ -1,19 +1,17 @@
-import { authOptions } from "@/lib/auth-options";
-import { prisma } from "@/lib/prisma";
 import { apiError, apiSuccess } from "@/shared/api/server";
 import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
 import { getTokenFromRequest } from "@/shared/config/token";
-import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> },
+  context: { params: Promise<{ id: string }> }
 ) {
-  const token = await getTokenFromRequest(request);
-  
   const { id } = await context.params;
   const userId = Number(id);
+
+  const token = await getTokenFromRequest(request);
+  
 
   if (!Number.isInteger(userId) || userId <= 0) {
     return apiError("Некорректный id пользователя", {

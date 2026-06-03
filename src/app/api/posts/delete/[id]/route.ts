@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { getSessionUserId } from "@/lib/get-session-user-id";
-import { prisma } from "@/lib/prisma";
 import { apiError, apiSuccess } from "@/shared/api/server";
 import { NEXT_PUBLIC_DATABASE_URL_DEV } from "@/shared/config/env";
 import { getTokenFromRequest } from "@/shared/config/token";
@@ -9,14 +8,15 @@ export async function DELETE(
   request: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
+  const { id } = await context.params;
+  const postId = Number(id);
   const token = await getTokenFromRequest(request);
   const sessionId = await getSessionUserId();
   if (!sessionId) {
     return apiError("Не авторизован", { status: 401, notice: "warning" });
   }
 
-  const { id } = await context.params;
-  const postId = Number(id);
+  
   if (!Number.isInteger(postId) || postId <= 0) {
     return apiError("Некорректный id поста", {
       status: 400,
